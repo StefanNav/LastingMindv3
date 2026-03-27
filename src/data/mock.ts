@@ -1,4 +1,4 @@
-import type { LegacyCreator, Phase, HomePhase, CategoryDetail, ModuleIntroData, Module2IntroData } from '@/types'
+import type { LegacyCreator, Phase, HomePhase, CategoryDetail, ModuleIntroData, Module2IntroData, ConversationConfig } from '@/types'
 
 export const mockCreator: LegacyCreator = {
   id: 'creator-1',
@@ -490,6 +490,104 @@ export const module2IntroData: Record<string, Module2IntroData> = {
       { id: 'val-family', label: 'Family & Togetherness', subtitle: 'Putting loved ones first' },
       { id: 'val-work', label: 'Hard Work & Perseverance', subtitle: 'Pushing through when it mattered' },
       { id: 'val-faith', label: 'Faith & Spirituality', subtitle: 'The beliefs that anchored you' },
+    ],
+  },
+}
+
+export const conversationConfigs: Record<string, ConversationConfig> = {
+  'cat-family': {
+    categoryId: 'cat-family',
+    moduleId: 'mod-fam-1',
+    moduleTitle: "Who's in Your Family",
+    questions: [
+      {
+        id: 'q-fam-1',
+        promptText: "Lets start with the people closest to you. Do you have any children, what are their names?",
+        mockUserResponse: "Well, my wife Linda, we've been married 44 years this June. She's my best friend. We have 2 kids, Sarah and Michael. Sarah's 38, Michael's 35.",
+        mockAiAcknowledgment: "That's a wonderful family. 44 years with Linda — that's something special. Let me make sure I've captured everyone.",
+      },
+      {
+        id: 'q-fam-2',
+        promptText: "What about your parents? Are they still around?",
+        mockUserResponse: "My dad Robert passed about ten years ago. My mom Margaret is still here — she's 89 and still sharp as a tack. Lives about 20 minutes from us.",
+        mockAiAcknowledgment: "Robert and Margaret, I'm glad your mom is still here. She sounds like a strong woman.",
+      },
+    ],
+    finishMessages: [
+      "Robert and Margaret, I'm glad your mom is still here. She sounds like a strong woman.",
+      "Great, I think I have a good picture of your family. These are the people who matter most to you.",
+    ],
+    summaryHeading: "Here's what I captured during the conversation.",
+    summaryListLabel: 'Tap to edit family members',
+    summaryAddLabel: 'Add a friend I missed',
+    summaryItems: [
+      { id: 'si-1', name: 'Sarah Rogers', label: 'Daughter' },
+      { id: 'si-2', name: 'Michael Thompson', label: 'Son' },
+      { id: 'si-3', name: 'Jessica Li', label: 'Mother' },
+      { id: 'si-4', name: 'David Kim', label: 'Father' },
+      { id: 'si-5', name: 'Emily Johnson', label: 'Sister' },
+    ],
+  },
+  'cat-friends': {
+    categoryId: 'cat-friends',
+    moduleId: 'mod-fri-1',
+    moduleTitle: 'Your Friend Circle',
+    questions: [
+      {
+        id: 'q-fri-1',
+        promptText: "Let's talk about the friends who've been with you through it all. Who comes to mind first?",
+        mockUserResponse: "My buddy Tom — we've been friends since college. He was my best man. And Nancy from work, she's been a close friend for about 20 years now.",
+        mockAiAcknowledgment: "Tom and Nancy — sounds like you've had some real anchors in your life. College friendships that last are something special.",
+      },
+      {
+        id: 'q-fri-2',
+        promptText: "Anyone else you'd want to make sure we capture? Maybe a neighbor or someone from your community?",
+        mockUserResponse: "Bill next door. We've been neighbors for 15 years. He's the kind of guy who just shows up when you need him.",
+        mockAiAcknowledgment: "Bill sounds like a true friend. The ones who show up without being asked — those are keepers.",
+      },
+    ],
+    finishMessages: [
+      "Bill sounds like a true friend. The ones who show up without being asked — those are keepers.",
+      "I think I've got a good picture of your closest friends. These are the people who've walked alongside you.",
+    ],
+    summaryHeading: "Here's what I captured during the conversation.",
+    summaryListLabel: 'Tap to edit friends',
+    summaryAddLabel: 'Add a friend I missed',
+    summaryItems: [
+      { id: 'si-1', name: 'Tom Henderson', label: 'College Friend' },
+      { id: 'si-2', name: 'Nancy Park', label: 'Work Friend' },
+      { id: 'si-3', name: 'Bill Martinez', label: 'Neighbor' },
+    ],
+  },
+  'cat-career': {
+    categoryId: 'cat-career',
+    moduleId: 'mod-car-1',
+    moduleTitle: 'Your Career Journey',
+    questions: [
+      {
+        id: 'q-car-1',
+        promptText: "Let's start at the beginning. What was your very first job, and how did you end up there?",
+        mockUserResponse: "I started as a stock boy at the local hardware store when I was 16. My dad knew the owner. It taught me how to work hard and show up on time.",
+        mockAiAcknowledgment: "A hardware store at 16 — that's a great way to learn the basics. Sounds like it set a strong foundation.",
+      },
+      {
+        id: 'q-car-2',
+        promptText: "What about the career you're most known for? Walk me through how that unfolded.",
+        mockUserResponse: "I spent 30 years in engineering at Boeing. Started as a junior engineer, worked my way up to lead the 747 maintenance program. Retired as a senior director.",
+        mockAiAcknowledgment: "30 years at Boeing, from junior engineer to senior director — that's an incredible arc. The 747 program is legendary.",
+      },
+    ],
+    finishMessages: [
+      "30 years at Boeing, from junior engineer to senior director — that's an incredible arc.",
+      "I've got a clear picture of your career journey. These are the roles that defined your professional life.",
+    ],
+    summaryHeading: "Here's what I captured during the conversation.",
+    summaryListLabel: 'Tap to edit career entries',
+    summaryAddLabel: 'Add a role I missed',
+    summaryItems: [
+      { id: 'si-1', name: 'Hardware Store', label: 'Stock Boy' },
+      { id: 'si-2', name: 'Boeing', label: 'Junior Engineer' },
+      { id: 'si-3', name: 'Boeing', label: 'Senior Director' },
     ],
   },
 }

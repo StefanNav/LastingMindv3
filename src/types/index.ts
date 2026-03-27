@@ -148,3 +148,38 @@ export interface AppState {
   currentPrompt: Prompt | null
   isSessionActive: boolean
 }
+
+export interface ConversationQuestion {
+  id: string
+  promptText: string
+  mockUserResponse: string
+  mockAiAcknowledgment: string
+}
+
+export interface ConversationSummaryItem {
+  id: string
+  name: string
+  label: string
+}
+
+export interface ConversationConfig {
+  categoryId: string
+  moduleId: string
+  moduleTitle: string
+  questions: ConversationQuestion[]
+  summaryHeading: string
+  summaryListLabel: string
+  summaryAddLabel: string
+  summaryItems: ConversationSummaryItem[]
+  finishMessages: string[]
+}
+
+export type ConversationStep =
+  | 'question'
+  | 'recording'
+  | 'transcription'
+  | 'ai_thinking'
+  | 'finish'
+  | 'summary'
+
+export type ConversationInputMode = 'voice' | 'text'
