@@ -1,5 +1,23 @@
 export type PhaseId = 'foundation' | 'story' | 'legacy'
 
+export type CategoryStatus = 'locked' | 'not_started' | 'growing' | 'budding' | 'flourishing'
+
+export interface Category {
+  id: string
+  title: string
+  image: string
+  status: CategoryStatus
+  currentModule?: number
+  totalModules: number
+}
+
+export interface HomePhase {
+  id: string
+  title: string
+  label: string
+  categories: Category[]
+}
+
 export interface Phase {
   id: PhaseId
   title: string
@@ -51,6 +69,48 @@ export interface LegacyCreator {
   completedModules: string[]
   stories: Story[]
   treeGrowthLevel: number
+}
+
+export interface CategoryModule {
+  id: string
+  title: string
+  description: string
+  duration: string
+  completed: boolean
+  locked: boolean
+}
+
+export interface RecentEntry {
+  id: string
+  memberInitial: string
+  memberName: string
+  title: string
+  snippet: string
+  date: string
+}
+
+export interface GrowthAction {
+  id: string
+  label: string
+}
+
+export interface CategorySheetMember {
+  id: string
+  initial: string
+  name: string
+  entryCount: number
+}
+
+export interface CategoryDetail {
+  categoryId: string
+  heading: string
+  subtitle?: string
+  modules: CategoryModule[]
+  familyMembers?: CategorySheetMember[]
+  recentEntries?: RecentEntry[]
+  growthActions?: GrowthAction[]
+  entriesComplete?: number
+  entriesToNextStar?: number
 }
 
 export interface AppState {

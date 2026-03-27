@@ -21,9 +21,9 @@ export function MobileShell({ children }: MobileShellProps) {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
-      <div className="relative flex h-[932px] w-[430px] flex-col overflow-hidden bg-background shadow-2xl">
-        {/* Status Bar */}
-        <div className="flex h-11 items-center justify-between px-6 text-xs font-medium">
+      <div className="relative flex h-[932px] w-[430px] flex-col overflow-hidden bg-background shadow-2xl" style={{ transform: 'translateZ(0)' }}>
+        {/* Status Bar — overlays content */}
+        <div className="absolute top-0 left-0 right-0 z-50 flex h-11 items-center justify-between bg-background/60 px-6 text-xs font-medium">
           <span>9:41</span>
           <div className="flex items-center gap-1">
             <div className="h-2.5 w-4 rounded-sm border border-foreground/50">
