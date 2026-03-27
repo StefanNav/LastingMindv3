@@ -6,6 +6,8 @@ export interface Category {
   id: string
   title: string
   image: string
+  imageHeight?: number
+  imageWidth?: number
   status: CategoryStatus
   currentModule?: number
   totalModules: number
@@ -111,6 +113,33 @@ export interface CategoryDetail {
   growthActions?: GrowthAction[]
   entriesComplete?: number
   entriesToNextStar?: number
+}
+
+export interface ModuleIntroData {
+  categoryId: string
+  categoryLabel: string
+  image: string
+  imageHeight: number
+  moduleTitle: string
+  description: string
+}
+
+export interface Module2IntroOption {
+  id: string
+  label: string
+  subtitle?: string
+}
+
+export interface Module2IntroData {
+  categoryId: string
+  categoryLabel: string
+  image: string
+  imageWidth: number
+  moduleTitle: string
+  description: string
+  selectionType: 'chips' | 'radio-cards'
+  disabledButtonText: string
+  options: Module2IntroOption[]
 }
 
 export interface AppState {

@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
 import { HomeHeader } from '@/components/home/HomeHeader'
@@ -6,14 +7,26 @@ import { PromptCard } from '@/components/home/PromptCard'
 import { PhaseToggle } from '@/components/home/PhaseToggle'
 import { CategoryNodeCard } from '@/components/cards/CategoryNodeCard'
 import { CategoryBottomSheet } from '@/components/sheets/CategoryBottomSheet'
-import { mockHomePhases, mockCategoryDetails } from '@/data/mock'
+import { mockHomePhases, mockCategoryDetails, module2IntroData } from '@/data/mock'
 import type { Category } from '@/types'
 
 export function HomePage() {
+  const navigate = useNavigate()
+  const location = useLocation()
   const [activePhaseIndex, setActivePhaseIndex] = useState(0)
   const activePhase = mockHomePhases[activePhaseIndex]
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const isSheetOpen = selectedCategory !== null
+
+  useEffect(() => {
+    const state = location.state as { openCategory?: string } | null
+    if (state?.openCategory) {
+      const allCategories = mockHomePhases.flatMap((p) => p.categories)
+      const match = allCategories.find((c) => c.id === state.openCategory)
+      if (match) setSelectedCategory(match)
+      navigate(location.pathname, { replace: true, state: {} })
+    }
+  }, [location.state, navigate, location.pathname])
 
   const handleCategoryClick = useCallback((category: Category) => {
     setSelectedCategory(category)
@@ -22,6 +35,17 @@ export function HomePage() {
   const handleSheetClose = useCallback(() => {
     setSelectedCategory(null)
   }, [])
+
+  const handleBeginModule = useCallback((categoryId: string, moduleId: string) => {
+    setSelectedCategory(null)
+    const detail = mockCategoryDetails[categoryId]
+    const isModule2 = detail?.modules?.[1]?.id === moduleId && module2IntroData[categoryId]
+    if (isModule2) {
+      navigate(`/intro2/${categoryId}`)
+    } else {
+      navigate(`/intro/${categoryId}`)
+    }
+  }, [navigate])
 
   return (
     <PageTransition>
@@ -123,6 +147,7 @@ export function HomePage() {
         category={selectedCategory}
         detail={selectedCategory ? mockCategoryDetails[selectedCategory.id] ?? null : null}
         onClose={handleSheetClose}
+        onBeginModule={handleBeginModule}
       />
     </PageTransition>
   )

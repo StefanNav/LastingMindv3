@@ -17,7 +17,7 @@ const navItems = [
 export function MobileShell({ children }: MobileShellProps) {
   const location = useLocation()
   const navigate = useNavigate()
-  const isOnboarding = location.pathname === '/onboarding'
+  const hideNav = location.pathname === '/onboarding' || location.pathname.startsWith('/intro')
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
@@ -38,7 +38,7 @@ export function MobileShell({ children }: MobileShellProps) {
         </main>
 
         {/* Bottom Navigation — hidden during onboarding */}
-        {!isOnboarding && (
+        {!hideNav && (
           <nav className="flex h-20 items-center justify-around border-t border-border bg-background pb-4">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path

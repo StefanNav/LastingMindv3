@@ -8,6 +8,8 @@ import { SessionPage } from '@/pages/SessionPage'
 import { SuccessPage } from '@/pages/SuccessPage'
 import { FamilyPage } from '@/pages/FamilyPage'
 import { SettingsPage } from '@/pages/SettingsPage'
+import { ModuleIntroPage } from '@/pages/ModuleIntroPage'
+import { Module2IntroPage } from '@/pages/Module2IntroPage'
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
               <Route path="/success" element={<SuccessPage />} />
               <Route path="/family" element={<FamilyPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/intro/:categoryId" element={<ModuleIntroPage />} />
+              <Route path="/intro2/:categoryId" element={<Module2IntroPage />} />
             </Routes>
           </AnimatePresence>
         </MobileShell>

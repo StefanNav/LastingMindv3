@@ -50,7 +50,10 @@ export function CategoryNodeCard({ category, onClick }: CategoryNodeCardProps) {
       )}
     >
       {/* Category image */}
-      <div className="relative h-[156px] w-[147px] overflow-hidden">
+      <div
+        className="relative overflow-hidden"
+        style={{ height: category.imageHeight ?? 156, width: category.imageWidth ?? 147 }}
+      >
         <img
           src={image}
           alt={title}
