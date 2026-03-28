@@ -1,6 +1,9 @@
 import { Star } from 'lucide-react'
+import { useApp } from '@/app/AppProvider'
 
 export function HomeHeader() {
+  const { foundationStars } = useApp()
+
   return (
     <div className="flex h-[96px] items-center justify-between bg-[var(--lm-bg-header)] px-4 pb-[19px] pt-[68px]">
       {/* LM Logo */}
@@ -17,10 +20,10 @@ export function HomeHeader() {
 
       {/* Right icons */}
       <div className="flex items-center gap-3">
-        {/* Streak count */}
+        {/* Star count */}
         <div className="flex h-[30px] items-center justify-center gap-1 rounded-full p-0.5">
           <p className="text-center text-[16px] font-bold leading-[1.2] tracking-[0.12px] text-foreground">
-            6
+            {foundationStars}
           </p>
           <Star className="size-4 text-lm-gold-star" fill="var(--lm-gold-star)" />
         </div>

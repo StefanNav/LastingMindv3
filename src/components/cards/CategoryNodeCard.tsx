@@ -42,11 +42,10 @@ export function CategoryNodeCard({ category, onClick }: CategoryNodeCardProps) {
     <button
       type="button"
       onClick={onClick}
-      disabled={isLocked}
       className={cn(
         'bg-lm-bg-card flex flex-col items-center justify-center gap-2 rounded-[10px] px-5 py-4 shadow-card w-full',
         'transition-transform active:scale-[0.97]',
-        isLocked && 'opacity-70 cursor-not-allowed',
+        isLocked && 'opacity-70',
       )}
     >
       {/* Category image */}

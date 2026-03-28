@@ -1,13 +1,14 @@
 import { Star } from 'lucide-react'
+import { useApp } from '@/app/AppProvider'
 
 const FOUNDATION_STAR_COUNT = 6
 
 interface FoundationProgressCardProps {
-  filledStars?: number
   onContinue?: () => void
 }
 
-export function FoundationProgressCard({ filledStars = 0, onContinue }: FoundationProgressCardProps) {
+export function FoundationProgressCard({ onContinue }: FoundationProgressCardProps) {
+  const { foundationStars: filledStars } = useApp()
   return (
     <div className="px-4">
       <div className="flex flex-col items-center gap-2.5 rounded-[10px] bg-lm-bg-card p-3 shadow-[0px_3px_6px_0px_rgba(0,0,0,0.16)]">

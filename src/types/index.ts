@@ -183,3 +183,30 @@ export type ConversationStep =
   | 'summary'
 
 export type ConversationInputMode = 'voice' | 'text'
+
+export type DemoStateId = 'state-0' | 'flow-1' | 'flow-2' | 'flow-3'
+
+export interface DemoPromptCard {
+  categoryTag: string
+  question: string
+}
+
+export interface DemoConfig {
+  id: DemoStateId
+  label: string
+  foundationStars: number
+  treeImage: string
+  promptCard: DemoPromptCard
+  homePhases: HomePhase[]
+  categoryDetails: Record<string, CategoryDetail>
+}
+
+export interface ModuleCompletionState {
+  categoryId: string
+  moduleNumber: 1 | 2
+  moduleTitle: string
+  categoryLabel: string
+  starEarned: boolean
+  totalStars: number
+  totalStarsNeeded: number
+}

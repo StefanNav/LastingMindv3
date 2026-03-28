@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Home, Mic, Users, Settings } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { DemoDropdown } from './DemoDropdown'
 
 interface MobileShellProps {
   children: ReactNode
@@ -25,6 +26,7 @@ export function MobileShell({ children }: MobileShellProps) {
         {/* Status Bar — overlays content */}
         <div className="absolute top-0 left-0 right-0 z-50 flex h-11 items-center justify-between bg-background/60 px-6 text-xs font-medium">
           <span>9:41</span>
+          <DemoDropdown />
           <div className="flex items-center gap-1">
             <div className="h-2.5 w-4 rounded-sm border border-foreground/50">
               <div className="m-0.5 h-1.5 w-2.5 rounded-xs bg-foreground/50" />

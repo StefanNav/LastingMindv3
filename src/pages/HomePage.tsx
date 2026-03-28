@@ -7,21 +7,28 @@ import { PromptCard } from '@/components/home/PromptCard'
 import { PhaseToggle } from '@/components/home/PhaseToggle'
 import { CategoryNodeCard } from '@/components/cards/CategoryNodeCard'
 import { CategoryBottomSheet } from '@/components/sheets/CategoryBottomSheet'
-import { mockHomePhases, mockCategoryDetails, module2IntroData } from '@/data/mock'
+import { module2IntroData } from '@/data/mock'
+import { useApp } from '@/app/AppProvider'
 import type { Category } from '@/types'
 
 export function HomePage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { homePhases, categoryDetails, promptCard, treeImage, activeDemoId } = useApp()
   const [activePhaseIndex, setActivePhaseIndex] = useState(0)
-  const activePhase = mockHomePhases[activePhaseIndex]
+  const activePhase = homePhases[activePhaseIndex]
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const isSheetOpen = selectedCategory !== null
 
   useEffect(() => {
+    setActivePhaseIndex(0)
+    setSelectedCategory(null)
+  }, [activeDemoId])
+
+  useEffect(() => {
     const state = location.state as { openCategory?: string } | null
     if (state?.openCategory) {
-      const allCategories = mockHomePhases.flatMap((p) => p.categories)
+      const allCategories = homePhases.flatMap((p) => p.categories)
       const match = allCategories.find((c) => c.id === state.openCategory)
       if (match) setSelectedCategory(match)
       navigate(location.pathname, { replace: true, state: {} })
@@ -36,9 +43,14 @@ export function HomePage() {
     setSelectedCategory(null)
   }, [])
 
+  const handleContinueFoundation = useCallback(() => {
+    setSelectedCategory(null)
+    setActivePhaseIndex(0)
+  }, [])
+
   const handleBeginModule = useCallback((categoryId: string, moduleId: string) => {
     setSelectedCategory(null)
-    const detail = mockCategoryDetails[categoryId]
+    const detail = categoryDetails[categoryId]
     const isModule2 = detail?.modules?.[1]?.id === moduleId && module2IntroData[categoryId]
     if (isModule2) {
       navigate(`/intro2/${categoryId}`)
@@ -72,8 +84,8 @@ export function HomePage() {
 
           {/* ── Prompt Card ── */}
           <PromptCard
-            categoryTag="From Core values"
-            question="What's a belief you've changed your mind about, and what caused that shift?"
+            categoryTag={promptCard.categoryTag}
+            question={promptCard.question}
           />
         </div>
 
@@ -81,7 +93,7 @@ export function HomePage() {
         <div className="relative z-[2] mt-10 flex justify-center">
           <div className="relative h-[316px] w-[466px]">
             <img
-              src="/images/Tree 1.png"
+              src={treeImage}
               alt="Legacy tree"
               className="h-full w-full object-contain"
             />
@@ -116,7 +128,7 @@ export function HomePage() {
             onPrevious={() => setActivePhaseIndex((i) => i - 1)}
             onNext={() => setActivePhaseIndex((i) => i + 1)}
             hasPrevious={activePhaseIndex > 0}
-            hasNext={activePhaseIndex < mockHomePhases.length - 1}
+            hasNext={activePhaseIndex < homePhases.length - 1}
           />
         </div>
 
@@ -145,9 +157,10 @@ export function HomePage() {
       <CategoryBottomSheet
         isOpen={isSheetOpen}
         category={selectedCategory}
-        detail={selectedCategory ? mockCategoryDetails[selectedCategory.id] ?? null : null}
+        detail={selectedCategory ? categoryDetails[selectedCategory.id] ?? null : null}
         onClose={handleSheetClose}
         onBeginModule={handleBeginModule}
+        onContinueFoundation={handleContinueFoundation}
       />
     </PageTransition>
   )

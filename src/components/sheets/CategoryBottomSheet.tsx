@@ -13,11 +13,12 @@ interface CategoryBottomSheetProps {
   detail: CategoryDetail | null
   onClose: () => void
   onBeginModule?: (categoryId: string, moduleId: string) => void
+  onContinueFoundation?: () => void
 }
 
 const DRAG_CLOSE_THRESHOLD = 100
 
-export function CategoryBottomSheet({ isOpen, category, detail, onClose, onBeginModule }: CategoryBottomSheetProps) {
+export function CategoryBottomSheet({ isOpen, category, detail, onClose, onBeginModule, onContinueFoundation }: CategoryBottomSheetProps) {
   const shouldReduceMotion = useReducedMotion()
 
   useEffect(() => {
@@ -78,11 +79,15 @@ export function CategoryBottomSheet({ isOpen, category, detail, onClose, onBegin
   }, [onClose])
 
   function renderContent() {
-    if (!category || !detail) return null
+    if (!category) return null
+
+    if (category.status === 'locked') {
+      return <LockedContent category={category} onContinueFoundation={onContinueFoundation} />
+    }
+
+    if (!detail) return null
 
     switch (category.status) {
-      case 'locked':
-        return <LockedContent category={category} onContinueFoundation={onClose} />
       case 'not_started':
         return <ZeroStateContent category={category} detail={detail} onBeginModule={(moduleId) => onBeginModule?.(category.id, moduleId)} />
       case 'growing':
