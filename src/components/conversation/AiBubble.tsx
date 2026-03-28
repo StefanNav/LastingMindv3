@@ -16,7 +16,7 @@ export function AiBubble({ messages }: AiBubbleProps) {
       {messages.map((msg, i) => (
         <p
           key={i}
-          className="font-display text-[20px] font-semibold leading-[28px] tracking-[0.45px] text-[#3e2f26]"
+          className="text-center font-display text-[20px] font-semibold leading-[28px] tracking-[0.45px] text-[#3e2f26]"
           style={{ fontVariationSettings: "'opsz' 12, 'wdth' 100", marginTop: i > 0 ? '10px' : 0 }}
         >
           {msg}

@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import { Pause, CircleStop } from 'lucide-react'
 
 interface VoiceRecordingProps {
-  transcribingText: string
   onStop: () => void
 }
 
@@ -37,7 +36,7 @@ function useTimer() {
   return `${mins}:${secs.toString().padStart(2, '0')}`
 }
 
-export function VoiceRecording({ transcribingText, onStop }: VoiceRecordingProps) {
+export function VoiceRecording({ onStop }: VoiceRecordingProps) {
   const bars = useWaveformBars(40)
   const time = useTimer()
   const [isPaused, setIsPaused] = useState(false)
@@ -63,21 +62,6 @@ export function VoiceRecording({ transcribingText, onStop }: VoiceRecordingProps
           </span>
         </div>
       </div>
-
-      {/* Transcription preview */}
-      {transcribingText && (
-        <div className="w-full rounded-[15px] bg-white/90 px-[10px] py-5 shadow-[0px_3px_6px_0px_rgba(0,0,0,0.16)]">
-          <p className="text-center text-[12px] font-semibold leading-[1.2] tracking-wide text-[var(--lm-text-secondary)]">
-            TRANSCRIBING YOUR ANSWER
-          </p>
-          <p
-            className="mt-[10px] font-display text-[20px] font-semibold leading-[28px] tracking-[0.45px] text-[#3e2f26]"
-            style={{ fontVariationSettings: "'opsz' 12, 'wdth' 100" }}
-          >
-            {transcribingText}
-          </p>
-        </div>
-      )}
 
       {/* Controls */}
       <div className="flex w-full gap-2">

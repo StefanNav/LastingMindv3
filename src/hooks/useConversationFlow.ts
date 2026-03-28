@@ -6,13 +6,14 @@ interface ConversationState {
   currentQuestionIndex: number
   inputMode: ConversationInputMode
   summaryItems: ConversationSummaryItem[]
+  lastAiAcknowledgment: string | null
 }
 
 type ConversationAction =
   | { type: 'START_RECORDING' }
   | { type: 'STOP_RECORDING' }
   | { type: 'CONFIRM_TRANSCRIPTION' }
-  | { type: 'AI_THINKING_COMPLETE' }
+  | { type: 'AI_THINKING_COMPLETE'; payload: { totalQuestions: number; acknowledgment: string } }
   | { type: 'GO_TO_SUMMARY' }
   | { type: 'GO_BACK' }
   | { type: 'TOGGLE_INPUT_MODE' }
@@ -26,6 +27,7 @@ function createInitialState(config: ConversationConfig): ConversationState {
     currentQuestionIndex: 0,
     inputMode: 'voice',
     summaryItems: [...config.summaryItems],
+    lastAiAcknowledgment: null,
   }
 }
 
@@ -45,10 +47,12 @@ function conversationReducer(
 
     case 'AI_THINKING_COMPLETE': {
       const nextIndex = state.currentQuestionIndex + 1
+      const isLast = nextIndex >= action.payload.totalQuestions
       return {
         ...state,
-        step: 'finish',
-        currentQuestionIndex: nextIndex,
+        step: isLast ? 'finish' : 'question',
+        currentQuestionIndex: isLast ? state.currentQuestionIndex : nextIndex,
+        lastAiAcknowledgment: action.payload.acknowledgment,
       }
     }
 
@@ -117,7 +121,17 @@ export function useConversationFlow(config: ConversationConfig) {
   const startRecording = useCallback(() => dispatch({ type: 'START_RECORDING' }), [])
   const stopRecording = useCallback(() => dispatch({ type: 'STOP_RECORDING' }), [])
   const confirmTranscription = useCallback(() => dispatch({ type: 'CONFIRM_TRANSCRIPTION' }), [])
-  const aiThinkingComplete = useCallback(() => dispatch({ type: 'AI_THINKING_COMPLETE' }), [])
+  const aiThinkingComplete = useCallback(
+    () =>
+      dispatch({
+        type: 'AI_THINKING_COMPLETE',
+        payload: {
+          totalQuestions,
+          acknowledgment: currentQuestion.mockAiAcknowledgment,
+        },
+      }),
+    [totalQuestions, currentQuestion],
+  )
   const goToSummary = useCallback(() => dispatch({ type: 'GO_TO_SUMMARY' }), [])
   const goBack = useCallback(() => dispatch({ type: 'GO_BACK' }), [])
   const toggleInputMode = useCallback(() => dispatch({ type: 'TOGGLE_INPUT_MODE' }), [])
@@ -135,6 +149,8 @@ export function useConversationFlow(config: ConversationConfig) {
     [],
   )
 
+  const lastAiAcknowledgment = state.lastAiAcknowledgment
+
   return {
     ...state,
     config,
@@ -143,6 +159,7 @@ export function useConversationFlow(config: ConversationConfig) {
     currentQuestion,
     progressPercent,
     headerRightLabel,
+    lastAiAcknowledgment,
     startRecording,
     stopRecording,
     confirmTranscription,

@@ -4,6 +4,7 @@ import { PageTransition } from '@/animations/PageTransition'
 import { useConversationFlow } from '@/hooks/useConversationFlow'
 import { ConversationHeader } from '@/components/conversation/ConversationHeader'
 import { AiBubble } from '@/components/conversation/AiBubble'
+import { TranscriptionBubble } from '@/components/conversation/TranscriptionBubble'
 import { VoiceInput } from '@/components/conversation/VoiceInput'
 import { VoiceRecording } from '@/components/conversation/VoiceRecording'
 import { TranscriptionReview } from '@/components/conversation/TranscriptionReview'
@@ -54,6 +55,7 @@ export function GuidedConversationPage({ config, onComplete, onBack }: GuidedCon
             progressPercent={100}
             onBack={flow.goBack}
             showProgress={false}
+            variant="summary"
           />
           <SummaryList
             heading={config.summaryHeading}
@@ -83,7 +85,7 @@ export function GuidedConversationPage({ config, onComplete, onBack }: GuidedCon
         {/* Background image */}
         <div className="pointer-events-none absolute inset-0 z-0">
           <img
-            src="/images/Background Imagev2.png"
+            src="/images/hilltree 2.png"
             alt=""
             className="absolute inset-0 size-full object-cover"
           />
@@ -103,28 +105,37 @@ export function GuidedConversationPage({ config, onComplete, onBack }: GuidedCon
             {flow.step === 'question' && (
               <AiBubble
                 key={`question-${flow.currentQuestionIndex}`}
-                messages={[flow.currentQuestion.promptText]}
+                messages={
+                  flow.lastAiAcknowledgment && flow.currentQuestionIndex > 0
+                    ? [flow.lastAiAcknowledgment, flow.currentQuestion.promptText]
+                    : [flow.currentQuestion.promptText]
+                }
               />
             )}
 
             {flow.step === 'recording' && (
-              <AiBubble
+              <TranscriptionBubble
                 key={`recording-${flow.currentQuestionIndex}`}
-                messages={[flow.currentQuestion.promptText]}
+                text={flow.currentQuestion.mockUserResponse}
+                label="TRANSCRIBING YOUR ANSWER"
               />
             )}
 
             {flow.step === 'transcription' && (
-              <AiBubble
+              <TranscriptionBubble
                 key={`transcription-${flow.currentQuestionIndex}`}
-                messages={[flow.currentQuestion.promptText]}
+                text={flow.currentQuestion.mockUserResponse}
+                label="YOUR RESPONSE"
+                showTapToEdit
+                onTapToEdit={() => {}}
               />
             )}
 
             {flow.step === 'ai_thinking' && (
-              <AiBubble
+              <TranscriptionBubble
                 key={`thinking-${flow.currentQuestionIndex}`}
-                messages={[flow.currentQuestion.mockAiAcknowledgment]}
+                text={flow.currentQuestion.mockUserResponse}
+                showDotsIndicator
               />
             )}
 
@@ -159,7 +170,6 @@ export function GuidedConversationPage({ config, onComplete, onBack }: GuidedCon
             {flow.step === 'recording' && (
               <VoiceRecording
                 key="recording"
-                transcribingText={flow.currentQuestion.mockUserResponse}
                 onStop={flow.stopRecording}
               />
             )}
@@ -167,8 +177,7 @@ export function GuidedConversationPage({ config, onComplete, onBack }: GuidedCon
             {flow.step === 'transcription' && (
               <TranscriptionReview
                 key="transcription"
-                text={flow.currentQuestion.mockUserResponse}
-                onSeeNote={() => {}}
+                onSayMore={flow.startRecording}
                 onContinue={flow.confirmTranscription}
               />
             )}

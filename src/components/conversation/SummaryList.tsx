@@ -35,7 +35,7 @@ export function SummaryList({
   return (
     <div className="flex h-full flex-col bg-[var(--lm-bg-primary)]">
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto pt-[130px]">
+      <div className="flex-1 overflow-y-auto pt-[160px]">
         {/* Heading */}
         <div className="flex items-center justify-center px-4 py-[10px]">
           <p

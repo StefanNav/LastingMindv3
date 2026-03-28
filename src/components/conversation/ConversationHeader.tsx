@@ -7,6 +7,7 @@ interface ConversationHeaderProps {
   progressPercent: number
   onBack: () => void
   showProgress?: boolean
+  variant?: 'default' | 'summary'
 }
 
 export function ConversationHeader({
@@ -15,9 +16,12 @@ export function ConversationHeader({
   progressPercent,
   onBack,
   showProgress = true,
+  variant = 'default',
 }: ConversationHeaderProps) {
+  const isSummary = variant === 'summary'
+
   return (
-    <div className="absolute inset-x-0 top-0 z-20 flex flex-col items-center gap-[6px] border-b border-black/16 bg-white/60 pb-[12px] pt-[62px] backdrop-blur-sm">
+    <div className={`absolute inset-x-0 top-0 z-20 flex flex-col items-center border-b border-black/16 pb-[12px] pt-[62px] ${isSummary ? 'gap-[20px] bg-[var(--lm-bg-primary)]' : 'gap-[6px] bg-white/60 backdrop-blur-sm'}`}>
       <div className="flex w-full items-center justify-between px-4">
         <button
           type="button"
