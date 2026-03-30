@@ -7,26 +7,31 @@ export function ReflectionThinking() {
       <div className="flex flex-1 items-center justify-center">
         <div className="relative size-[161px]">
           {/* Dashed circle */}
-          <svg className="size-full" viewBox="0 0 161 161">
+          <motion.svg
+            className="size-full"
+            viewBox="0 0 161 161"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          >
             <circle
               cx="80.5"
               cy="80.5"
               r="72"
               fill="none"
               stroke="#33602b"
-              strokeWidth="2.5"
-              strokeDasharray="16 12"
+              strokeWidth="1"
+              strokeDasharray="4 8"
               strokeLinecap="round"
             />
-          </svg>
+          </motion.svg>
           {/* Orbiting green dot */}
           <motion.div
             className="absolute left-1/2 top-1/2"
             animate={{ rotate: 360 }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+            transition={{ duration: 4, repeat: Infinity, ease: [0.4, 0, 0.2, 1] }}
             style={{ width: 161, height: 161, marginLeft: -80.5, marginTop: -80.5 }}
           >
-            <div className="absolute right-[-3px] top-1/2 size-[22px] -translate-y-1/2 rounded-full bg-lm-green shadow-[0px_2px_4px_rgba(0,0,0,0.15)]" />
+            <div className="absolute right-[-3px] top-1/2 size-[22px] -translate-y-1/2 rounded-full bg-lm-green shadow-[0px_2px_4px_rgba(0,0,0,0.15),0_0_10px_3px_rgba(50,117,30,0.4)]" />
           </motion.div>
         </div>
       </div>
