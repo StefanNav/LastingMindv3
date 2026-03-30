@@ -90,6 +90,7 @@ export function CategoryBottomSheet({ isOpen, category, detail, onClose, onBegin
     switch (category.status) {
       case 'not_started':
         return <ZeroStateContent category={category} detail={detail} onBeginModule={(moduleId) => onBeginModule?.(category.id, moduleId)} />
+      case 'started':
       case 'growing':
       case 'budding':
         return <StartedContent category={category} detail={detail} onBeginModule={(moduleId) => onBeginModule?.(category.id, moduleId)} />

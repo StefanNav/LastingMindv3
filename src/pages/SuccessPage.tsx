@@ -102,10 +102,67 @@ export function SuccessPage() {
             </motion.div>
           )}
 
-          {/* Step 3: Result — Flow 1 (Module 1, no star) */}
-          {step === 'result' && (
+          {/* Step 3: Result */}
+          {step === 'result' && completionState.starEarned && (
             <motion.div
-              key="result"
+              key="result-star"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+              className="flex w-full flex-col items-center gap-8"
+            >
+              {/* Star earned heading */}
+              <div className="flex flex-col items-center gap-3">
+                <p className="font-display text-[26px] font-normal leading-[1.2] text-foreground">
+                  Star Earned!
+                </p>
+                <p className="text-[16px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+                  {completionState.totalStars} of {completionState.totalStarsNeeded} stars earned
+                </p>
+              </div>
+
+              {/* Animated star */}
+              <motion.div
+                initial={{ scale: 0, rotate: -30 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
+              >
+                <Star className="size-20 fill-[var(--lm-gold-star)] text-[var(--lm-gold-star)]" strokeWidth={1.2} />
+              </motion.div>
+
+              <p className="max-w-[260px] text-center text-[14px] font-semibold leading-[1.4] text-[var(--lm-text-secondary)]">
+                You earned a star for {categoryLabel}. Keep going to unlock your tree's next stage.
+              </p>
+
+              {/* CTAs */}
+              <div className="flex w-full flex-col gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => navigate('/home')}
+                  className="flex w-full items-center justify-center gap-2 rounded-[4px] bg-lm-green px-10 py-4"
+                >
+                  <span className="text-[18px] font-medium leading-[1.2] text-white">
+                    Continue
+                  </span>
+                  <ArrowRight className="size-5 text-white" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/home')}
+                  className="flex w-full items-center justify-center rounded-[4px] border border-[var(--lm-border)] bg-transparent px-10 py-4"
+                >
+                  <span className="text-[18px] font-medium leading-[1.2] text-foreground">
+                    Return Home
+                  </span>
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Flow 1 — Module 1 complete, no star */}
+          {step === 'result' && !completionState.starEarned && (
+            <motion.div
+              key="result-no-star"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}

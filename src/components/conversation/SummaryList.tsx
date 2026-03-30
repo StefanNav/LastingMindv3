@@ -1,5 +1,8 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Pencil, X, Plus, ArrowRight } from 'lucide-react'
+import { EditSummaryItemModal } from './EditSummaryItemModal'
+import { DeleteConfirmationModal } from './DeleteConfirmationModal'
 import type { ConversationSummaryItem } from '@/types'
 
 interface SummaryListProps {
@@ -9,7 +12,7 @@ interface SummaryListProps {
   items: ConversationSummaryItem[]
   onEdit: (item: ConversationSummaryItem) => void
   onDelete: (id: string) => void
-  onAdd: () => void
+  onAdd: (item: ConversationSummaryItem) => void
   onSaveAndFinish: () => void
 }
 
@@ -32,6 +35,10 @@ export function SummaryList({
   onAdd,
   onSaveAndFinish,
 }: SummaryListProps) {
+  const [editingItem, setEditingItem] = useState<ConversationSummaryItem | null>(null)
+  const [isAdding, setIsAdding] = useState(false)
+  const [deletingItem, setDeletingItem] = useState<ConversationSummaryItem | null>(null)
+
   return (
     <div className="flex h-full flex-col bg-[var(--lm-bg-primary)]">
       {/* Scrollable content */}
@@ -72,14 +79,14 @@ export function SummaryList({
                 <div className="flex shrink-0 items-center gap-[10px]">
                   <button
                     type="button"
-                    onClick={() => onEdit(item)}
+                    onClick={() => setEditingItem(item)}
                     className="flex size-[18px] items-center justify-center"
                   >
                     <Pencil className="size-[14px] text-[var(--lm-text-secondary)]" />
                   </button>
                   <button
                     type="button"
-                    onClick={() => onDelete(item.id)}
+                    onClick={() => setDeletingItem(item)}
                     className="flex size-[18px] items-center justify-center"
                   >
                     <X className="size-[14px] text-[var(--lm-text-secondary)]" />
@@ -91,7 +98,7 @@ export function SummaryList({
             {/* Add button */}
             <button
               type="button"
-              onClick={onAdd}
+              onClick={() => setIsAdding(true)}
               className="flex items-center justify-center gap-[10px] rounded-[6px] border border-dashed border-[#5d6056] bg-[#fffcf4] px-4 py-[10px]"
             >
               <Plus className="size-4 text-[#5d6056]" />
@@ -119,6 +126,45 @@ export function SummaryList({
           </span>
         </button>
       </div>
+
+      {/* Edit modal */}
+      <EditSummaryItemModal
+        isOpen={editingItem !== null}
+        title="Edit family member"
+        initialName={editingItem?.name ?? ''}
+        initialRelationship={editingItem?.label ?? ''}
+        onSave={(name, relationship) => {
+          if (editingItem) {
+            onEdit({ ...editingItem, name, label: relationship })
+          }
+          setEditingItem(null)
+        }}
+        onCancel={() => setEditingItem(null)}
+      />
+
+      {/* Add modal */}
+      <EditSummaryItemModal
+        isOpen={isAdding}
+        title="Add a family member"
+        onSave={(name, relationship) => {
+          onAdd({ id: `si-new-${Date.now()}`, name, label: relationship })
+          setIsAdding(false)
+        }}
+        onCancel={() => setIsAdding(false)}
+      />
+
+      {/* Delete confirmation */}
+      <DeleteConfirmationModal
+        isOpen={deletingItem !== null}
+        name={deletingItem?.name ?? ''}
+        onConfirm={() => {
+          if (deletingItem) {
+            onDelete(deletingItem.id)
+          }
+          setDeletingItem(null)
+        }}
+        onCancel={() => setDeletingItem(null)}
+      />
     </div>
   )
 }

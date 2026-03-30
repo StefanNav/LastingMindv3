@@ -18,7 +18,7 @@ const navItems = [
 export function MobileShell({ children }: MobileShellProps) {
   const location = useLocation()
   const navigate = useNavigate()
-  const hideNav = location.pathname === '/onboarding' || location.pathname.startsWith('/intro') || location.pathname.startsWith('/conversation')
+  const hideNav = location.pathname === '/onboarding' || location.pathname.startsWith('/intro') || location.pathname.startsWith('/conversation') || location.pathname.startsWith('/reflection') || location.pathname.startsWith('/reflect')
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">

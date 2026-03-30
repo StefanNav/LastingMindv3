@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
 import { useConversationFlow } from '@/hooks/useConversationFlow'
@@ -12,20 +12,26 @@ import { TextInput } from '@/components/conversation/TextInput'
 import { AiThinking } from '@/components/conversation/AiThinking'
 import { FinishFooter } from '@/components/conversation/FinishFooter'
 import { SummaryList } from '@/components/conversation/SummaryList'
+import { ExitConfirmationModal } from '@/components/conversation/ExitConfirmationModal'
 import type { ConversationConfig } from '@/types'
 
 interface GuidedConversationPageProps {
   config: ConversationConfig
   onComplete?: () => void
   onBack?: () => void
+  onExit?: () => void
 }
 
-export function GuidedConversationPage({ config, onComplete, onBack }: GuidedConversationPageProps) {
+export function GuidedConversationPage({ config, onComplete, onBack, onExit }: GuidedConversationPageProps) {
   const flow = useConversationFlow(config)
+  const [isEditingTranscription, setIsEditingTranscription] = useState(false)
+  const [showExitModal, setShowExitModal] = useState(false)
 
   const handleBack = useCallback(() => {
-    if (flow.step === 'question' && flow.currentQuestionIndex === 0) {
+    if (!flow.hasAnswered && flow.step === 'question' && flow.currentQuestionIndex === 0) {
       onBack?.()
+    } else if (flow.hasAnswered) {
+      setShowExitModal(true)
     } else {
       flow.goBack()
     }
@@ -64,13 +70,7 @@ export function GuidedConversationPage({ config, onComplete, onBack }: GuidedCon
             items={flow.summaryItems}
             onEdit={flow.editSummaryItem}
             onDelete={flow.deleteSummaryItem}
-            onAdd={() => {
-              flow.addSummaryItem({
-                id: `si-new-${Date.now()}`,
-                name: 'New Entry',
-                label: 'Tap to edit',
-              })
-            }}
+            onAdd={flow.addSummaryItem}
             onSaveAndFinish={handleSaveAndFinish}
           />
         </div>
@@ -128,6 +128,7 @@ export function GuidedConversationPage({ config, onComplete, onBack }: GuidedCon
                 label="YOUR RESPONSE"
                 showTapToEdit
                 onTapToEdit={() => {}}
+                onEditingChange={setIsEditingTranscription}
               />
             )}
 
@@ -149,7 +150,7 @@ export function GuidedConversationPage({ config, onComplete, onBack }: GuidedCon
         </div>
 
         {/* Bottom action area */}
-        <div className="relative z-10">
+        {!isEditingTranscription && <div className="relative z-10">
           <AnimatePresence mode="wait">
             {flow.step === 'question' && flow.inputMode === 'voice' && (
               <VoiceInput
@@ -193,7 +194,13 @@ export function GuidedConversationPage({ config, onComplete, onBack }: GuidedCon
               />
             )}
           </AnimatePresence>
-        </div>
+        </div>}
+
+        <ExitConfirmationModal
+          isOpen={showExitModal}
+          onStay={() => setShowExitModal(false)}
+          onLeave={() => onExit?.()}
+        />
       </div>
     </PageTransition>
   )

@@ -139,17 +139,17 @@ const state0: DemoConfig = {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// FLOW 1 — Foundation In Progress (2 of 6 stars: Family ✅, Career ✅)
+// FLOW 1 — Foundation In Progress (0 stars: all Module 1s complete, Module 2s at zero)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const flow1: DemoConfig = {
   id: 'flow-1',
   label: 'Flow 1',
-  foundationStars: 2,
+  foundationStars: 0,
   treeImage: TREE_IMAGE,
   promptCard: {
-    categoryTag: 'From Friends',
-    question: 'Tell us about a friend who changed your life.',
+    categoryTag: 'From Family',
+    question: 'Tell us about a family member — share a story or memory.',
   },
   homePhases: [
     {
@@ -157,12 +157,12 @@ const flow1: DemoConfig = {
       title: 'Foundation',
       label: 'Phase 1',
       categories: [
-        { id: 'cat-family',      title: 'Family',      ...CAT_IMAGES.family,      status: 'flourishing', totalModules: 2 },
-        { id: 'cat-friends',     title: 'Friends',     ...CAT_IMAGES.friends,     status: 'growing',     totalModules: 2 },
-        { id: 'cat-career',      title: 'Career',      ...CAT_IMAGES.career,      status: 'flourishing', totalModules: 2 },
-        { id: 'cat-education',   title: 'Education',   ...CAT_IMAGES.education,   status: 'not_started', totalModules: 2 },
-        { id: 'cat-favourites',  title: 'Favourites',  ...CAT_IMAGES.favourites,  status: 'not_started', totalModules: 2 },
-        { id: 'cat-core-values', title: 'Core Values', ...CAT_IMAGES.coreValues,  status: 'not_started', totalModules: 2 },
+        { id: 'cat-family',      title: 'Family',      ...CAT_IMAGES.family,      status: 'started', totalModules: 2 },
+        { id: 'cat-friends',     title: 'Friends',     ...CAT_IMAGES.friends,     status: 'started', totalModules: 2 },
+        { id: 'cat-career',      title: 'Career',      ...CAT_IMAGES.career,      status: 'started', totalModules: 2 },
+        { id: 'cat-education',   title: 'Education',   ...CAT_IMAGES.education,   status: 'started', totalModules: 2 },
+        { id: 'cat-favourites',  title: 'Favourites',  ...CAT_IMAGES.favourites,  status: 'started', totalModules: 2 },
+        { id: 'cat-core-values', title: 'Core Values', ...CAT_IMAGES.coreValues,  status: 'started', totalModules: 2 },
       ],
     },
     {
@@ -197,35 +197,25 @@ const flow1: DemoConfig = {
     },
   ],
   categoryDetails: {
-    // Family — flourishing (CompleteContent)
+    // Family — growing (Module 1 done, Module 2 at zero)
     'cat-family': {
       categoryId: 'cat-family',
       heading: 'Tell us about your family',
-      subtitle: "You've completed all modules — keep adding to your family story!",
+      subtitle: 'Complete one more module to earn your star!',
       modules: [
         { id: 'mod-fam-1', title: "Who's in your family", description: 'This module lays the foundation for future exercises.', duration: '5min', completed: true, locked: false },
-        { id: 'mod-fam-2', title: 'Tell us about a family member', description: 'Share a story or a memory about someone in your family.', duration: '5min', completed: true, locked: false },
+        { id: 'mod-fam-2', title: 'Tell us about a family member', description: 'Share a story or a memory about someone in your family.', duration: '5min', completed: false, locked: false },
       ],
       familyMembers: [
-        { id: 'fm-linda', initial: 'L', name: 'Linda', entryCount: 2 },
-        { id: 'fm-mom', initial: 'M', name: 'Mom', entryCount: 1 },
+        { id: 'fm-linda', initial: 'L', name: 'Linda', entryCount: 0 },
+        { id: 'fm-mom', initial: 'M', name: 'Mom', entryCount: 0 },
         { id: 'fm-dad', initial: 'D', name: 'Dad', entryCount: 0 },
         { id: 'fm-sarah', initial: 'S', name: 'Sarah', entryCount: 0 },
         { id: 'fm-robert', initial: 'R', name: 'Robert', entryCount: 0 },
         { id: 'fm-james', initial: 'J', name: 'James', entryCount: 0 },
       ],
-      recentEntries: [
-        { id: 'entry-1', memberInitial: 'M', memberName: 'Mom', title: 'Moms Sunday dinners', snippet: 'Every Sunday, Mom would make her famous roast chicken...', date: 'Mar 15, 2026' },
-      ],
-      growthActions: [
-        { id: 'ga-1', label: 'Add more family members' },
-        { id: 'ga-2', label: 'Reflect on what family means to you' },
-        { id: 'ga-3', label: 'Record a story about a family member' },
-      ],
-      entriesComplete: 3,
-      entriesToNextStar: 2,
     },
-    // Friends — growing (StartedContent: Module 1 done, Module 2 active)
+    // Friends — growing (Module 1 done, Module 2 at zero)
     'cat-friends': {
       categoryId: 'cat-friends',
       heading: 'Tell us about your friends',
@@ -235,66 +225,49 @@ const flow1: DemoConfig = {
         { id: 'mod-fri-2', title: 'A friendship that shaped you', description: 'Tell us about a friend who changed your life.', duration: '5min', completed: false, locked: false },
       ],
       familyMembers: [
-        { id: 'fr-tom', initial: 'T', name: 'Tom', entryCount: 1 },
+        { id: 'fr-tom', initial: 'T', name: 'Tom', entryCount: 0 },
         { id: 'fr-bill', initial: 'B', name: 'Bill', entryCount: 0 },
         { id: 'fr-nancy', initial: 'N', name: 'Nancy', entryCount: 0 },
       ],
-      recentEntries: [
-        { id: 'entry-2', memberInitial: 'T', memberName: 'Tom', title: 'College roommate days', snippet: 'Tom and I met on the first day of college...', date: 'Mar 12, 2026' },
-      ],
-      growthActions: [
-        { id: 'ga-4', label: 'Add more friends' },
-        { id: 'ga-5', label: 'Share a favorite memory with a friend' },
-        { id: 'ga-6', label: 'Record a story about a friendship' },
-      ],
-      entriesComplete: 2,
-      entriesToNextStar: 3,
     },
-    // Career — flourishing (CompleteContent)
+    // Career — growing (Module 1 done, Module 2 at zero)
     'cat-career': {
       categoryId: 'cat-career',
       heading: 'Tell us about your career',
-      subtitle: "You've completed all modules — keep adding to your career story!",
+      subtitle: 'Complete one more module to earn your star!',
       modules: [
         { id: 'mod-car-1', title: 'Your career journey', description: 'Walk us through the jobs and roles that defined you.', duration: '5min', completed: true, locked: false },
-        { id: 'mod-car-2', title: 'Lessons from work', description: 'What did your career teach you about life?', duration: '5min', completed: true, locked: false },
+        { id: 'mod-car-2', title: 'Lessons from work', description: 'What did your career teach you about life?', duration: '5min', completed: false, locked: false },
       ],
-      growthActions: [
-        { id: 'ga-7', label: 'Share a career milestone' },
-        { id: 'ga-8', label: 'Reflect on your professional growth' },
-        { id: 'ga-9', label: 'Record advice for someone starting out' },
-      ],
-      entriesComplete: 4,
-      entriesToNextStar: 1,
     },
-    // Education — not_started (ZeroStateContent)
+    // Education — growing (Module 1 done, Module 2 at zero)
     'cat-education': {
       categoryId: 'cat-education',
       heading: 'Tell us about your education',
-      subtitle: 'Complete both modules to earn your first star',
+      subtitle: 'Complete one more module to earn your star!',
       modules: [
-        { id: 'mod-edu-1', title: 'Your school years', description: 'Share memories from your time in school.', duration: '5min', completed: false, locked: false },
-        { id: 'mod-edu-2', title: 'What education meant to you', description: 'How did learning shape who you became?', duration: '5min', completed: false, locked: true },
+        { id: 'mod-edu-1', title: 'Your school years', description: 'Share memories from your time in school.', duration: '5min', completed: true, locked: false },
+        { id: 'mod-edu-2', title: 'What education meant to you', description: 'How did learning shape who you became?', duration: '5min', completed: false, locked: false },
       ],
     },
-    // Favourites — not_started (ZeroStateContent)
+    // Favourites — growing (Module 1 done, Module 2 at zero)
     'cat-favourites': {
       categoryId: 'cat-favourites',
       heading: 'Tell us about your favourites',
-      subtitle: 'Complete both modules to earn your first star',
+      subtitle: 'Complete one more module to earn your star!',
       modules: [
-        { id: 'mod-fav-1', title: 'Your favourite things', description: 'Foods, places, songs, movies — the things you love most.', duration: '5min', completed: false, locked: false },
-        { id: 'mod-fav-2', title: 'Why they matter', description: 'What makes these favourites special to you?', duration: '5min', completed: false, locked: true },
+        { id: 'mod-fav-1', title: 'Your favourite things', description: 'Foods, places, songs, movies — the things you love most.', duration: '5min', completed: true, locked: false },
+        { id: 'mod-fav-2', title: 'Why they matter', description: 'What makes these favourites special to you?', duration: '5min', completed: false, locked: false },
       ],
     },
-    // Core Values — not_started (ZeroStateContent)
+    // Core Values — growing (Module 1 done, Module 2 at zero)
     'cat-core-values': {
       categoryId: 'cat-core-values',
       heading: 'Tell us about your core values',
-      subtitle: 'Complete both modules to earn your first star',
+      subtitle: 'Complete one more module to earn your star!',
       modules: [
-        { id: 'mod-val-1', title: 'What you stand for', description: 'The principles that have guided your life.', duration: '5min', completed: false, locked: false },
-        { id: 'mod-val-2', title: 'Values in action', description: 'Share a time your values were tested.', duration: '5min', completed: false, locked: true },
+        { id: 'mod-val-1', title: 'What you stand for', description: 'The principles that have guided your life.', duration: '5min', completed: true, locked: false },
+        { id: 'mod-val-2', title: 'Values in action', description: 'Share a time your values were tested.', duration: '5min', completed: false, locked: false },
       ],
     },
   },

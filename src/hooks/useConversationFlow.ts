@@ -7,6 +7,7 @@ interface ConversationState {
   inputMode: ConversationInputMode
   summaryItems: ConversationSummaryItem[]
   lastAiAcknowledgment: string | null
+  hasAnswered: boolean
 }
 
 type ConversationAction =
@@ -28,6 +29,7 @@ function createInitialState(config: ConversationConfig): ConversationState {
     inputMode: 'voice',
     summaryItems: [...config.summaryItems],
     lastAiAcknowledgment: null,
+    hasAnswered: false,
   }
 }
 
@@ -40,7 +42,7 @@ function conversationReducer(
       return { ...state, step: 'recording' }
 
     case 'STOP_RECORDING':
-      return { ...state, step: 'transcription' }
+      return { ...state, step: 'transcription', hasAnswered: true }
 
     case 'CONFIRM_TRANSCRIPTION':
       return { ...state, step: 'ai_thinking' }

@@ -1,6 +1,6 @@
 export type PhaseId = 'foundation' | 'story' | 'legacy'
 
-export type CategoryStatus = 'locked' | 'not_started' | 'growing' | 'budding' | 'flourishing'
+export type CategoryStatus = 'locked' | 'not_started' | 'started' | 'growing' | 'budding' | 'flourishing'
 
 export interface Category {
   id: string
@@ -210,3 +210,32 @@ export interface ModuleCompletionState {
   totalStars: number
   totalStarsNeeded: number
 }
+
+export interface ReflectionQuestion {
+  id: string
+  categoryLabel: string
+  promptText: string
+  mockUserResponse: string
+}
+
+export interface ReflectionConfig {
+  categoryId: string
+  moduleId: string
+  moduleTitle: string
+  subjectName: string
+  subjectRelation: string
+  questions: ReflectionQuestion[]
+  openReflectionMessage: string
+  summaryHeading: string
+}
+
+export type ReflectionStep =
+  | 'prompt_select'
+  | 'reflect'
+  | 'recording'
+  | 'transcription'
+  | 'ai_thinking'
+  | 'confirm_transcript'
+  | 'summary'
+
+export type ReflectionMethod = 'guided' | 'open'

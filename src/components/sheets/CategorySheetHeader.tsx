@@ -6,6 +6,7 @@ const STAR_COUNT = 3
 const filledStarCount: Record<CategoryStatus, number> = {
   locked: 0,
   not_started: 0,
+  started: 0,
   growing: 1,
   budding: 2,
   flourishing: 3,
@@ -14,6 +15,7 @@ const filledStarCount: Record<CategoryStatus, number> = {
 const statusLabel: Record<CategoryStatus, string> = {
   locked: '',
   not_started: 'Not Started',
+  started: 'Started',
   growing: 'Growing',
   budding: 'Budding',
   flourishing: 'Flourishing',

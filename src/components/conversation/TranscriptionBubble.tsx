@@ -1,5 +1,6 @@
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { FileText } from 'lucide-react'
+import { FileText, Check } from 'lucide-react'
 
 interface TranscriptionBubbleProps {
   text: string
@@ -7,9 +8,41 @@ interface TranscriptionBubbleProps {
   showDotsIndicator?: boolean
   showTapToEdit?: boolean
   onTapToEdit?: () => void
+  onEditingChange?: (isEditing: boolean) => void
 }
 
-export function TranscriptionBubble({ text, label, showDotsIndicator, showTapToEdit, onTapToEdit }: TranscriptionBubbleProps) {
+export function TranscriptionBubble({ text, label, showDotsIndicator, showTapToEdit, onEditingChange }: TranscriptionBubbleProps) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedText, setEditedText] = useState(text)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const autoResize = useCallback(() => {
+    const ta = textareaRef.current
+    if (!ta) return
+    ta.style.height = 'auto'
+    ta.style.height = `${ta.scrollHeight}px`
+  }, [])
+
+  useEffect(() => {
+    if (isEditing && textareaRef.current) {
+      textareaRef.current.focus()
+      textareaRef.current.setSelectionRange(editedText.length, editedText.length)
+      autoResize()
+    }
+  }, [isEditing, autoResize, editedText.length])
+
+  const handleStartEdit = () => {
+    setIsEditing(true)
+    onEditingChange?.(true)
+  }
+
+  const handleDone = () => {
+    setIsEditing(false)
+    onEditingChange?.(false)
+  }
+
+  const displayText = isEditing ? editedText : editedText
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -42,22 +75,48 @@ export function TranscriptionBubble({ text, label, showDotsIndicator, showTapToE
         </div>
       )}
 
-      <p
-        className="font-display text-[20px] font-semibold leading-[28px] tracking-[0.45px] text-[#3e2f26] w-full"
-        style={{ fontVariationSettings: "'opsz' 12, 'wdth' 100" }}
-      >
-        {text}
-      </p>
+      {isEditing ? (
+        <textarea
+          ref={textareaRef}
+          value={editedText}
+          onChange={(e) => {
+            setEditedText(e.target.value)
+            autoResize()
+          }}
+          className="w-full resize-none border-0 border-b border-[#3e2f26]/20 bg-transparent pb-4 font-display text-[20px] font-semibold leading-[28px] tracking-[0.45px] text-[#3e2f26] outline-none"
+          style={{ fontVariationSettings: "'opsz' 12, 'wdth' 100" }}
+        />
+      ) : (
+        <p
+          className="font-display text-[20px] font-semibold leading-[28px] tracking-[0.45px] text-[#3e2f26] w-full"
+          style={{ fontVariationSettings: "'opsz' 12, 'wdth' 100" }}
+        >
+          {displayText}
+        </p>
+      )}
 
-      {showTapToEdit && (
+      {showTapToEdit && !isEditing && (
         <button
           type="button"
-          onClick={onTapToEdit}
+          onClick={handleStartEdit}
           className="flex w-full items-center gap-1"
         >
           <FileText className="size-[18px] text-[#3e2f26]" />
           <span className="text-[14px] font-medium leading-[20px] text-[#3e2f26]">
             Tap to edit
+          </span>
+        </button>
+      )}
+
+      {isEditing && (
+        <button
+          type="button"
+          onClick={handleDone}
+          className="mt-3 flex items-center gap-1 self-end rounded-[6px] bg-lm-green px-3 py-1.5"
+        >
+          <Check className="size-4 text-white" />
+          <span className="text-[14px] font-medium leading-[20px] text-white">
+            Done
           </span>
         </button>
       )}

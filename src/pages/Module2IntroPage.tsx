@@ -124,7 +124,12 @@ export function Module2IntroPage() {
             type="button"
             disabled={!hasSelection}
             onClick={() => {
-              // Will navigate to module flow in the future
+              if (categoryId === 'cat-family' && selectedOption) {
+                const selectedLabel = data.options.find(o => o.id === selectedOption)?.label ?? ''
+                navigate(`/reflection/${categoryId}`, {
+                  state: { selectedMember: selectedLabel },
+                })
+              }
             }}
             className={cn(
               'flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-4',

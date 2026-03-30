@@ -1,4 +1,4 @@
-import type { LegacyCreator, Phase, HomePhase, CategoryDetail, ModuleIntroData, Module2IntroData, ConversationConfig } from '@/types'
+import type { LegacyCreator, Phase, HomePhase, CategoryDetail, ModuleIntroData, Module2IntroData, ConversationConfig, ReflectionConfig } from '@/types'
 
 export const mockCreator: LegacyCreator = {
   id: 'creator-1',
@@ -494,6 +494,68 @@ export const module2IntroData: Record<string, Module2IntroData> = {
   },
 }
 
+export const reflectionConfigs: Record<string, ReflectionConfig> = {
+  'cat-family': {
+    categoryId: 'cat-family',
+    moduleId: 'mod-fam-2',
+    moduleTitle: 'Tell us about a family member',
+    subjectName: 'Dad',
+    subjectRelation: 'Father',
+    openReflectionMessage: "You can begin speaking about Dad openly. I'll make sure to record everything.",
+    summaryHeading: "Here's a summary of what was recorded",
+    questions: [
+      {
+        id: 'rq-fam-1',
+        categoryLabel: 'About Dad',
+        promptText: "What's something you and Dad did together that you've never quite been able to explain to anyone else, something that only makes sense if you were there?",
+        mockUserResponse: "Every Sunday morning he'd wake me up at 5am to go to this little diner about 40 minutes away. Nobody else in the family understood why we drove that far for breakfast when there were places ten minutes from the house. But that was kind of the point. It was just ours.",
+      },
+      {
+        id: 'rq-fam-2',
+        categoryLabel: 'About Dad',
+        promptText: "What's a small habit or phrase of Dad's that stuck with you long after you stopped living under the same roof?",
+        mockUserResponse: "He always said 'don't let perfect get in the way of good enough.' I didn't understand it when I was young, but I catch myself saying it to my own kids now.",
+      },
+      {
+        id: 'rq-fam-3',
+        categoryLabel: 'About Dad',
+        promptText: "Was there ever a moment where you saw Dad not as a parent, but just as a person? What happened?",
+        mockUserResponse: "When Grandma passed, I saw him cry for the first time. He sat on the porch for an hour not saying anything. I realized he was someone's kid too.",
+      },
+      {
+        id: 'rq-fam-4',
+        categoryLabel: 'About Dad',
+        promptText: "If you could relive one ordinary day with Dad — nothing special, just a regular day — what would it look like?",
+        mockUserResponse: "A Saturday in fall. Raking leaves, him listening to the game on the radio. We'd bag them up, then he'd make chili. Nothing extraordinary. That's what made it perfect.",
+      },
+      {
+        id: 'rq-fam-5',
+        categoryLabel: 'About Dad',
+        promptText: "What's something Dad taught you — not with words, but just by the way he lived?",
+        mockUserResponse: "He never missed a day of work in 30 years. Never complained about it either. He just showed up. That taught me more about responsibility than any lecture ever could.",
+      },
+      {
+        id: 'rq-fam-6',
+        categoryLabel: 'About Dad',
+        promptText: "Is there something you wish you had asked Dad while you still could — or something you wish you had said?",
+        mockUserResponse: "I wish I'd asked him what he dreamed about when he was my age. I know about his life but I don't really know what he wanted it to be.",
+      },
+      {
+        id: 'rq-fam-7',
+        categoryLabel: 'About Dad',
+        promptText: "What's a story about Dad that always gets a laugh when you tell it at family gatherings?",
+        mockUserResponse: "He once tried to fix the kitchen sink himself and flooded the whole first floor. Mom was furious but he just stood there in the water laughing.",
+      },
+      {
+        id: 'rq-fam-8',
+        categoryLabel: 'About Dad',
+        promptText: "How do you think Dad would describe you if someone asked him?",
+        mockUserResponse: "He'd probably say I worry too much — just like my mother. Then he'd say something about being proud, but in his roundabout way where you had to read between the lines.",
+      },
+    ],
+  },
+}
+
 export const conversationConfigs: Record<string, ConversationConfig> = {
   'cat-family': {
     categoryId: 'cat-family',
@@ -519,7 +581,7 @@ export const conversationConfigs: Record<string, ConversationConfig> = {
     ],
     summaryHeading: "Here's what I captured during the conversation.",
     summaryListLabel: 'Tap to edit family members',
-    summaryAddLabel: 'Add a friend I missed',
+    summaryAddLabel: 'Add a family member',
     summaryItems: [
       { id: 'si-1', name: 'Sarah Rogers', label: 'Daughter' },
       { id: 'si-2', name: 'Michael Thompson', label: 'Son' },

@@ -11,6 +11,9 @@ import { SettingsPage } from '@/pages/SettingsPage'
 import { ModuleIntroPage } from '@/pages/ModuleIntroPage'
 import { Module2IntroPage } from '@/pages/Module2IntroPage'
 import { GuidedConversationPage } from '@/pages/GuidedConversationPage'
+import { ReflectionPromptPage } from '@/pages/ReflectionPromptPage'
+import { ReflectionPage } from '@/pages/ReflectionPage'
+import { ReflectionSummaryPage } from '@/pages/ReflectionSummaryPage'
 import { conversationConfigs, foundationIntroData } from '@/data/mock'
 import { PageTransition } from '@/animations/PageTransition'
 import type { ModuleCompletionState } from '@/types'
@@ -47,6 +50,7 @@ function ConversationRoute() {
         navigate('/success', { state: completionState })
       }}
       onBack={() => navigate(`/intro/${categoryId}`)}
+      onExit={() => navigate('/home')}
     />
   )
 }
@@ -68,6 +72,9 @@ function App() {
               <Route path="/intro/:categoryId" element={<ModuleIntroPage />} />
               <Route path="/intro2/:categoryId" element={<Module2IntroPage />} />
               <Route path="/conversation/:categoryId" element={<ConversationRoute />} />
+              <Route path="/reflection/:categoryId" element={<ReflectionPromptPage />} />
+              <Route path="/reflect/:categoryId" element={<ReflectionPage />} />
+              <Route path="/reflection/:categoryId/summary" element={<ReflectionSummaryPage />} />
             </Routes>
           </AnimatePresence>
         </MobileShell>
