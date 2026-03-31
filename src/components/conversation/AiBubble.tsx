@@ -11,17 +11,32 @@ export function AiBubble({ messages }: AiBubbleProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-      className="mx-[15px] rounded-[15px] bg-white/90 px-[10px] py-5 shadow-[0px_3px_6px_0px_rgba(0,0,0,0.16)]"
+      className="relative mx-[15px] my-[10px]"
     >
-      {messages.map((msg, i) => (
-        <p
-          key={i}
-          className="text-center font-display text-[20px] font-semibold leading-[28px] tracking-[0.45px] text-[#3e2f26]"
-          style={{ fontVariationSettings: "'opsz' 12, 'wdth' 100", marginTop: i > 0 ? '10px' : 0 }}
-        >
-          {msg}
+      <div className="flex flex-col gap-[10px] rounded-[8px] bg-[var(--lm-bg-reflection)] px-4 py-2 shadow-reflection">
+        <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+          Open Reflection
         </p>
-      ))}
+        {messages.map((msg, i) => (
+          <p
+            key={i}
+            className="text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)]"
+            style={{ marginTop: i > 0 ? '10px' : 0 }}
+          >
+            {msg}
+          </p>
+        ))}
+      </div>
+      {/* Triangle pointer with matching shadow */}
+      <svg
+        className="ml-5"
+        width="20"
+        height="10"
+        viewBox="0 0 20 10"
+        style={{ filter: 'drop-shadow(0px 2px 3px rgba(0,0,0,0.12))' }}
+      >
+        <polygon points="0,0 10,10 20,0" fill="var(--lm-bg-reflection)" />
+      </svg>
     </motion.div>
   )
 }

@@ -97,6 +97,7 @@ export function GuidedConversationPage({ config, onComplete, onBack, onExit }: G
           rightLabel={flow.headerRightLabel}
           progressPercent={flow.progressPercent}
           onBack={handleBack}
+          showOverlay
         />
 
         {/* Middle content area */}
@@ -117,7 +118,7 @@ export function GuidedConversationPage({ config, onComplete, onBack, onExit }: G
               <TranscriptionBubble
                 key={`recording-${flow.currentQuestionIndex}`}
                 text={flow.currentQuestion.mockUserResponse}
-                label="TRANSCRIBING YOUR ANSWER"
+                label="Transcribing your answer"
               />
             )}
 
@@ -125,7 +126,7 @@ export function GuidedConversationPage({ config, onComplete, onBack, onExit }: G
               <TranscriptionBubble
                 key={`transcription-${flow.currentQuestionIndex}`}
                 text={flow.currentQuestion.mockUserResponse}
-                label="YOUR RESPONSE"
+                label="Your Response"
                 showTapToEdit
                 onTapToEdit={() => {}}
                 onEditingChange={setIsEditingTranscription}

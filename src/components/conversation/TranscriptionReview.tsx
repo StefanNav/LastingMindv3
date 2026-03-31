@@ -23,7 +23,7 @@ export function TranscriptionReview({ onSayMore, onContinue }: TranscriptionRevi
           className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] px-5 py-4"
         >
           <Mic className="size-6 text-[#283227]" />
-          <span className="text-[18px] font-medium leading-[1.2] text-[#283227]">
+          <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
             Say more
           </span>
         </button>
@@ -32,7 +32,7 @@ export function TranscriptionReview({ onSayMore, onContinue }: TranscriptionRevi
           onClick={onContinue}
           className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-5 py-4"
         >
-          <span className="text-[18px] font-medium leading-[1.2] text-white">
+          <span className="text-[16px] font-medium leading-[1.2] text-white">
             Continue
           </span>
           <ChevronRight className="size-6 text-white" />

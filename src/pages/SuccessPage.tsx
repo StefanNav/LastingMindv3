@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
-import { Star, Loader2, Check, ArrowRight } from 'lucide-react'
+import { Star, Check, ArrowRight } from 'lucide-react'
+import { ThinkingDots } from '@/components/ui/ThinkingDots'
 import type { ModuleCompletionState } from '@/types'
 
 type SuccessStep = 'saving' | 'saved' | 'result'
@@ -42,7 +43,7 @@ export function SuccessPage() {
             onClick={() => navigate('/home')}
             className="mt-4 flex items-center justify-center rounded-[4px] bg-lm-green px-10 py-4"
           >
-            <span className="text-[18px] font-medium leading-[1.2] text-white">Return Home</span>
+            <span className="text-[16px] font-medium leading-[1.2] text-white">Return Home</span>
           </button>
         </div>
       </PageTransition>
@@ -65,12 +66,7 @@ export function SuccessPage() {
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
               className="flex flex-col items-center gap-5"
             >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
-              >
-                <Loader2 className="size-12 text-lm-green" />
-              </motion.div>
+              <ThinkingDots size="md" />
               <p className="font-display text-[22px] font-normal leading-[1.3] text-foreground">
                 Saving your story…
               </p>
@@ -141,7 +137,7 @@ export function SuccessPage() {
                   onClick={() => navigate('/home')}
                   className="flex w-full items-center justify-center gap-2 rounded-[4px] bg-lm-green px-10 py-4"
                 >
-                  <span className="text-[18px] font-medium leading-[1.2] text-white">
+                  <span className="text-[16px] font-medium leading-[1.2] text-white">
                     Continue
                   </span>
                   <ArrowRight className="size-5 text-white" />
@@ -151,7 +147,7 @@ export function SuccessPage() {
                   onClick={() => navigate('/home')}
                   className="flex w-full items-center justify-center rounded-[4px] border border-[var(--lm-border)] bg-transparent px-10 py-4"
                 >
-                  <span className="text-[18px] font-medium leading-[1.2] text-foreground">
+                  <span className="text-[16px] font-medium leading-[1.2] text-foreground">
                     Return Home
                   </span>
                 </button>
@@ -193,7 +189,7 @@ export function SuccessPage() {
                   onClick={() => navigate(`/intro2/${categoryId}`)}
                   className="flex w-full items-center justify-center gap-2 rounded-[4px] bg-lm-green px-10 py-4"
                 >
-                  <span className="text-[18px] font-medium leading-[1.2] text-white">
+                  <span className="text-[16px] font-medium leading-[1.2] text-white">
                     Begin Module 2
                   </span>
                   <ArrowRight className="size-5 text-white" />
@@ -203,7 +199,7 @@ export function SuccessPage() {
                   onClick={() => navigate('/home')}
                   className="flex w-full items-center justify-center rounded-[4px] border border-[var(--lm-border)] bg-transparent px-10 py-4"
                 >
-                  <span className="text-[18px] font-medium leading-[1.2] text-foreground">
+                  <span className="text-[16px] font-medium leading-[1.2] text-foreground">
                     Choose another category
                   </span>
                 </button>

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { FileText, Check } from 'lucide-react'
+import { Check } from 'lucide-react'
+import { ThinkingDots } from '@/components/ui/ThinkingDots'
 
 interface TranscriptionBubbleProps {
   text: string
@@ -49,77 +50,74 @@ export function TranscriptionBubble({ text, label, showDotsIndicator, showTapToE
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-      className="mx-[15px] flex flex-col gap-[10px] items-center justify-center rounded-[15px] bg-white/90 px-[10px] py-5 shadow-[0px_3px_6px_0px_rgba(0,0,0,0.16)]"
+      className="relative mx-[15px] my-[10px]"
     >
-      {label && (
-        <p className="text-center text-[12px] font-semibold leading-[1.2] tracking-wide text-[#7b7b7b]">
-          {label}
-        </p>
-      )}
+      <div className="flex flex-col gap-[10px] rounded-[8px] bg-[var(--lm-bg-reflection)] px-4 py-2 shadow-reflection">
+        {label && (
+          <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+            {label}
+          </p>
+        )}
 
-      {showDotsIndicator && !label && (
-        <div className="flex gap-[3px]">
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={i}
-              className="size-[6px] rounded-full bg-lm-green-dark"
-              animate={{ opacity: [0.3, 1, 0.3], y: [0, -4, 0] }}
-              transition={{
-                duration: 1,
-                repeat: Infinity,
-                delay: i * 0.2,
-                ease: 'easeInOut',
-              }}
-            />
-          ))}
-        </div>
-      )}
+        {showDotsIndicator && !label && (
+          <ThinkingDots />
+        )}
 
-      {isEditing ? (
-        <textarea
-          ref={textareaRef}
-          value={editedText}
-          onChange={(e) => {
-            setEditedText(e.target.value)
-            autoResize()
-          }}
-          className="w-full resize-none border-0 border-b border-[#3e2f26]/20 bg-transparent pb-4 font-display text-[20px] font-semibold leading-[28px] tracking-[0.45px] text-[#3e2f26] outline-none"
-          style={{ fontVariationSettings: "'opsz' 12, 'wdth' 100" }}
-        />
-      ) : (
-        <p
-          className="font-display text-[20px] font-semibold leading-[28px] tracking-[0.45px] text-[#3e2f26] w-full"
-          style={{ fontVariationSettings: "'opsz' 12, 'wdth' 100" }}
-        >
-          {displayText}
-        </p>
-      )}
+        {isEditing ? (
+          <textarea
+            ref={textareaRef}
+            value={editedText}
+            onChange={(e) => {
+              setEditedText(e.target.value)
+              autoResize()
+            }}
+            className="w-full resize-none border-0 border-b border-[#3e2f26]/20 bg-transparent pb-4 text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)] outline-none"
+          />
+        ) : (
+          <p className="w-full text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
+            {displayText}
+          </p>
+        )}
 
-      {showTapToEdit && !isEditing && (
-        <button
-          type="button"
-          onClick={handleStartEdit}
-          className="flex w-full items-center gap-1"
-        >
-          <FileText className="size-[18px] text-[#3e2f26]" />
-          <span className="text-[14px] font-medium leading-[20px] text-[#3e2f26]">
-            Tap to edit
-          </span>
-        </button>
-      )}
+        {showTapToEdit && !isEditing && (
+          <button
+            type="button"
+            onClick={handleStartEdit}
+            className="flex w-full items-center gap-1"
+          >
+            <svg className="size-[18px] text-[#3e2f26]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 22h16" />
+              <path d="M18 2l4 4L8 20H4v-4L18 2z" />
+            </svg>
+            <span className="text-[14px] font-medium leading-[20px] text-[#3e2f26]">
+              Tap to edit
+            </span>
+          </button>
+        )}
 
-      {isEditing && (
-        <button
-          type="button"
-          onClick={handleDone}
-          className="mt-3 flex items-center gap-1 self-end rounded-[6px] bg-lm-green px-3 py-1.5"
-        >
-          <Check className="size-4 text-white" />
-          <span className="text-[14px] font-medium leading-[20px] text-white">
-            Done
-          </span>
-        </button>
-      )}
+        {isEditing && (
+          <button
+            type="button"
+            onClick={handleDone}
+            className="mt-3 flex items-center gap-1 self-end rounded-[6px] bg-lm-green px-3 py-1.5"
+          >
+            <Check className="size-4 text-white" />
+            <span className="text-[14px] font-medium leading-[20px] text-white">
+              Done
+            </span>
+          </button>
+        )}
+      </div>
+      {/* Triangle pointer with matching shadow */}
+      <svg
+        className="ml-5"
+        width="20"
+        height="10"
+        viewBox="0 0 20 10"
+        style={{ filter: 'drop-shadow(0px 2px 3px rgba(0,0,0,0.12))' }}
+      >
+        <polygon points="0,0 10,10 20,0" fill="var(--lm-bg-reflection)" />
+      </svg>
     </motion.div>
   )
 }

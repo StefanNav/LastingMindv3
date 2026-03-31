@@ -95,7 +95,7 @@ export function ModuleIntroPage() {
             onClick={() => navigate(`/conversation/${categoryId}`)}
             className="flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-4"
           >
-            <span className="text-[18px] font-medium leading-[1.2] text-white">
+            <span className="text-[16px] font-medium leading-[1.2] text-white">
               Lets Begin
             </span>
           </button>

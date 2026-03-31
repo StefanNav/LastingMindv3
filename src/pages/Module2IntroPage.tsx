@@ -136,7 +136,7 @@ export function Module2IntroPage() {
               !hasSelection && 'opacity-70',
             )}
           >
-            <span className="text-[18px] font-medium leading-[1.2] text-white">
+            <span className="text-[16px] font-medium leading-[1.2] text-white">
               {hasSelection ? 'Lets Begin' : data.disabledButtonText}
             </span>
           </button>

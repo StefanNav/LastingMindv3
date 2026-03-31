@@ -9,6 +9,7 @@ interface ConversationHeaderProps {
   showProgress?: boolean
   variant?: 'default' | 'summary'
   backgroundImage?: string
+  showOverlay?: boolean
 }
 
 export function ConversationHeader({
@@ -19,17 +20,21 @@ export function ConversationHeader({
   showProgress = true,
   variant = 'default',
   backgroundImage,
+  showOverlay,
 }: ConversationHeaderProps) {
   const isSummary = variant === 'summary'
 
   return (
-    <div className={`absolute inset-x-0 top-0 z-20 flex flex-col items-center overflow-hidden border-b border-black/16 pb-[12px] pt-[62px] ${isSummary ? 'gap-[20px] bg-[var(--lm-bg-primary)]' : backgroundImage ? 'gap-[6px]' : 'gap-[6px] bg-white/60 backdrop-blur-sm'}`}>
+    <div className={`absolute inset-x-0 top-0 z-20 flex flex-col items-center overflow-hidden border-b border-black/16 pb-[12px] pt-[62px] ${isSummary ? 'gap-[20px] bg-[var(--lm-bg-primary)]' : backgroundImage ? 'gap-[6px]' : 'gap-[6px]'}`}>
       {backgroundImage && (
         <img
           src={backgroundImage}
           alt=""
           className="pointer-events-none absolute inset-0 size-full object-cover"
         />
+      )}
+      {showOverlay && (
+        <div className="pointer-events-none absolute inset-0 bg-white/60" />
       )}
       <div className="relative flex w-full items-center justify-between px-4">
         <button
@@ -47,7 +52,7 @@ export function ConversationHeader({
         </span>
       </div>
 
-      <p className="relative text-center text-[18px] font-semibold leading-[1.2] text-lm-green-dark">
+      <p className="relative text-center font-display text-[18px] font-semibold leading-[1.2] text-lm-green-dark">
         {moduleTitle}
       </p>
 

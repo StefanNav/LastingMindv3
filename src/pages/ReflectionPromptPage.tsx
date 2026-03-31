@@ -89,15 +89,7 @@ export function ReflectionPromptPage() {
   return (
     <PageTransition>
       <div className="relative flex h-full flex-col overflow-hidden bg-[var(--lm-bg-primary)]">
-        {/* Background image */}
-        <div className="pointer-events-none absolute inset-0 z-0">
-          <img
-            src="/images/Background Image.png"
-            alt=""
-            className="absolute inset-0 size-full object-cover"
-          />
-          <div className="absolute inset-0 bg-[var(--lm-bg-primary)]/52" />
-        </div>
+        {/* Background image (hidden) */}
 
         {/* Back button */}
         <div className="relative z-10 px-4 pt-[62px]">
@@ -131,14 +123,14 @@ export function ReflectionPromptPage() {
               >
                 {/* Card */}
                 <div className="rounded-[10px] border border-[var(--lm-border-subtle)] bg-[var(--lm-bg-card)] p-2 shadow-reflection">
-                  <div className="flex flex-col gap-4 rounded-[10px] border border-[var(--lm-border)] p-4">
+                  <div className="flex h-[280px] flex-col justify-between gap-4 rounded-[10px] border border-[var(--lm-border)] p-4">
                     {/* Category label */}
                     <p className="text-center text-[10px] font-black uppercase leading-none tracking-[1px] text-[var(--lm-gold-muted)]">
                       {activeQuestion.categoryLabel}
                     </p>
 
                     {/* Question text */}
-                    <div className="py-6">
+                    <div className="flex flex-1 items-center overflow-hidden py-2">
                       <p className="text-center font-display text-[18px] font-normal leading-[1.5] tracking-[0.5px] text-[var(--lm-text-primary)]">
                         {activeQuestion.promptText}
                       </p>
@@ -184,7 +176,7 @@ export function ReflectionPromptPage() {
             onClick={handleReflectOpenly}
             className="flex w-full items-center justify-center rounded-[10px] bg-[#e7ebd9] p-[10px]"
           >
-            <span className="text-center text-[16px] font-semibold leading-[1.2] text-[#283227]">
+            <span className="text-center text-[16px] font-medium leading-[1.2] text-[#283227]">
               I Prefer to Reflect Openly
             </span>
           </button>

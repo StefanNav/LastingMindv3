@@ -88,7 +88,7 @@ export function VoiceRecording({ onStop, isPaused: controlledPaused, onPauseChan
           className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] border border-[#283227] px-5 py-4"
         >
           <Pause className="size-6 text-[#283227]" />
-          <span className="text-[18px] font-medium leading-[1.2] text-[#283227]">
+          <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
             {isPaused ? 'Resume' : 'Pause'}
           </span>
         </button>
@@ -98,7 +98,7 @@ export function VoiceRecording({ onStop, isPaused: controlledPaused, onPauseChan
           className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-[#d40016] px-5 py-4"
         >
           <CircleStop className="size-6 text-white" />
-          <span className="text-[18px] font-medium leading-[1.2] text-white">
+          <span className="text-[16px] font-medium leading-[1.2] text-white">
             Press to Stop
           </span>
         </button>

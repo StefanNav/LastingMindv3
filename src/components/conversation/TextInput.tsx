@@ -57,7 +57,7 @@ export function TextInput({ onSubmit, onToggleInputMode }: TextInputProps) {
         className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] p-[10px]"
       >
         <Mic className="size-6 text-[#283227]" />
-        <span className="text-center text-[16px] font-semibold leading-[1.2] text-[#283227]">
+        <span className="text-center text-[16px] font-medium leading-[1.2] text-[#283227]">
           Prefer to talk? Switch to voice
         </span>
       </button>

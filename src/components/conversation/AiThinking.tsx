@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { ThinkingDots } from '@/components/ui/ThinkingDots'
 
 export function AiThinking() {
   return (
@@ -13,21 +14,7 @@ export function AiThinking() {
         <span className="text-[18px] font-medium leading-[1.2] text-[var(--lm-text-primary)]">
           AI is thinking
         </span>
-        <div className="flex gap-[3px]">
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={i}
-              className="size-[6px] rounded-full bg-lm-green-dark"
-              animate={{ opacity: [0.3, 1, 0.3], y: [0, -4, 0] }}
-              transition={{
-                duration: 1,
-                repeat: Infinity,
-                delay: i * 0.2,
-                ease: 'easeInOut',
-              }}
-            />
-          ))}
-        </div>
+        <ThinkingDots />
       </div>
     </motion.div>
   )

@@ -157,7 +157,7 @@ export function ReflectionPage() {
           progressPercent={0}
           onBack={handleBack}
           showProgress={false}
-          backgroundImage="/images/Background Image.png"
+          backgroundImage=""
         />
 
         {/* Text input mode — question at top, inline text area fills remaining space */}
@@ -229,9 +229,9 @@ export function ReflectionPage() {
                         questionText={flow.activeQuestion.promptText}
                       />
                     )}
-                    <div className="mx-4 flex flex-col gap-[20px] rounded-[10px] border border-[#e7ebd9] bg-[#fffcf4] p-[10px] shadow-[0px_3px_6px_0px_rgba(0,0,0,0.15)]">
+                    <div className="mx-4 flex flex-col gap-[10px] rounded-[10px] border border-[#e7ebd9] bg-[#fffcf4] px-4 py-2 shadow-[0px_3px_6px_0px_rgba(0,0,0,0.15)]">
                       <p className="text-[14px] font-semibold leading-[1.2] text-[#7b7b7b]">
-                        YOUR RESPONSE
+                        Your Response
                       </p>
                       {isEditingTranscription ? (
                         <textarea
@@ -241,10 +241,10 @@ export function ReflectionPage() {
                             setEditedResponseText(e.target.value)
                             autoResizeResponse()
                           }}
-                          className="w-full resize-none border-0 border-b border-[#3e2f26]/20 bg-transparent pb-4 text-[18px] leading-[1.2] text-[#2f3228] outline-none"
+                          className="w-full resize-none border-0 border-b border-[#3e2f26]/20 bg-transparent pb-4 text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)] outline-none"
                         />
                       ) : (
-                        <p className="text-[18px] leading-[1.2] text-[#2f3228]">
+                        <p className="text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
                           {editedResponseText || flow.mockResponseText}
                         </p>
                       )}

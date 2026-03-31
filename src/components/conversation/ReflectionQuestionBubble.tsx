@@ -17,7 +17,7 @@ export function ReflectionQuestionBubble({ questionText }: ReflectionQuestionBub
         <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
           Reflection Question
         </p>
-        <p className="font-display text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
+        <p className="text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
           {questionText}
         </p>
       </div>

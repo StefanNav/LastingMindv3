@@ -14,7 +14,7 @@ export function VoiceInput({ onStartRecording, onToggleInputMode }: VoiceInputPr
         className="flex w-full flex-col items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4"
       >
         <Mic className="size-6 text-white" />
-        <span className="text-[18px] font-medium leading-[1.2] text-white">
+        <span className="text-[16px] font-medium leading-[1.2] text-white">
           Press to Talk{' '}
         </span>
       </button>
@@ -25,7 +25,7 @@ export function VoiceInput({ onStartRecording, onToggleInputMode }: VoiceInputPr
         className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] p-[10px]"
       >
         <Keyboard className="size-6 text-[#283227]" />
-        <span className="text-center text-[16px] font-semibold leading-[1.2] text-[#283227]">
+        <span className="text-center text-[16px] font-medium leading-[1.2] text-[#283227]">
           Prefer to type? Switch to text
         </span>
       </button>
