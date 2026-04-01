@@ -5,6 +5,7 @@ import { PageTransition } from '@/animations/PageTransition'
 import { module2IntroData } from '@/data/mock'
 import { SelectionChips } from '@/components/intro/SelectionChips'
 import { SelectionRadioCards } from '@/components/intro/SelectionRadioCards'
+import { FamilyWebPicker } from '@/components/intro/FamilyWebPicker'
 import { cn } from '@/lib/utils'
 
 export function Module2IntroPage() {
@@ -80,19 +81,19 @@ export function Module2IntroPage() {
               <div className="flex flex-col items-center gap-2.5">
                 <div className="flex items-center gap-1.5">
                   <HelpCircle className="size-4 text-[var(--lm-text-secondary)]" />
-                  <span className="text-center text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+                  <span className="text-center text-[14px] font-medium leading-[1.2] text-[var(--lm-text-secondary)]">
                     Reflection Question
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Clock className="size-4 text-[var(--lm-text-secondary)]" />
-                  <span className="text-center text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+                  <span className="text-center text-[14px] font-medium leading-[1.2] text-[var(--lm-text-secondary)]">
                     About 5 minutes
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Mic className="size-4 text-[var(--lm-text-secondary)]" />
-                  <span className="text-center text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+                  <span className="text-center text-[14px] font-medium leading-[1.2] text-[var(--lm-text-secondary)]">
                     Voice or Type
                   </span>
                 </div>
@@ -101,7 +102,13 @@ export function Module2IntroPage() {
 
             {/* Selection area */}
             <div className="w-full pb-[140px]">
-              {data.selectionType === 'chips' ? (
+              {data.selectionType === 'web' && data.webMembers ? (
+                <FamilyWebPicker
+                  webMembers={data.webMembers}
+                  selectedId={selectedOption}
+                  onSelect={setSelectedOption}
+                />
+              ) : data.selectionType === 'chips' ? (
                 <SelectionChips
                   options={data.options}
                   selectedId={selectedOption}
@@ -125,10 +132,20 @@ export function Module2IntroPage() {
             disabled={!hasSelection}
             onClick={() => {
               if (categoryId === 'cat-family' && selectedOption) {
-                const selectedLabel = data.options.find(o => o.id === selectedOption)?.label ?? ''
-                navigate(`/reflection/${categoryId}`, {
-                  state: { selectedMember: selectedLabel },
-                })
+                if (data.selectionType === 'web' && data.webMembers) {
+                  const member = data.webMembers.find(m => m.id === selectedOption)
+                  navigate(`/reflection/${categoryId}`, {
+                    state: {
+                      selectedMember: member ? `${member.firstName} ${member.lastName}` : '',
+                      selectedRelationship: member?.relationship ?? '',
+                    },
+                  })
+                } else {
+                  const selectedLabel = data.options.find(o => o.id === selectedOption)?.label ?? ''
+                  navigate(`/reflection/${categoryId}`, {
+                    state: { selectedMember: selectedLabel },
+                  })
+                }
               }
             }}
             className={cn(

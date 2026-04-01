@@ -11,7 +11,9 @@ export function ReflectionPromptPage() {
   const { categoryId } = useParams<{ categoryId: string }>()
   const navigate = useNavigate()
   const location = useLocation()
-  const selectedMember = (location.state as { selectedMember?: string })?.selectedMember
+  const locationState = location.state as { selectedMember?: string; selectedRelationship?: string } | null
+  const selectedMember = locationState?.selectedMember
+  const selectedRelationship = locationState?.selectedRelationship
 
   const config = categoryId ? reflectionConfigs[categoryId] : undefined
 
@@ -57,6 +59,7 @@ export function ReflectionPromptPage() {
         method: 'guided',
         promptIndex: activeIndex,
         selectedMember,
+        selectedRelationship,
       },
     })
   }
@@ -67,6 +70,7 @@ export function ReflectionPromptPage() {
         method: 'open',
         promptIndex: activeIndex,
         selectedMember,
+        selectedRelationship,
       },
     })
   }

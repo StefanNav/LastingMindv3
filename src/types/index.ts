@@ -130,6 +130,15 @@ export interface Module2IntroOption {
   subtitle?: string
 }
 
+export interface FamilyWebMember {
+  id: string
+  firstName: string
+  lastName: string
+  relationship: string
+  proximity: 'immediate' | 'extended'
+  entryCount?: number
+}
+
 export interface Module2IntroData {
   categoryId: string
   categoryLabel: string
@@ -137,9 +146,10 @@ export interface Module2IntroData {
   imageWidth: number
   moduleTitle: string
   description: string
-  selectionType: 'chips' | 'radio-cards'
+  selectionType: 'chips' | 'radio-cards' | 'web'
   disabledButtonText: string
   options: Module2IntroOption[]
+  webMembers?: FamilyWebMember[]
 }
 
 export interface AppState {
@@ -184,7 +194,7 @@ export type ConversationStep =
 
 export type ConversationInputMode = 'voice' | 'text'
 
-export type DemoStateId = 'state-0' | 'flow-1' | 'flow-2' | 'flow-3'
+export type DemoStateId = 'state-0' | 'flow-1' | 'flow-2' | 'flow-3' | 'onboarding'
 
 export interface DemoPromptCard {
   categoryTag: string

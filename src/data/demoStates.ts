@@ -777,6 +777,23 @@ const flow3: DemoConfig = {
   },
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// ONBOARDING — Restart the onboarding flow (navigates to /onboarding)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const onboarding: DemoConfig = {
+  id: 'onboarding',
+  label: 'Onboarding',
+  foundationStars: 0,
+  treeImage: TREE_IMAGE,
+  promptCard: {
+    categoryTag: 'Suggested first step',
+    question: 'Start with the people closest to you — tell us about your family.',
+  },
+  homePhases: state0.homePhases,
+  categoryDetails: state0.categoryDetails,
+}
+
 // ─── Export all demo states ───────────────────────────────────────────────────
 
 export const demoStates: Record<DemoStateId, DemoConfig> = {
@@ -784,6 +801,7 @@ export const demoStates: Record<DemoStateId, DemoConfig> = {
   'flow-1': flow1,
   'flow-2': flow2,
   'flow-3': flow3,
+  'onboarding': onboarding,
 }
 
-export const demoStateOrder: DemoStateId[] = ['state-0', 'flow-1', 'flow-2', 'flow-3']
+export const demoStateOrder: DemoStateId[] = ['state-0', 'flow-1', 'flow-2', 'flow-3', 'onboarding']

@@ -1,4 +1,4 @@
-import type { LegacyCreator, Phase, HomePhase, CategoryDetail, ModuleIntroData, Module2IntroData, ConversationConfig, ReflectionConfig } from '@/types'
+import type { LegacyCreator, Phase, HomePhase, CategoryDetail, ModuleIntroData, Module2IntroData, ConversationConfig, ReflectionConfig, FamilyWebMember } from '@/types'
 
 export const mockCreator: LegacyCreator = {
   id: 'creator-1',
@@ -389,6 +389,20 @@ export const foundationIntroData: Record<string, ModuleIntroData> = {
   },
 }
 
+export const familyWebMembers: FamilyWebMember[] = [
+  { id: 'fw-sarah', firstName: 'Sarah', lastName: 'Rogers', relationship: 'Daughter', proximity: 'immediate', entryCount: 1 },
+  { id: 'fw-michael', firstName: 'Michael', lastName: 'Thompson', relationship: 'Son', proximity: 'immediate', entryCount: 0 },
+  { id: 'fw-jessica', firstName: 'Jessica', lastName: 'Li', relationship: 'Mother', proximity: 'immediate', entryCount: 2 },
+  { id: 'fw-david', firstName: 'David', lastName: 'Kim', relationship: 'Father', proximity: 'immediate', entryCount: 1 },
+  { id: 'fw-emily', firstName: 'Emily', lastName: 'Johnson', relationship: 'Sister', proximity: 'immediate', entryCount: 0 },
+  { id: 'fw-robert-b', firstName: 'Robert', lastName: 'Mitchell', relationship: 'Brother', proximity: 'immediate', entryCount: 0 },
+  { id: 'fw-robert-u', firstName: 'Robert', lastName: 'Kim', relationship: 'Uncle', proximity: 'extended', entryCount: 0 },
+  { id: 'fw-linda', firstName: 'Linda', lastName: 'Kim', relationship: 'Aunt', proximity: 'extended', entryCount: 1 },
+  { id: 'fw-james', firstName: 'James', lastName: 'Rogers', relationship: 'Son-in-law', proximity: 'extended', entryCount: 0 },
+  { id: 'fw-margaret', firstName: 'Margaret', lastName: 'Li', relationship: 'Grandmother', proximity: 'extended', entryCount: 0 },
+  { id: 'fw-lily', firstName: 'Lily', lastName: 'Mitchell', relationship: 'Granddaughter', proximity: 'extended', entryCount: 0 },
+]
+
 export const module2IntroData: Record<string, Module2IntroData> = {
   'cat-family': {
     categoryId: 'cat-family',
@@ -397,17 +411,10 @@ export const module2IntroData: Record<string, Module2IntroData> = {
     imageWidth: 132,
     moduleTitle: 'Tell us about a family member',
     description: 'Pick someone from your family and share a memory.',
-    selectionType: 'chips',
+    selectionType: 'web',
     disabledButtonText: 'Choose someone to begin',
-    options: [
-      { id: 'fm-linda', label: 'Linda' },
-      { id: 'fm-mom', label: 'Mom' },
-      { id: 'fm-dad', label: 'Dad' },
-      { id: 'fm-sarah', label: 'Sarah' },
-      { id: 'fm-robert', label: 'Robert' },
-      { id: 'fm-james', label: 'James' },
-      { id: 'fm-decide', label: "I'll decide as I go" },
-    ],
+    options: [],
+    webMembers: familyWebMembers,
   },
   'cat-friends': {
     categoryId: 'cat-friends',

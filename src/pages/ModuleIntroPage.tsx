@@ -68,19 +68,19 @@ export function ModuleIntroPage() {
             <div className="flex flex-col items-center gap-2.5">
               <div className="flex items-center gap-1.5">
                 <Compass className="size-4 text-[var(--lm-text-secondary)]" />
-                <span className="text-center text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+                <span className="text-center text-[14px] font-medium leading-[1.2] text-[var(--lm-text-secondary)]">
                   Guided Conversation
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Clock className="size-4 text-[var(--lm-text-secondary)]" />
-                <span className="text-center text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+                <span className="text-center text-[14px] font-medium leading-[1.2] text-[var(--lm-text-secondary)]">
                   About 5 minutes
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Mic className="size-4 text-[var(--lm-text-secondary)]" />
-                <span className="text-center text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+                <span className="text-center text-[14px] font-medium leading-[1.2] text-[var(--lm-text-secondary)]">
                   Voice or Type
                 </span>
               </div>

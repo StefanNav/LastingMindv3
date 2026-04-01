@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, Check } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useApp } from '@/app/AppProvider'
 import { demoStates } from '@/data/demoStates'
 import { cn } from '@/lib/utils'
@@ -8,6 +9,7 @@ export function DemoDropdown() {
   const { activeDemoId, setDemoState, demoStateOrder } = useApp()
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -20,6 +22,8 @@ export function DemoDropdown() {
     }
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isOpen])
+
+  const flowStates = demoStateOrder.filter((id) => id !== 'onboarding')
 
   return (
     <div ref={dropdownRef} className="relative">
@@ -35,7 +39,7 @@ export function DemoDropdown() {
       {isOpen && (
         <div className="absolute left-1/2 top-full z-[100] mt-1 -translate-x-1/2 overflow-hidden rounded-lg border border-border bg-background shadow-lg">
           <div className="flex flex-col py-1">
-            {demoStateOrder.map((id) => {
+            {flowStates.map((id) => {
               const config = demoStates[id]
               const isActive = id === activeDemoId
               return (
@@ -60,6 +64,26 @@ export function DemoDropdown() {
                 </button>
               )
             })}
+            <div className="mx-2 my-1 border-t border-border" />
+            <button
+              type="button"
+              onClick={() => {
+                setDemoState('onboarding')
+                navigate('/onboarding')
+                setIsOpen(false)
+              }}
+              className={cn(
+                'flex items-center gap-2 whitespace-nowrap px-3 py-1.5 text-left text-[11px] leading-none transition-colors',
+                activeDemoId === 'onboarding'
+                  ? 'bg-lm-green/10 font-bold text-lm-green'
+                  : 'text-foreground/70 hover:bg-foreground/5',
+              )}
+            >
+              <span className="w-3 flex-shrink-0">
+                {activeDemoId === 'onboarding' && <Check className="size-3" />}
+              </span>
+              Onboarding
+            </button>
           </div>
         </div>
       )}
