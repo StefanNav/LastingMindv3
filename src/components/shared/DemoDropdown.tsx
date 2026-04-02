@@ -23,8 +23,6 @@ export function DemoDropdown() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isOpen])
 
-  const flowStates = demoStateOrder.filter((id) => id !== 'onboarding')
-
   return (
     <div ref={dropdownRef} className="relative">
       <button
@@ -39,7 +37,7 @@ export function DemoDropdown() {
       {isOpen && (
         <div className="absolute left-1/2 top-full z-[100] mt-1 -translate-x-1/2 overflow-hidden rounded-lg border border-border bg-background shadow-lg">
           <div className="flex flex-col py-1">
-            {flowStates.map((id) => {
+            {demoStateOrder.map((id) => {
               const config = demoStates[id]
               const isActive = id === activeDemoId
               return (
@@ -47,6 +45,12 @@ export function DemoDropdown() {
                   key={id}
                   type="button"
                   onClick={() => {
+                    if (id === 'onboarding') {
+                      window.dispatchEvent(new CustomEvent('onboarding-reset'))
+                      navigate('/onboarding')
+                    } else {
+                      navigate('/home')
+                    }
                     setDemoState(id)
                     setIsOpen(false)
                   }}
@@ -64,27 +68,6 @@ export function DemoDropdown() {
                 </button>
               )
             })}
-            <div className="mx-2 my-1 border-t border-border" />
-            <button
-              type="button"
-              onClick={() => {
-                window.dispatchEvent(new CustomEvent('onboarding-reset'))
-                setDemoState('onboarding')
-                navigate('/onboarding')
-                setIsOpen(false)
-              }}
-              className={cn(
-                'flex items-center gap-2 whitespace-nowrap px-3 py-1.5 text-left text-[11px] leading-none transition-colors',
-                activeDemoId === 'onboarding'
-                  ? 'bg-lm-green/10 font-bold text-lm-green'
-                  : 'text-foreground/70 hover:bg-foreground/5',
-              )}
-            >
-              <span className="w-3 flex-shrink-0">
-                {activeDemoId === 'onboarding' && <Check className="size-3" />}
-              </span>
-              Onboarding
-            </button>
           </div>
         </div>
       )}

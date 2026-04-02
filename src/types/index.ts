@@ -194,7 +194,7 @@ export type ConversationStep =
 
 export type ConversationInputMode = 'voice' | 'text'
 
-export type DemoStateId = 'state-0' | 'flow-1' | 'flow-2' | 'flow-3' | 'onboarding'
+export type DemoStateId = 'onboarding' | 'state-0' | 'state-1' | 'state-2' | 'state-3' | 'state-4'
 
 export interface DemoPromptCard {
   categoryTag: string

@@ -139,12 +139,12 @@ const state0: DemoConfig = {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// FLOW 1 — Foundation In Progress (0 stars: all Module 1s complete, Module 2s at zero)
+// STATE 1 — Foundation In Progress (0 stars: all Module 1s complete, Module 2s at zero)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const flow1: DemoConfig = {
-  id: 'flow-1',
-  label: 'Flow 1',
+const state1: DemoConfig = {
+  id: 'state-1',
+  label: 'State 1',
   foundationStars: 0,
   treeImage: TREE_IMAGE,
   promptCard: {
@@ -274,12 +274,189 @@ const flow1: DemoConfig = {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// FLOW 2 — Foundation Complete, Phase 2 Just Opened (6 of 6 stars)
+// STATE 2 — Almost There (5 stars: Core Values Module 2 remaining, Phase 2 still locked)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const flow2: DemoConfig = {
-  id: 'flow-2',
-  label: 'Flow 2',
+const state2: DemoConfig = {
+  id: 'state-2',
+  label: 'State 2',
+  foundationStars: 5,
+  treeImage: TREE_IMAGE,
+  promptCard: {
+    categoryTag: 'From Core Values',
+    question: 'Share a time your values were tested — earn your final star.',
+  },
+  homePhases: [
+    {
+      id: 'foundation',
+      title: 'Foundation',
+      label: 'Phase 1',
+      categories: [
+        { id: 'cat-family',      title: 'Family',      ...CAT_IMAGES.family,      status: 'flourishing', totalModules: 2 },
+        { id: 'cat-friends',     title: 'Friends',     ...CAT_IMAGES.friends,     status: 'flourishing', totalModules: 2 },
+        { id: 'cat-career',      title: 'Career',      ...CAT_IMAGES.career,      status: 'flourishing', totalModules: 2 },
+        { id: 'cat-education',   title: 'Education',   ...CAT_IMAGES.education,   status: 'flourishing', totalModules: 2 },
+        { id: 'cat-favourites',  title: 'Favourites',  ...CAT_IMAGES.favourites,  status: 'flourishing', totalModules: 2 },
+        { id: 'cat-core-values', title: 'Core Values', ...CAT_IMAGES.coreValues,  status: 'started',     totalModules: 2 },
+      ],
+    },
+    {
+      id: 'life-story',
+      title: 'Life Story',
+      label: 'Phase 2',
+      categories: [
+        { id: 'cat-life-chapters',     title: 'Life Chapters',     ...CAT_IMAGES.lifeChapters,     status: 'locked', totalModules: 3 },
+        { id: 'cat-wisdom',            title: 'Wisdom & Advice',   ...CAT_IMAGES.wisdom,           status: 'locked', totalModules: 3 },
+        { id: 'cat-greatest-memories', title: 'Greatest Memories', ...CAT_IMAGES.greatestMemories, status: 'locked', totalModules: 3 },
+      ],
+    },
+    {
+      id: 'your-legacy',
+      title: 'Your Legacy',
+      label: 'Phase 3',
+      categories: [
+        { id: 'cat-letters',        title: 'Letters to Loved Ones', ...CAT_IMAGES.letters,       status: 'locked', totalModules: 3 },
+        { id: 'cat-voice-messages', title: 'Voice Messages',        ...CAT_IMAGES.voiceMessages, status: 'locked', totalModules: 3 },
+        { id: 'cat-memoir',         title: 'Memoir',                ...CAT_IMAGES.memoir,        status: 'locked', totalModules: 3 },
+      ],
+    },
+    {
+      id: 'keep-growing',
+      title: 'Keep Growing',
+      label: 'Phase 4',
+      categories: [
+        { id: 'cat-open-journaling',      title: 'Open Journaling',          ...CAT_IMAGES.openJournaling,     status: 'locked', totalModules: 3 },
+        { id: 'cat-questions-loved-ones',  title: 'Questions from Loved Ones', ...CAT_IMAGES.questionsLovedOnes, status: 'locked', totalModules: 3 },
+        { id: 'cat-reflective-questions',  title: 'Reflective Questions',     ...CAT_IMAGES.reflectiveQuestions, status: 'locked', totalModules: 3 },
+      ],
+    },
+  ],
+  categoryDetails: {
+    // Family — flourishing (both modules complete, star earned)
+    'cat-family': {
+      categoryId: 'cat-family',
+      heading: 'Tell us about your family',
+      subtitle: "You've completed all modules — keep adding to your family story!",
+      modules: [
+        { id: 'mod-fam-1', title: "Who's in your family", description: 'This module lays the foundation for future exercises.', duration: '5min', completed: true, locked: false },
+        { id: 'mod-fam-2', title: 'Tell us about a family member', description: 'Share a story or a memory about someone in your family.', duration: '5min', completed: true, locked: false },
+      ],
+      familyMembers: [
+        { id: 'fm-linda', initial: 'L', name: 'Linda', entryCount: 2 },
+        { id: 'fm-mom', initial: 'M', name: 'Mom', entryCount: 1 },
+        { id: 'fm-dad', initial: 'D', name: 'Dad', entryCount: 1 },
+        { id: 'fm-sarah', initial: 'S', name: 'Sarah', entryCount: 1 },
+        { id: 'fm-robert', initial: 'R', name: 'Robert', entryCount: 0 },
+        { id: 'fm-james', initial: 'J', name: 'James', entryCount: 0 },
+      ],
+      recentEntries: [
+        { id: 'entry-1', memberInitial: 'M', memberName: 'Mom', title: 'Moms Sunday dinners', snippet: 'Every Sunday, Mom would make her famous roast chicken...', date: 'Mar 15, 2026' },
+        { id: 'entry-f2', memberInitial: 'D', memberName: 'Dad', title: 'Dad in the workshop', snippet: 'Dad spent every Saturday morning in his workshop...', date: 'Mar 18, 2026' },
+      ],
+      growthActions: [
+        { id: 'ga-1', label: 'Add more family members' },
+        { id: 'ga-2', label: 'Reflect on what family means to you' },
+        { id: 'ga-3', label: 'Record a story about a family member' },
+      ],
+      entriesComplete: 5,
+      entriesToNextStar: 2,
+    },
+    // Friends — flourishing
+    'cat-friends': {
+      categoryId: 'cat-friends',
+      heading: 'Tell us about your friends',
+      subtitle: "You've completed all modules — keep adding to your friend stories!",
+      modules: [
+        { id: 'mod-fri-1', title: 'Who are your closest friends', description: 'Share the people who have been there through it all.', duration: '5min', completed: true, locked: false },
+        { id: 'mod-fri-2', title: 'A friendship that shaped you', description: 'Tell us about a friend who changed your life.', duration: '5min', completed: true, locked: false },
+      ],
+      familyMembers: [
+        { id: 'fr-tom', initial: 'T', name: 'Tom', entryCount: 2 },
+        { id: 'fr-bill', initial: 'B', name: 'Bill', entryCount: 1 },
+        { id: 'fr-nancy', initial: 'N', name: 'Nancy', entryCount: 1 },
+      ],
+      recentEntries: [
+        { id: 'entry-2', memberInitial: 'T', memberName: 'Tom', title: 'College roommate days', snippet: 'Tom and I met on the first day of college...', date: 'Mar 12, 2026' },
+      ],
+      growthActions: [
+        { id: 'ga-4', label: 'Add more friends' },
+        { id: 'ga-5', label: 'Share a favorite memory with a friend' },
+        { id: 'ga-6', label: 'Record a story about a friendship' },
+      ],
+      entriesComplete: 4,
+      entriesToNextStar: 1,
+    },
+    // Career — flourishing
+    'cat-career': {
+      categoryId: 'cat-career',
+      heading: 'Tell us about your career',
+      subtitle: "You've completed all modules — keep adding to your career story!",
+      modules: [
+        { id: 'mod-car-1', title: 'Your career journey', description: 'Walk us through the jobs and roles that defined you.', duration: '5min', completed: true, locked: false },
+        { id: 'mod-car-2', title: 'Lessons from work', description: 'What did your career teach you about life?', duration: '5min', completed: true, locked: false },
+      ],
+      growthActions: [
+        { id: 'ga-7', label: 'Share a career milestone' },
+        { id: 'ga-8', label: 'Reflect on your professional growth' },
+        { id: 'ga-9', label: 'Record advice for someone starting out' },
+      ],
+      entriesComplete: 4,
+      entriesToNextStar: 1,
+    },
+    // Education — flourishing
+    'cat-education': {
+      categoryId: 'cat-education',
+      heading: 'Tell us about your education',
+      subtitle: "You've completed all modules — keep adding to your education story!",
+      modules: [
+        { id: 'mod-edu-1', title: 'Your school years', description: 'Share memories from your time in school.', duration: '5min', completed: true, locked: false },
+        { id: 'mod-edu-2', title: 'What education meant to you', description: 'How did learning shape who you became?', duration: '5min', completed: true, locked: false },
+      ],
+      growthActions: [
+        { id: 'ga-10', label: 'Share a favorite teacher story' },
+        { id: 'ga-11', label: 'Reflect on a lesson that stuck with you' },
+        { id: 'ga-12', label: 'Record advice about education' },
+      ],
+      entriesComplete: 3,
+      entriesToNextStar: 2,
+    },
+    // Favourites — flourishing
+    'cat-favourites': {
+      categoryId: 'cat-favourites',
+      heading: 'Tell us about your favourites',
+      subtitle: "You've completed all modules — keep exploring your favourites!",
+      modules: [
+        { id: 'mod-fav-1', title: 'Your favourite things', description: 'Foods, places, songs, movies — the things you love most.', duration: '5min', completed: true, locked: false },
+        { id: 'mod-fav-2', title: 'Why they matter', description: 'What makes these favourites special to you?', duration: '5min', completed: true, locked: false },
+      ],
+      growthActions: [
+        { id: 'ga-13', label: 'Share a favourite childhood memory' },
+        { id: 'ga-14', label: 'Record your all-time favourite song' },
+        { id: 'ga-15', label: 'Tell us about a favourite place' },
+      ],
+      entriesComplete: 3,
+      entriesToNextStar: 2,
+    },
+    // Core Values — started (Module 1 done, Module 2 unlocked but not done — last star remaining)
+    'cat-core-values': {
+      categoryId: 'cat-core-values',
+      heading: 'Tell us about your core values',
+      subtitle: 'Complete one more module to earn your final star!',
+      modules: [
+        { id: 'mod-val-1', title: 'What you stand for', description: 'The principles that have guided your life.', duration: '5min', completed: true, locked: false },
+        { id: 'mod-val-2', title: 'Values in action', description: 'Share a time your values were tested.', duration: '5min', completed: false, locked: false },
+      ],
+    },
+  },
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STATE 3 — Foundation Complete, Phase 2 Just Opened (6 of 6 stars)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const state3: DemoConfig = {
+  id: 'state-3',
+  label: 'State 3',
   foundationStars: 6,
   treeImage: TREE_IMAGE,
   promptCard: {
@@ -510,12 +687,12 @@ const flow2: DemoConfig = {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// FLOW 3 — Deep Progress (Phase 2 ~40%, Phase 3 ~15%, Chat with Self unlocked)
+// STATE 4 — Deep Progress (Phase 2 ~40%, Phase 3 ~15%, Chat with Self unlocked)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const flow3: DemoConfig = {
-  id: 'flow-3',
-  label: 'Flow 3',
+const state4: DemoConfig = {
+  id: 'state-4',
+  label: 'State 4',
   foundationStars: 6,
   treeImage: TREE_IMAGE,
   promptCard: {
@@ -797,11 +974,12 @@ const onboarding: DemoConfig = {
 // ─── Export all demo states ───────────────────────────────────────────────────
 
 export const demoStates: Record<DemoStateId, DemoConfig> = {
-  'state-0': state0,
-  'flow-1': flow1,
-  'flow-2': flow2,
-  'flow-3': flow3,
   'onboarding': onboarding,
+  'state-0': state0,
+  'state-1': state1,
+  'state-2': state2,
+  'state-3': state3,
+  'state-4': state4,
 }
 
-export const demoStateOrder: DemoStateId[] = ['state-0', 'flow-1', 'flow-2', 'flow-3', 'onboarding']
+export const demoStateOrder: DemoStateId[] = ['onboarding', 'state-0', 'state-1', 'state-2', 'state-3', 'state-4']

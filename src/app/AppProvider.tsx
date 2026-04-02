@@ -9,6 +9,7 @@ interface AppContextValue {
   // Demo mode
   activeDemoId: DemoStateId
   setDemoState: (id: DemoStateId) => void
+  onboardingKey: number
   demoConfig: DemoConfig
   homePhases: HomePhase[]
   categoryDetails: Record<string, CategoryDetail>
@@ -28,7 +29,7 @@ export function useApp() {
   return context
 }
 
-const DEFAULT_DEMO: DemoStateId = 'flow-3'
+const DEFAULT_DEMO: DemoStateId = 'state-0'
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AppState>({
@@ -39,11 +40,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
   })
 
   const [activeDemoId, setActiveDemoId] = useState<DemoStateId>(DEFAULT_DEMO)
+  const [onboardingKey, setOnboardingKey] = useState(0)
 
   const demoConfig = demoStates[activeDemoId]
 
   const setDemoState = (id: DemoStateId) => {
     setActiveDemoId(id)
+    if (id === 'onboarding') {
+      setOnboardingKey((k) => k + 1)
+    }
   }
 
   const value = useMemo<AppContextValue>(() => ({
@@ -51,6 +56,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState,
     activeDemoId,
     setDemoState,
+    onboardingKey,
     demoConfig,
     homePhases: demoConfig.homePhases,
     categoryDetails: demoConfig.categoryDetails,
@@ -58,7 +64,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     foundationStars: demoConfig.foundationStars,
     treeImage: demoConfig.treeImage,
     demoStateOrder,
-  }), [state, activeDemoId, demoConfig])
+  }), [state, activeDemoId, onboardingKey, demoConfig])
 
   return (
     <AppContext.Provider value={value}>

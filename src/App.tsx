@@ -16,7 +16,13 @@ import { ReflectionPage } from '@/pages/ReflectionPage'
 import { ReflectionSummaryPage } from '@/pages/ReflectionSummaryPage'
 import { conversationConfigs, foundationIntroData } from '@/data/mock'
 import { PageTransition } from '@/animations/PageTransition'
+import { useApp } from '@/app/AppProvider'
 import type { ModuleCompletionState } from '@/types'
+
+function KeyedOnboarding() {
+  const { onboardingKey } = useApp()
+  return <OnboardingPage key={onboardingKey} />
+}
 
 function ConversationRoute() {
   const { categoryId } = useParams<{ categoryId: string }>()
@@ -63,7 +69,7 @@ function App() {
           <AnimatePresence mode="wait">
             <Routes>
               <Route path="/" element={<Navigate to="/onboarding" replace />} />
-              <Route path="/onboarding" element={<OnboardingPage />} />
+              <Route path="/onboarding" element={<KeyedOnboarding />} />
               <Route path="/home" element={<HomePage />} />
               <Route path="/session" element={<SessionPage />} />
               <Route path="/success" element={<SuccessPage />} />
