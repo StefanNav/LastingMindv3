@@ -292,12 +292,12 @@ const state2: DemoConfig = {
       title: 'Foundation',
       label: 'Phase 1',
       categories: [
-        { id: 'cat-family',      title: 'Family',      ...CAT_IMAGES.family,      status: 'flourishing', totalModules: 2 },
-        { id: 'cat-friends',     title: 'Friends',     ...CAT_IMAGES.friends,     status: 'flourishing', totalModules: 2 },
-        { id: 'cat-career',      title: 'Career',      ...CAT_IMAGES.career,      status: 'flourishing', totalModules: 2 },
-        { id: 'cat-education',   title: 'Education',   ...CAT_IMAGES.education,   status: 'flourishing', totalModules: 2 },
-        { id: 'cat-favourites',  title: 'Favourites',  ...CAT_IMAGES.favourites,  status: 'flourishing', totalModules: 2 },
-        { id: 'cat-core-values', title: 'Core Values', ...CAT_IMAGES.coreValues,  status: 'started',     totalModules: 2 },
+        { id: 'cat-family',      title: 'Family',      ...CAT_IMAGES.family,      status: 'growing', totalModules: 2 },
+        { id: 'cat-friends',     title: 'Friends',     ...CAT_IMAGES.friends,     status: 'growing', totalModules: 2 },
+        { id: 'cat-career',      title: 'Career',      ...CAT_IMAGES.career,      status: 'growing', totalModules: 2 },
+        { id: 'cat-education',   title: 'Education',   ...CAT_IMAGES.education,   status: 'growing', totalModules: 2 },
+        { id: 'cat-favourites',  title: 'Favourites',  ...CAT_IMAGES.favourites,  status: 'growing', totalModules: 2 },
+        { id: 'cat-core-values', title: 'Core Values', ...CAT_IMAGES.coreValues,  status: 'started', totalModules: 2 },
       ],
     },
     {
