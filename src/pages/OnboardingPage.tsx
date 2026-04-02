@@ -45,7 +45,7 @@ export function OnboardingPage() {
   const [direction, setDirection] = useState<Direction>(1)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-  const [userType, setUserType] = useState<'builder' | 'connector' | null>(null)
+  const [_userType, setUserType] = useState<'builder' | 'connector' | null>(null)
 
   const next = useCallback(() => {
     setDirection(1)
