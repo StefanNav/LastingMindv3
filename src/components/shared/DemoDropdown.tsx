@@ -68,6 +68,7 @@ export function DemoDropdown() {
             <button
               type="button"
               onClick={() => {
+                window.dispatchEvent(new CustomEvent('onboarding-reset'))
                 setDemoState('onboarding')
                 navigate('/onboarding')
                 setIsOpen(false)

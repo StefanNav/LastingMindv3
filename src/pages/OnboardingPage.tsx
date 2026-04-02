@@ -88,6 +88,19 @@ export function OnboardingPage() {
     return () => window.removeEventListener('onboarding-back', handler)
   }, [back])
 
+  // Listen for reset event from DemoDropdown to restart at splash
+  useEffect(() => {
+    const handler = () => {
+      setStep(0)
+      setDirection(1)
+      setFirstName('')
+      setLastName('')
+      setUserType(null)
+    }
+    window.addEventListener('onboarding-reset', handler)
+    return () => window.removeEventListener('onboarding-reset', handler)
+  }, [])
+
   const displayName = firstName || 'Alex'
 
   const steps = useMemo(() => [
