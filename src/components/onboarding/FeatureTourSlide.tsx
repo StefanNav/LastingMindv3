@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { ProgressBar } from './ProgressBar'
+import { containerVariants, dissolveVariants } from './animations'
 
 interface FeatureTourSlideProps {
   heading: string
@@ -30,19 +31,26 @@ export function FeatureTourSlide({
         <ProgressBar currentStep={progressStep} totalSteps={totalProgressSteps} />
       </div>
 
-      <motion.h1
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="mt-4 px-4 font-display text-[28px] font-semibold leading-[1.15] tracking-tight text-foreground text-center"
+      <motion.div
+        variants={containerVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="mt-4 px-4 text-center"
       >
-        {heading}
-      </motion.h1>
+        <motion.h1
+          variants={dissolveVariants}
+          className="font-display text-[28px] font-semibold leading-[1.15] tracking-tight text-foreground text-center"
+        >
+          {heading}
+        </motion.h1>
+      </motion.div>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.15 }}
+        variants={dissolveVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
         className="flex flex-1 items-center justify-center overflow-hidden px-4"
       >
         {children}

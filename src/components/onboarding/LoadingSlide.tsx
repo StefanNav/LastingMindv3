@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ThinkingDots } from '@/components/ui/ThinkingDots'
+import { dissolveVariants } from './animations'
 
 interface LoadingSlideProps {
   onComplete: () => void
@@ -18,9 +19,10 @@ export function LoadingSlide({ onComplete, delay = 2000, imageSrc = '/images/onb
     <div className="flex h-full flex-col">
       <div className="flex flex-1 items-center justify-center">
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          variants={dissolveVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
         >
           <ThinkingDots size="md" />
         </motion.div>

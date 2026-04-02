@@ -1,38 +1,42 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { NarrativeSlide } from '@/components/onboarding/NarrativeSlide'
-import { NameInputSlide } from '@/components/onboarding/NameInputSlide'
-import { GreetingSlide } from '@/components/onboarding/GreetingSlide'
-import { BirthdayPickerSlide } from '@/components/onboarding/BirthdayPickerSlide'
-import { LoadingSlide } from '@/components/onboarding/LoadingSlide'
-import { WelcomeSlide } from '@/components/onboarding/WelcomeSlide'
-import { FeatureTourSlide } from '@/components/onboarding/FeatureTourSlide'
+import { NarrativePhase } from '@/components/onboarding/NarrativePhase'
+import { PostNamePhase } from '@/components/onboarding/PostNamePhase'
+import { PostBirthdayPhase } from '@/components/onboarding/PostBirthdayPhase'
+import { FeatureTourCarousel } from '@/components/onboarding/FeatureTourCarousel'
 import { CategoryGridSlide } from '@/components/onboarding/CategoryGridSlide'
 import { FamilyDetailSlide } from '@/components/onboarding/FamilyDetailSlide'
 import { ChatPreviewSlide } from '@/components/onboarding/ChatPreviewSlide'
 import { PreparingSlide } from '@/components/onboarding/PreparingSlide'
+import { SplashScreen } from '@/components/onboarding/SplashScreen'
+import { UserTypeScreen } from '@/components/onboarding/UserTypeScreen'
 
 type Direction = 1 | -1
 
 const slideVariants = {
-  enter: (dir: Direction) => ({
-    x: dir > 0 ? '80%' : '-80%',
+  enter: () => ({
     opacity: 0,
+    y: 12,
+    clipPath: 'inset(60% 0 0 0)',
+    filter: 'blur(6px)',
   }),
   center: {
-    x: 0,
     opacity: 1,
+    y: 0,
+    clipPath: 'inset(0% 0 0 0)',
+    filter: 'blur(0px)',
   },
-  exit: (dir: Direction) => ({
-    x: dir > 0 ? '-80%' : '80%',
+  exit: () => ({
     opacity: 0,
+    filter: 'blur(4px)',
+    transition: { duration: 0.15 },
   }),
 }
 
 const slideTransition = {
-  x: { type: 'spring' as const, stiffness: 300, damping: 30 },
-  opacity: { duration: 0.25 },
+  duration: 1.7,
+  ease: [0.25, 0.1, 0.25, 1] as const,
 }
 
 export function OnboardingPage() {
@@ -41,6 +45,7 @@ export function OnboardingPage() {
   const [direction, setDirection] = useState<Direction>(1)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
+  const [userType, setUserType] = useState<'builder' | 'connector' | null>(null)
 
   const next = useCallback(() => {
     setDirection(1)
@@ -68,6 +73,14 @@ export function OnboardingPage() {
     setStep((s) => s + 1)
   }, [])
 
+  const handleUserType = useCallback((type: 'builder' | 'connector') => {
+    setUserType(type)
+    if (type === 'builder') {
+      setDirection(1)
+      setStep((s) => s + 1)
+    }
+  }, [])
+
   // Listen for back button in status bar (testing utility)
   useEffect(() => {
     const handler = () => back()
@@ -78,190 +91,90 @@ export function OnboardingPage() {
   const displayName = firstName || 'Alex'
 
   const steps = useMemo(() => [
-    // Phase 1: Narrative Intro (0-3)
+    // Step 0: Splash screen
     {
-      id: 'narrative-1',
-      render: () => (
-        <NarrativeSlide
-          heading="Every legacy starts as a seed"
-          subtitle="Lasting Mind helps you build something your loved ones can return to for years to come."
-          imageSrc="/images/onboarding/seed-1.png"
-          buttonLabel="Let's Begin"
-          onNext={next}
-        />
-      ),
+      id: 'splash',
+      render: () => <SplashScreen onStart={next} />,
     },
+    // Step 1: User type selection
     {
-      id: 'narrative-2',
-      render: () => (
-        <NarrativeSlide
-          heading="The people you love want to know you"
-          subtitle="Not just who you are today, but who you've been and what shaped you."
-          imageSrc="/images/onboarding/seed-2.png"
-          buttonLabel="Continue"
-          onNext={next}
-        />
-      ),
+      id: 'user-type',
+      render: () => <UserTypeScreen onSelect={handleUserType} />,
     },
+    // Phase 1: Narrative Intro + Name Input — single persistent component
     {
-      id: 'narrative-3',
+      id: 'narrative-phase',
       render: () => (
-        <NarrativeSlide
-          heading="We help bring your story to life"
-          subtitle="Through guided reflections we capture your life chapters for your loved ones."
-          imageSrc="/images/onboarding/seed-3.png"
-          buttonLabel="Continue"
-          onNext={next}
-        />
-      ),
-    },
-    {
-      id: 'narrative-4',
-      render: () => (
-        <NarrativeSlide
-          heading="What you build here will grow"
-          subtitle="Over time, your stories become something your loved ones can return to."
-          imageSrc="/images/onboarding/sprout-1.png"
-          buttonLabel="Continue"
-          onNext={next}
-        />
-      ),
-    },
-    // Phase 2: User Info (4-6)
-    {
-      id: 'name-input',
-      render: () => (
-        <NameInputSlide
-          heading="Your story is ready to take root"
-          subtitle="This is the first step in shaping something that reflects you."
-          onNext={handleNameSubmit}
+        <NarrativePhase
+          onComplete={handleNameSubmit}
           initialFirstName={firstName}
           initialLastName={lastName}
         />
       ),
     },
+    // Phase 2: Loading → Greeting → Birthday (persistent plant)
     {
-      id: 'loading-name',
-      render: () => <LoadingSlide onComplete={next} delay={2000} />,
-    },
-    {
-      id: 'greeting',
+      id: 'post-name-phase',
       render: () => (
-        <GreetingSlide firstName={displayName} onComplete={next} delay={2500} />
+        <PostNamePhase
+          firstName={displayName}
+          onComplete={handleBirthdaySubmit}
+        />
       ),
     },
-    // Phase 3: Birthday (8-9)
+    // Phase 3: Loading → Welcome → Tree morph (persistent plant/canvas)
     {
-      id: 'birthday',
+      id: 'post-birthday-phase',
       render: () => (
-        <BirthdayPickerSlide
+        <PostBirthdayPhase
           firstName={displayName}
-          onNext={handleBirthdaySubmit}
+          onComplete={next}
         />
       ),
     },
     {
-      id: 'loading-birthday',
-      render: () => <LoadingSlide onComplete={next} delay={2000} />,
-    },
-    // Phase 4: Welcome + Feature Tour (10-15)
-    {
-      id: 'welcome',
+      id: 'tour-carousel',
       render: () => (
-        <WelcomeSlide firstName={displayName} onComplete={next} delay={3000} />
-      ),
-    },
-    {
-      id: 'tour-tree',
-      render: () => (
-        <FeatureTourSlide
-          heading="This tree reflects what you build here"
-          progressStep={0}
-          totalProgressSteps={5}
-          onNext={next}
-          showBack={false}
-        >
-          <div className="flex h-[280px] w-full items-end justify-center">
-            <img
-              src="/images/Tree 1.png"
-              alt=""
-              className="max-h-full object-contain"
-            />
-          </div>
-        </FeatureTourSlide>
-      ),
-    },
-    {
-      id: 'tour-categories',
-      render: () => (
-        <FeatureTourSlide
-          heading="It grows as you share the details of your life"
-          progressStep={1}
-          totalProgressSteps={5}
-          onBack={back}
-          onNext={next}
-        >
-          <CategoryGridSlide />
-        </FeatureTourSlide>
-      ),
-    },
-    {
-      id: 'tour-family',
-      render: () => (
-        <FeatureTourSlide
-          heading="More depth leads to a richer Lasting Mind legacy"
-          progressStep={2}
-          totalProgressSteps={5}
-          onBack={back}
-          onNext={next}
-        >
-          <FamilyDetailSlide />
-        </FeatureTourSlide>
-      ),
-    },
-    {
-      id: 'tour-trees',
-      render: () => (
-        <FeatureTourSlide
-          heading="As your Lasting Mind deepens, your tree grows"
-          progressStep={3}
-          totalProgressSteps={5}
-          onBack={back}
-          onNext={next}
-        >
-          <div className="flex h-[220px] w-full items-end justify-center gap-3">
-            <img
-              src="/images/onboarding/tree 1.2.png"
-              alt=""
-              className="h-[82px] object-contain"
-            />
-            <img
-              src="/images/onboarding/Tree 2.2.png"
-              alt=""
-              className="h-[98px] object-contain"
-            />
-            <img
-              src="/images/Tree 1.png"
-              alt=""
-              className="h-[121px] object-contain"
-            />
-          </div>
-        </FeatureTourSlide>
-      ),
-    },
-    {
-      id: 'tour-chat',
-      render: () => (
-        <FeatureTourSlide
-          heading="Eventually, your loved ones can talk with what you create"
-          progressStep={4}
-          totalProgressSteps={5}
-          onBack={back}
-          onNext={next}
-          nextLabel="Start Building"
-        >
-          <ChatPreviewSlide />
-        </FeatureTourSlide>
+        <FeatureTourCarousel
+          onComplete={next}
+          slides={[
+            {
+              id: 'tour-tree',
+              heading: 'This tree reflects what you build here',
+              content: (
+                <div className="flex h-[280px] w-full items-end justify-center">
+                  <img src="/images/Tree 1.png" alt="" className="max-h-full object-contain" />
+                </div>
+              ),
+            },
+            {
+              id: 'tour-categories',
+              heading: 'It grows as you share the details of your life',
+              content: <CategoryGridSlide />,
+            },
+            {
+              id: 'tour-family',
+              heading: 'More depth leads to a richer Lasting Mind legacy',
+              content: <FamilyDetailSlide />,
+            },
+            {
+              id: 'tour-trees',
+              heading: 'As your Lasting Mind deepens, your tree grows',
+              content: (
+                <div className="flex h-[220px] w-full items-end justify-center gap-3">
+                  <img src="/images/onboarding/tree 1.2.png" alt="" className="h-[82px] object-contain" />
+                  <img src="/images/Tree 1.png" alt="" className="h-[121px] object-contain" />
+                  <img src="/images/onboarding/Tree 2.2.png" alt="" className="h-[98px] object-contain" />
+                </div>
+              ),
+            },
+            {
+              id: 'tour-chat',
+              heading: 'Eventually, your loved ones can talk with what you create',
+              content: <ChatPreviewSlide />,
+            },
+          ]}
+        />
       ),
     },
     // Phase 5: Loading (16)
@@ -269,23 +182,36 @@ export function OnboardingPage() {
       id: 'preparing',
       render: () => <PreparingSlide onComplete={goHome} delay={3000} />,
     },
-  ], [next, back, goHome, handleNameSubmit, handleBirthdaySubmit, firstName, lastName, displayName])
+  ], [next, back, goHome, handleNameSubmit, handleBirthdaySubmit, handleUserType, firstName, lastName, displayName])
 
   const currentStep = steps[Math.min(step, steps.length - 1)]
 
   return (
-    <div className="h-full overflow-hidden">
+    <div className="h-full overflow-hidden relative">
+      {/* Backdrop plant — visible during NarrativePhase exit so plant doesn't glitch */}
+      {step === 3 && (
+        <div
+          className="absolute left-0 right-0 flex items-end justify-center pointer-events-none"
+          style={{ bottom: 78, zIndex: 0 }}
+        >
+          <img
+            src="/images/onboarding/sprount-2.png"
+            alt=""
+            style={{ width: '100%', maxWidth: 340, height: 'auto' }}
+          />
+        </div>
+      )}
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
           key={currentStep.id}
           custom={direction}
           variants={slideVariants}
-          initial="enter"
+          initial={currentStep.id === 'post-name-phase' || currentStep.id === 'post-birthday-phase' ? 'center' : 'enter'}
           animate="center"
           exit="exit"
           transition={slideTransition}
           className="h-full"
-          style={{ willChange: 'transform, opacity' }}
+          style={{ willChange: 'transform, opacity', position: 'relative', zIndex: 1 }}
         >
           {currentStep.render()}
         </motion.div>

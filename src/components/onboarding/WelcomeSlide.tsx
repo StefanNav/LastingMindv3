@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { containerVariants, dissolveVariants } from './animations'
 
 interface WelcomeSlideProps {
   firstName: string
@@ -16,19 +17,25 @@ export function WelcomeSlide({ firstName, onComplete, delay = 3000 }: WelcomeSli
   return (
     <div className="flex h-full flex-col">
       <div className="flex flex-1 flex-col items-center px-4 pt-44 text-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="font-display text-[28px] font-semibold leading-[1.15] tracking-tight text-foreground"
+        <motion.div
+          variants={containerVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
         >
-          Welcome to your Lasting Mind, {firstName}
-        </motion.h1>
+          <motion.h1
+            variants={dissolveVariants}
+            className="font-display text-[28px] font-semibold leading-[1.15] tracking-tight text-foreground"
+          >
+            Welcome to your Lasting Mind, {firstName}
+          </motion.h1>
+        </motion.div>
       </div>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.3 }}
+        variants={dissolveVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
         className="relative min-h-0 flex-[1.5] w-full overflow-hidden"
       >
         <img

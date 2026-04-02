@@ -82,7 +82,8 @@ export function NameInputSlide({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="relative min-h-0 flex-1 w-full overflow-hidden"
+        className="relative w-full overflow-hidden"
+        style={{ height: '45%' }}
       >
         <img
           src="/images/onboarding/sprount-2.png"
