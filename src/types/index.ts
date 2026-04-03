@@ -170,6 +170,7 @@ export interface ConversationSummaryItem {
   id: string
   name: string
   label: string
+  dateRange?: string
 }
 
 export interface ConversationConfig {
@@ -249,3 +250,13 @@ export type ReflectionStep =
   | 'summary'
 
 export type ReflectionMethod = 'guided' | 'open'
+
+export interface LovedOneCreator {
+  id: string
+  name: string
+  relationship: string
+  avatarUrl: string | null
+  bio: string
+  entryCount: number
+  starCount: number
+}

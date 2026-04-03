@@ -5,8 +5,16 @@ interface EditSummaryItemModalProps {
   isOpen: boolean
   initialName?: string
   initialRelationship?: string
+  initialDateRange?: string
   title: string
-  onSave: (name: string, relationship: string) => void
+  nameLabel?: string
+  namePlaceholder?: string
+  relationshipLabel?: string
+  relationshipPlaceholder?: string
+  dateRangeLabel?: string
+  dateRangePlaceholder?: string
+  showDateRange?: boolean
+  onSave: (name: string, relationship: string, dateRange?: string) => void
   onCancel: () => void
 }
 
@@ -14,21 +22,31 @@ export function EditSummaryItemModal({
   isOpen,
   initialName = '',
   initialRelationship = '',
+  initialDateRange = '',
   title,
+  nameLabel = 'Name',
+  namePlaceholder = 'e.g. Sarah Mitchell',
+  relationshipLabel = 'Relationship',
+  relationshipPlaceholder = 'e.g. Daughter',
+  dateRangeLabel = 'Time Period',
+  dateRangePlaceholder = 'e.g. 1990 - 1998',
+  showDateRange = false,
   onSave,
   onCancel,
 }: EditSummaryItemModalProps) {
   const [name, setName] = useState(initialName)
   const [relationship, setRelationship] = useState(initialRelationship)
+  const [dateRange, setDateRange] = useState(initialDateRange)
   const nameRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (isOpen) {
       setName(initialName)
       setRelationship(initialRelationship)
+      setDateRange(initialDateRange)
       setTimeout(() => nameRef.current?.focus(), 100)
     }
-  }, [isOpen, initialName, initialRelationship])
+  }, [isOpen, initialName, initialRelationship, initialDateRange])
 
   const canSave = name.trim().length > 0 && relationship.trim().length > 0
 
@@ -58,29 +76,43 @@ export function EditSummaryItemModal({
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
                 <label className="text-[13px] font-semibold leading-[1.2] text-[#5d6056]">
-                  Name
+                  {nameLabel}
                 </label>
                 <input
                   ref={nameRef}
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Sarah Mitchell"
+                  placeholder={namePlaceholder}
                   className="rounded-[8px] border border-black/20 bg-white px-3 py-3 text-[16px] leading-[1.3] text-[#2f3228] outline-none focus:border-lm-green"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[13px] font-semibold leading-[1.2] text-[#5d6056]">
-                  Relationship
+                  {relationshipLabel}
                 </label>
                 <input
                   type="text"
                   value={relationship}
                   onChange={(e) => setRelationship(e.target.value)}
-                  placeholder="e.g. Daughter"
+                  placeholder={relationshipPlaceholder}
                   className="rounded-[8px] border border-black/20 bg-white px-3 py-3 text-[16px] leading-[1.3] text-[#2f3228] outline-none focus:border-lm-green"
                 />
               </div>
+              {showDateRange && (
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[13px] font-semibold leading-[1.2] text-[#5d6056]">
+                    {dateRangeLabel}
+                  </label>
+                  <input
+                    type="text"
+                    value={dateRange}
+                    onChange={(e) => setDateRange(e.target.value)}
+                    placeholder={dateRangePlaceholder}
+                    className="rounded-[8px] border border-black/20 bg-white px-3 py-3 text-[16px] leading-[1.3] text-[#2f3228] outline-none focus:border-lm-green"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="flex gap-3">
@@ -96,7 +128,7 @@ export function EditSummaryItemModal({
               <button
                 type="button"
                 disabled={!canSave}
-                onClick={() => onSave(name.trim(), relationship.trim())}
+                onClick={() => onSave(name.trim(), relationship.trim(), showDateRange ? dateRange.trim() : undefined)}
                 className="flex flex-1 items-center justify-center rounded-[10px] bg-lm-green px-5 py-3.5 disabled:opacity-40"
               >
                 <span className="text-[16px] font-medium leading-[1.2] text-white">

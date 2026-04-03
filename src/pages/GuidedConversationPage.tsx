@@ -12,6 +12,8 @@ import { TextInput } from '@/components/conversation/TextInput'
 import { AiThinking } from '@/components/conversation/AiThinking'
 import { FinishFooter } from '@/components/conversation/FinishFooter'
 import { SummaryList } from '@/components/conversation/SummaryList'
+import { CareerSummaryList } from '@/components/conversation/CareerSummaryList'
+import { EducationSummaryList } from '@/components/conversation/EducationSummaryList'
 import { ExitConfirmationModal } from '@/components/conversation/ExitConfirmationModal'
 import type { ConversationConfig } from '@/types'
 
@@ -52,6 +54,10 @@ export function GuidedConversationPage({ config, onComplete, onBack, onExit }: G
 
   // Summary screen — no background image
   if (flow.step === 'summary') {
+    const isCareer = config.categoryId === 'cat-career'
+    const isEducation = config.categoryId === 'cat-education'
+    const SummaryComponent = isCareer ? CareerSummaryList : isEducation ? EducationSummaryList : SummaryList
+
     return (
       <PageTransition>
         <div className="relative flex h-full flex-col bg-[var(--lm-bg-primary)]">
@@ -63,7 +69,7 @@ export function GuidedConversationPage({ config, onComplete, onBack, onExit }: G
             showProgress={false}
             variant="summary"
           />
-          <SummaryList
+          <SummaryComponent
             heading={config.summaryHeading}
             listLabel={config.summaryListLabel}
             addLabel={config.summaryAddLabel}

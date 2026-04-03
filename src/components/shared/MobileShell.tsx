@@ -11,14 +11,14 @@ interface MobileShellProps {
 const navItems = [
   { icon: Home, label: 'Home', path: '/home' },
   { icon: Mic, label: 'Session', path: '/session' },
-  { icon: Users, label: 'Family', path: '/family' },
+  { icon: Users, label: 'Loved Ones', path: '/loved-ones' },
   { icon: Settings, label: 'Settings', path: '/settings' },
 ]
 
 export function MobileShell({ children }: MobileShellProps) {
   const location = useLocation()
   const navigate = useNavigate()
-  const hideNav = location.pathname === '/onboarding' || location.pathname.startsWith('/intro') || location.pathname.startsWith('/conversation') || location.pathname.startsWith('/reflection') || location.pathname.startsWith('/reflect')
+  const hideNav = location.pathname === '/onboarding' || location.pathname.startsWith('/intro') || location.pathname.startsWith('/conversation') || location.pathname.startsWith('/reflection') || location.pathname.startsWith('/reflect') || location.pathname.startsWith('/favourites') || /^\/loved-ones\/[^/]+\//.test(location.pathname)
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">

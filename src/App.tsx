@@ -6,7 +6,7 @@ import { OnboardingPage } from '@/pages/OnboardingPage'
 import { HomePage } from '@/pages/HomePage'
 import { SessionPage } from '@/pages/SessionPage'
 import { SuccessPage } from '@/pages/SuccessPage'
-import { FamilyPage } from '@/pages/FamilyPage'
+import { LovedOnesPage } from '@/pages/LovedOnesPage'
 import { SettingsPage } from '@/pages/SettingsPage'
 import { ModuleIntroPage } from '@/pages/ModuleIntroPage'
 import { Module2IntroPage } from '@/pages/Module2IntroPage'
@@ -14,6 +14,9 @@ import { GuidedConversationPage } from '@/pages/GuidedConversationPage'
 import { ReflectionPromptPage } from '@/pages/ReflectionPromptPage'
 import { ReflectionPage } from '@/pages/ReflectionPage'
 import { ReflectionSummaryPage } from '@/pages/ReflectionSummaryPage'
+import { FavouritesPage } from '@/pages/FavouritesPage'
+import { FavouritesSummaryPage } from '@/pages/FavouritesSummaryPage'
+import { FavouritesMilestonePage } from '@/pages/FavouritesMilestonePage'
 import { conversationConfigs, foundationIntroData } from '@/data/mock'
 import { PageTransition } from '@/animations/PageTransition'
 import { useApp } from '@/app/AppProvider'
@@ -73,7 +76,11 @@ function App() {
               <Route path="/home" element={<HomePage />} />
               <Route path="/session" element={<SessionPage />} />
               <Route path="/success" element={<SuccessPage />} />
-              <Route path="/family" element={<FamilyPage />} />
+              <Route path="/loved-ones" element={<LovedOnesPage />} />
+              <Route path="/loved-ones/:creatorId/voice" element={null} />
+              <Route path="/loved-ones/:creatorId/chat" element={null} />
+              <Route path="/loved-ones/:creatorId/legacy" element={null} />
+              <Route path="/loved-ones/:creatorId/questions" element={null} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/intro/:categoryId" element={<ModuleIntroPage />} />
               <Route path="/intro2/:categoryId" element={<Module2IntroPage />} />
@@ -81,6 +88,9 @@ function App() {
               <Route path="/reflection/:categoryId" element={<ReflectionPromptPage />} />
               <Route path="/reflect/:categoryId" element={<ReflectionPage />} />
               <Route path="/reflection/:categoryId/summary" element={<ReflectionSummaryPage />} />
+              <Route path="/favourites" element={<FavouritesPage />} />
+              <Route path="/favourites/summary" element={<FavouritesSummaryPage />} />
+              <Route path="/favourites/milestone" element={<FavouritesMilestonePage />} />
             </Routes>
           </AnimatePresence>
         </MobileShell>

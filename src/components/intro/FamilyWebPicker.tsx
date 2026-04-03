@@ -1,3 +1,4 @@
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import type { FamilyWebMember } from '@/types'
 import { cn } from '@/lib/utils'
@@ -22,6 +23,38 @@ const itemVariants = {
 }
 
 export function FamilyWebPicker({ webMembers, selectedId, onSelect }: FamilyWebPickerProps) {
+  const [pulseStopped, setPulseStopped] = useState(false)
+  const [pulseIndex, setPulseIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+
+  const pulseOrder = useMemo(() => {
+    return webMembers
+      .filter((m) => (m.entryCount ?? 0) === 0)
+      .map((m) => m.id)
+  }, [webMembers])
+
+  const pulseTargetId = pulseStopped || isPaused ? null : pulseOrder[pulseIndex % pulseOrder.length] ?? null
+
+  useEffect(() => {
+    if (pulseStopped) return
+    if (isPaused) {
+      const gap = setTimeout(() => {
+        setPulseIndex((prev) => (prev + 1) % pulseOrder.length)
+        setIsPaused(false)
+      }, 1200)
+      return () => clearTimeout(gap)
+    }
+    const timer = setTimeout(() => {
+      setIsPaused(true)
+    }, 4000)
+    return () => clearTimeout(timer)
+  }, [pulseStopped, isPaused, pulseOrder.length, pulseIndex])
+
+  const handleSelect = useCallback((id: string) => {
+    setPulseStopped(true)
+    onSelect(id)
+  }, [onSelect])
+
   return (
     <div className="-mx-4 border-y border-lm-border-subtle bg-lm-bg-card px-4 py-5">
       <motion.div
@@ -40,7 +73,7 @@ export function FamilyWebPicker({ webMembers, selectedId, onSelect }: FamilyWebP
               key={member.id}
               type="button"
               variants={itemVariants}
-              onClick={() => onSelect(member.id)}
+              onClick={() => handleSelect(member.id)}
               className="flex w-[72px] flex-col items-center gap-1.5"
             >
               {/* Initials circle with entry count badge */}
@@ -52,7 +85,8 @@ export function FamilyWebPicker({ webMembers, selectedId, onSelect }: FamilyWebP
                     'flex size-10 items-center justify-center rounded-full transition-colors duration-200',
                     isSelected
                       ? 'border-2 border-lm-green bg-[#e7ebd9] shadow-[0_0_10px_rgba(50,117,30,0.25)]'
-                      : 'border border-dashed border-[var(--lm-text-secondary)] bg-[#fffcf5]',
+                      : 'border border-[var(--lm-text-secondary)]/40 bg-[#fffcf5]',
+                    !isSelected && member.id === pulseTargetId && 'animate-pulse-glow',
                   )}
                 >
                   <p

@@ -128,16 +128,16 @@
 
 @keyframes pulse-glow {
   0% {
-    box-shadow: 0 0 0 0 rgba(50, 117, 30, 0.35);
-    border-color: var(--lm-border);
+    box-shadow: 0 0 0 0 rgba(50, 160, 30, 0.55);
+    border-color: rgba(50, 160, 30, 0.6);
   }
   50% {
-    box-shadow: 0 0 0 5px rgba(50, 117, 30, 0);
-    border-color: rgba(50, 117, 30, 0.5);
+    box-shadow: 0 0 0 8px rgba(50, 160, 30, 0);
+    border-color: rgba(50, 160, 30, 0.8);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(50, 117, 30, 0);
-    border-color: var(--lm-border);
+    box-shadow: 0 0 0 0 rgba(50, 160, 30, 0);
+    border-color: rgba(50, 160, 30, 0.6);
   }
 }
 

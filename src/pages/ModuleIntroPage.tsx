@@ -40,7 +40,7 @@ export function ModuleIntroPage() {
           <div className="flex w-full flex-col items-center gap-[30px]">
             {/* Category image + label */}
             <div className="flex flex-col items-center gap-[26px]">
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center gap-3">
                 <div className="overflow-hidden" style={{ height: data.imageHeight, width: Math.round(data.imageHeight * (242 / 140)) }}>
                   <img
                     src={data.image}
@@ -48,7 +48,7 @@ export function ModuleIntroPage() {
                     className="h-full w-full object-contain"
                   />
                 </div>
-                <p className="text-center text-[18px] font-semibold leading-[1.2] text-lm-green-dark">
+                <p className="text-center text-[22px] font-semibold leading-[1.2] text-lm-green-dark">
                   {data.categoryLabel}
                 </p>
               </div>
@@ -58,7 +58,7 @@ export function ModuleIntroPage() {
                 <p className="font-display text-[32px] font-normal leading-[1.2] text-foreground">
                   {data.moduleTitle}
                 </p>
-                <p className="text-[16px] font-semibold leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+                <p className="text-[16px] font-normal leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
                   {data.description}
                 </p>
               </div>
@@ -92,7 +92,7 @@ export function ModuleIntroPage() {
         <div className="shrink-0 px-4 pb-[50px] pt-4">
           <button
             type="button"
-            onClick={() => navigate(`/conversation/${categoryId}`)}
+            onClick={() => navigate(categoryId === 'cat-favourites' ? '/favourites' : `/conversation/${categoryId}`)}
             className="flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-4"
           >
             <span className="text-[16px] font-medium leading-[1.2] text-white">

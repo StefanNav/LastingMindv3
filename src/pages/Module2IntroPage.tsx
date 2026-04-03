@@ -50,7 +50,7 @@ export function Module2IntroPage() {
             <div className="flex flex-col items-center gap-[30px] px-[10px]">
               <div className="flex flex-col items-center gap-[10px]">
                 {/* Image + label */}
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center gap-3">
                   <div
                     className="h-[140px] overflow-hidden"
                     style={{ width: data.imageWidth }}
@@ -61,7 +61,7 @@ export function Module2IntroPage() {
                       className="h-full w-full object-contain"
                     />
                   </div>
-                  <p className="text-center text-[18px] font-semibold leading-[1.2] text-lm-green-dark">
+                  <p className="text-center text-[22px] font-semibold leading-[1.2] text-lm-green-dark">
                     {data.categoryLabel}
                   </p>
                 </div>
@@ -71,7 +71,7 @@ export function Module2IntroPage() {
                   <p className="font-display text-[32px] font-normal leading-[1.2] text-foreground">
                     {data.moduleTitle}
                   </p>
-                  <p className="text-[16px] font-semibold leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+                  <p className="text-[16px] font-normal leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
                     {data.description}
                   </p>
                 </div>

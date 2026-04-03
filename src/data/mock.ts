@@ -377,7 +377,7 @@ export const foundationIntroData: Record<string, ModuleIntroData> = {
     image: '/images/Favourites 1.png',
     imageHeight: 156,
     moduleTitle: 'Your Favourite Things',
-    description: "We'll have a quick conversation about the things you love most — foods, places, songs, and more. Just talk naturally, there are no wrong answers.",
+    description: "Spin the slot machine to land on a category, then tell us about the things you love most. Ten quick questions, just have fun with it.",
   },
   'cat-core-values': {
     categoryId: 'cat-core-values',
@@ -628,6 +628,43 @@ export const conversationConfigs: Record<string, ConversationConfig> = {
       { id: 'si-3', name: 'Bill Martinez', label: 'Neighbor' },
     ],
   },
+  'cat-education': {
+    categoryId: 'cat-education',
+    moduleId: 'mod-edu-1',
+    moduleTitle: 'Where You Learned',
+    questions: [
+      {
+        id: 'q-edu-1',
+        promptText: "Let's start with school. Where did you first go to school, and what do you remember about those early years?",
+        mockUserResponse: "I went to Lincoln High School in our small town. It was one of those places where everybody knew everybody. I wasn't the best student, but I loved history class — Mr. Abrams made it come alive.",
+        mockAiAcknowledgment: "Lincoln High — sounds like one of those places that really shapes you. And a great history teacher can change everything.",
+      },
+      {
+        id: 'q-edu-2',
+        promptText: "Did you go on to college or any other kind of training after that? Walk me through what came next.",
+        mockUserResponse: "I went to State University for my bachelor's in history. Then years later, after I'd been working a while, I went back and got my MBA at Wharton. That was a whole different experience — I was the oldest one in the room.",
+        mockAiAcknowledgment: "A history degree and then an MBA at Wharton — that's quite a range. Going back to school later in life takes real courage.",
+      },
+      {
+        id: 'q-edu-3',
+        promptText: "Was there a teacher, professor, or mentor from your school years who really left a mark on you?",
+        mockUserResponse: "Professor Davis at State. She taught American history and she had this way of connecting the past to the present that just clicked for me. She's the reason I almost went into teaching myself.",
+        mockAiAcknowledgment: "Professor Davis sounds like someone who saw something in you. The teachers who make us consider a different path — those are the ones that matter most.",
+      },
+    ],
+    finishMessages: [
+      "Professor Davis sounds like someone who saw something in you. The teachers who make us consider a different path — those are the ones that matter most.",
+      "I've got a clear picture of your education journey. These are the places and people that shaped how you think.",
+    ],
+    summaryHeading: "Here's what I captured during the conversation.",
+    summaryListLabel: 'Tap to Edit Entry',
+    summaryAddLabel: 'Add a school I missed',
+    summaryItems: [
+      { id: 'si-1', name: 'High School Diploma', label: 'Lincoln High School', dateRange: '1969 - 1973' },
+      { id: 'si-2', name: 'BA History', label: 'State University', dateRange: '1973 - 1977' },
+      { id: 'si-3', name: 'MBA', label: 'Wharton Business School', dateRange: '1985 - 1987' },
+    ],
+  },
   'cat-career': {
     categoryId: 'cat-career',
     moduleId: 'mod-car-1',
@@ -651,12 +688,15 @@ export const conversationConfigs: Record<string, ConversationConfig> = {
       "I've got a clear picture of your career journey. These are the roles that defined your professional life.",
     ],
     summaryHeading: "Here's what I captured during the conversation.",
-    summaryListLabel: 'Tap to edit career entries',
+    summaryListLabel: 'Tap to Edit Entry',
     summaryAddLabel: 'Add a role I missed',
     summaryItems: [
-      { id: 'si-1', name: 'Hardware Store', label: 'Stock Boy' },
-      { id: 'si-2', name: 'Boeing', label: 'Junior Engineer' },
-      { id: 'si-3', name: 'Boeing', label: 'Senior Director' },
+      { id: 'si-1', name: 'Stock Boy', label: 'Hardware Store', dateRange: '1958 - 1960' },
+      { id: 'si-2', name: 'Junior Engineer', label: 'Boeing', dateRange: '1960 - 1968' },
+      { id: 'si-3', name: 'Project Lead', label: 'Boeing', dateRange: '1968 - 1975' },
+      { id: 'si-4', name: 'Engineering Manager', label: 'Lockheed Martin', dateRange: '1975 - 1983' },
+      { id: 'si-5', name: 'VP of Operations', label: 'Northrop Grumman', dateRange: '1983 - 1990' },
+      { id: 'si-6', name: 'Senior Director', label: 'Boeing', dateRange: '1990 - 1998' },
     ],
   },
 }
