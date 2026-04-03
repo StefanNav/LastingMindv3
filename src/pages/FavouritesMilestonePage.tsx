@@ -126,10 +126,10 @@ export function FavouritesMilestonePage() {
           <button
             type="button"
             onClick={handleShare}
-            className="flex w-full items-center justify-center gap-2 rounded-[4px] border border-[var(--lm-border)] bg-transparent px-10 py-4"
+            className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] px-5 py-4"
           >
-            <Share2 className="size-4 text-foreground" />
-            <span className="text-[16px] font-medium leading-[1.2] text-foreground">
+            <Share2 className="size-6 text-[#283227]" />
+            <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
               Share my card
             </span>
           </button>

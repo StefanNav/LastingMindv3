@@ -22,14 +22,18 @@ export function SlotMachineBody({ children, isSpinning }: SlotMachineBodyProps) 
           : { scale: 1 }
       }
     >
-      {/* Machine window inset */}
+      {/* Machine window inset — 3D drum effect via layered inner shadows */}
       <div
-        className="relative m-3 overflow-hidden rounded-xl border border-black/8 bg-[var(--lm-bg-primary)]"
+        className="relative m-5 overflow-hidden rounded-[32px] border border-black/8 bg-[var(--lm-bg-primary)]"
         style={{
-          boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.06)',
+          boxShadow:
+            'inset 0 12px 20px -8px rgba(0,0,0,0.06), ' +
+            'inset 0 -12px 20px -8px rgba(0,0,0,0.06), ' +
+            'inset 0 1px 3px rgba(0,0,0,0.03)',
         }}
       >
         {children}
+
       </div>
     </motion.div>
   )

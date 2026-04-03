@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Home, Mic, Users, Settings } from 'lucide-react'
+import { Home, MessageSquareMore, Users, CircleUserRound } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DemoDropdown } from './DemoDropdown'
 
@@ -10,9 +10,9 @@ interface MobileShellProps {
 
 const navItems = [
   { icon: Home, label: 'Home', path: '/home' },
-  { icon: Mic, label: 'Session', path: '/session' },
   { icon: Users, label: 'Loved Ones', path: '/loved-ones' },
-  { icon: Settings, label: 'Settings', path: '/settings' },
+  { icon: MessageSquareMore, label: 'Session', path: '/session' },
+  { icon: CircleUserRound, label: 'Profile', path: '/profile' },
 ]
 
 export function MobileShell({ children }: MobileShellProps) {

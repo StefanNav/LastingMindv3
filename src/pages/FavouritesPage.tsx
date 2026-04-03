@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
@@ -6,6 +6,7 @@ import { ConversationHeader } from '@/components/conversation/ConversationHeader
 import { SlotMachineBody } from '@/components/favourites/SlotMachineBody'
 import { SlotReel } from '@/components/favourites/SlotReel'
 import { SlotHandle } from '@/components/favourites/SlotHandle'
+import type { SlotHandleRef } from '@/components/favourites/SlotHandle'
 import { QuestionCard } from '@/components/favourites/QuestionCard'
 import { InlineSuccessMoment } from '@/components/favourites/InlineSuccessMoment'
 import { SparkParticles } from '@/components/favourites/SparkParticles'
@@ -15,6 +16,7 @@ export function FavouritesPage() {
   const navigate = useNavigate()
   const flow = useSlotMachineFlow()
   const [sparkTrigger, setSparkTrigger] = useState(0)
+  const handleRef = useRef<SlotHandleRef>(null)
 
   // Navigate to summary when all questions complete
   useEffect(() => {
@@ -45,63 +47,59 @@ export function FavouritesPage() {
           rightLabel={headerRightLabel}
           progressPercent={flow.progressPercent}
           onBack={() => navigate('/home')}
-          showProgress
         />
 
-        {/* Scrollable content below header */}
-        <div className="flex flex-1 flex-col overflow-y-auto px-4 pb-8 pt-[140px]">
-          {/* Slot Machine — vertically centred when idle */}
-          <div className="relative flex flex-1 flex-col items-center justify-center">
-            <div className="flex w-full items-center gap-3">
-              <div className="relative flex-1">
-                <SparkParticles trigger={sparkTrigger} />
-                <SlotMachineBody isSpinning={flow.step === 'spinning'}>
-                  <SlotReel
-                    categories={flow.reelCategories}
-                    targetIndex={flow.targetReelIndex}
-                    isSpinning={flow.step === 'spinning'}
-                    onSpinComplete={flow.spinComplete}
-                  />
-                </SlotMachineBody>
-              </div>
+        {/* Content area — machine + handle centered, button pinned to bottom */}
+        <div className="flex flex-1 flex-col px-4 pb-8 pt-[80px]">
+          {/* Machine + handle — centered, nudged down */}
+          <div className="flex flex-1 flex-col items-center justify-center pt-24">
+            <div className="relative w-full">
+              <SparkParticles trigger={sparkTrigger} />
+              <SlotMachineBody isSpinning={flow.step === 'spinning'}>
+                <SlotReel
+                  categories={flow.reelCategories}
+                  targetIndex={flow.targetReelIndex}
+                  isSpinning={flow.step === 'spinning'}
+                  onSpinComplete={flow.spinComplete}
+                />
+              </SlotMachineBody>
+            </div>
 
-              {/* Handle — right of the machine */}
-              <SlotHandle onPull={handlePull} disabled={isHandleDisabled} />
+            {/* Handle — below the machine */}
+            <div className="mt-4">
+              <SlotHandle ref={handleRef} onPull={handlePull} disabled={isHandleDisabled} />
             </div>
           </div>
 
-          {/* Inline success moment */}
-          <AnimatePresence mode="wait">
-            {flow.step === 'success' && (
-              <motion.div
-                key="success-moment"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <InlineSuccessMoment
-                  answeredCount={flow.answeredCount}
-                  totalQuestions={flow.totalQuestions}
-                  onDone={flow.successDone}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
 
-          {/* Idle prompt */}
-          {flow.step === 'idle' && flow.answeredCount === 0 && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="mt-8 text-center text-[14px] text-[var(--lm-text-secondary)]"
+          {/* Pull button — pinned at bottom */}
+          {flow.step === 'idle' && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mt-auto flex flex-col items-center gap-2 pt-4"
             >
-              Pull the lever down to spin
-            </motion.p>
+              <button
+                type="button"
+                onClick={() => handleRef.current?.triggerPull()}
+                disabled={isHandleDisabled}
+                className="flex w-full max-w-[240px] items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4 transition-transform active:scale-95 disabled:opacity-40"
+              >
+                <span className="text-[16px] font-medium leading-[1.2] text-white">
+                  Pull
+                </span>
+              </button>
+              {flow.answeredCount === 0 && (
+                <p className="text-[13px] text-[var(--lm-text-secondary)]">
+                  or drag the lever down
+                </p>
+              )}
+            </motion.div>
           )}
         </div>
 
-        {/* Question card — slide-up overlay */}
+        {/* Question card + success moment — shared overlay */}
         <AnimatePresence>
           {(flow.step === 'landed' || flow.step === 'answering') && flow.currentCategory && (
             <QuestionCard
@@ -110,6 +108,14 @@ export function FavouritesPage() {
               inputMode={flow.inputMode}
               onToggleMode={flow.toggleInputMode}
               onSubmit={flow.submitAnswer}
+            />
+          )}
+          {flow.step === 'success' && (
+            <InlineSuccessMoment
+              key="success-moment"
+              answeredCount={flow.answeredCount}
+              totalQuestions={flow.totalQuestions}
+              onDone={flow.successDone}
             />
           )}
         </AnimatePresence>

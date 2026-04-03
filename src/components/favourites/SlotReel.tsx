@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, useSpring, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import type { FavouritesCategory } from '@/types/favourites'
 
-const ITEM_HEIGHT = 52
+const ITEM_HEIGHT = 60
 const VISIBLE_ITEMS = 5
+const ANGLE_PER_ROW = 22
 const VIEWPORT_HEIGHT = ITEM_HEIGHT * VISIBLE_ITEMS
 
 interface SlotReelProps {
@@ -20,50 +21,63 @@ export function SlotReel({ categories, targetIndex, isSpinning, onSpinComplete }
 
   // Centre offset so target item sits in the middle row
   const centreOffset = Math.floor(VISIBLE_ITEMS / 2)
-  const targetY = -(targetIndex * ITEM_HEIGHT)
+  // Start in the 2nd copy so categories appear above the highlight
+  const initialY = -(totalItems * ITEM_HEIGHT)
 
-  // Spring-based y position
-  const springY = useSpring(0, {
-    stiffness: 60,
-    damping: 18,
-    mass: 1.2,
+  // useMotionValue as explicit source, useSpring follows with physics
+  const rawY = useMotionValue(initialY)
+  const springY = useSpring(rawY, {
+    stiffness: 35,
+    damping: 22,
+    mass: 1.6,
   })
+
+  // Track the final landing position for completion detection
+  const landingRef = useRef(initialY)
+
+  // Ensure correct initial position on mount
+  useEffect(() => {
+    rawY.jump(initialY)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (isSpinning) {
       completedRef.current = false
       setHasSpun(true)
-      // Spin far past then settle on target
-      const extraSpins = totalItems * 3
-      const overshoot = -((extraSpins + targetIndex) * ITEM_HEIGHT)
 
-      // Phase 1: fast spin
-      springY.set(overshoot - ITEM_HEIGHT * 4)
+      // Reset both rawY and springY to a clean starting position.
+      // The strip repeats, so jumping to the equivalent position in the
+      // 2nd copy is visually identical — no visible jump.
+      const stripLen = totalItems * ITEM_HEIGHT
+      const currentY = springY.get()
+      const offset = ((-currentY % stripLen) + stripLen) % stripLen
+      const startY = -(stripLen + offset)
+      rawY.jump(startY)
+      springY.jump(startY)
 
-      // Phase 2: settle on target after delay
-      const timer = setTimeout(() => {
-        springY.set(targetY)
-      }, 1200)
+      // Land on targetIndex, 3 full rotations ahead of startY
+      const landingY = startY - (3 * stripLen) - (targetIndex * ITEM_HEIGHT - offset)
+      landingRef.current = landingY
 
-      return () => clearTimeout(timer)
+      // One smooth set — spring decelerates naturally to the target
+      rawY.set(landingY)
     }
-  }, [isSpinning, targetIndex, targetY, totalItems, springY])
+  }, [isSpinning, targetIndex, totalItems, rawY, springY])
 
-  // Detect when spring settles
+  // Detect when spring settles near landing position
   useEffect(() => {
     if (!hasSpun) return
     const unsub = springY.on('change', (v) => {
       if (
         !completedRef.current &&
-        !isSpinning === false &&
-        Math.abs(v - targetY) < 0.5
+        Math.abs(v - landingRef.current) < 0.5
       ) {
         completedRef.current = true
         onSpinComplete()
       }
     })
     return unsub
-  }, [hasSpun, springY, targetY, onSpinComplete, isSpinning])
+  }, [hasSpun, springY, onSpinComplete])
 
   // Fallback: fire onSpinComplete after animation time
   useEffect(() => {
@@ -73,20 +87,26 @@ export function SlotReel({ categories, targetIndex, isSpinning, onSpinComplete }
           completedRef.current = true
           onSpinComplete()
         }
-      }, 2400)
+      }, 4000)
       return () => clearTimeout(timer)
     }
   }, [isSpinning, onSpinComplete])
 
-  // Build repeated items for infinite-scroll illusion
-  const repeatedCategories = [...categories, ...categories, ...categories, ...categories]
+  // Build repeated items — 6 copies for enough room during 3 full rotations
+  const repeatedCategories = [
+    ...categories, ...categories, ...categories,
+    ...categories, ...categories, ...categories,
+  ]
 
   const translateY = useTransform(springY, (v) => v + centreOffset * ITEM_HEIGHT)
+
+  // The pixel center of the viewport
+  const viewportCentre = centreOffset * ITEM_HEIGHT + ITEM_HEIGHT / 2
 
   return (
     <div
       className="relative overflow-hidden"
-      style={{ height: VIEWPORT_HEIGHT }}
+      style={{ height: VIEWPORT_HEIGHT, perspective: 280 }}
     >
       {/* Highlight band behind active row */}
       <div
@@ -97,26 +117,21 @@ export function SlotReel({ categories, targetIndex, isSpinning, onSpinComplete }
         }}
       />
 
-      {/* Top/bottom gradient fades */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20 h-16 bg-gradient-to-b from-[var(--lm-bg-card)] to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-16 bg-gradient-to-t from-[var(--lm-bg-card)] to-transparent" />
 
       {/* Reel strip */}
       <motion.div style={{ y: translateY }}>
-        {repeatedCategories.map((cat, i) => {
-          const globalIndex = i
-          return (
-            <ReelItem
-              key={`${cat.id}-${globalIndex}`}
-              emoji={cat.emoji}
-              name={cat.name}
-              index={globalIndex}
-              centreIndex={targetIndex + centreOffset}
-              springY={springY}
-              itemHeight={ITEM_HEIGHT}
-            />
-          )
-        })}
+        {repeatedCategories.map((cat, i) => (
+          <ReelItem
+            key={`${cat.id}-${i}`}
+            emoji={cat.emoji}
+            name={cat.name}
+            index={i}
+            springY={springY}
+            itemHeight={ITEM_HEIGHT}
+            centreOffset={centreOffset}
+            viewportCentre={viewportCentre}
+          />
+        ))}
       </motion.div>
     </div>
   )
@@ -126,21 +141,46 @@ interface ReelItemProps {
   emoji: string
   name: string
   index: number
-  centreIndex: number
   springY: ReturnType<typeof useSpring>
   itemHeight: number
+  centreOffset: number
+  viewportCentre: number
 }
 
-function ReelItem({ emoji, name, itemHeight }: ReelItemProps) {
+function ReelItem({ emoji, name, index, springY, itemHeight, centreOffset, viewportCentre }: ReelItemProps) {
+  // Item's pixel position in the viewport as the reel scrolls
+  const itemScreenY = useTransform(springY, (v) => {
+    const yOffset = v + centreOffset * itemHeight
+    return index * itemHeight + yOffset + itemHeight / 2
+  })
+
+  // Barrel transforms — matching birthday picker wheel
+  const offset = useTransform(itemScreenY, (y) => (y - viewportCentre) / itemHeight)
+
+  const rotateX = useTransform(offset, (o) => -o * ANGLE_PER_ROW)
+
+  const scale = useTransform(offset, (o) => 1 - Math.abs(o) * 0.04)
+
+  const opacity = useTransform(offset, (o) => {
+    const abs = Math.abs(o)
+    return abs > 2.5 ? 0.2 : 1 - abs * 0.18
+  })
+
   return (
-    <div
+    <motion.div
       className="flex items-center gap-3 px-4"
-      style={{ height: itemHeight }}
+      style={{
+        height: itemHeight,
+        rotateX,
+        scale,
+        opacity,
+        transformOrigin: 'center center',
+      }}
     >
-      <span className="text-[24px]">{emoji}</span>
-      <span className="text-[16px] font-semibold leading-[1.2] text-foreground">
+      <span className="text-[28px]">{emoji}</span>
+      <span className="text-[16px] font-bold leading-[1.2] text-foreground">
         {name}
       </span>
-    </div>
+    </motion.div>
   )
 }

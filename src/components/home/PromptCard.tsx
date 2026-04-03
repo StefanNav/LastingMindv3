@@ -1,4 +1,4 @@
-import { Star } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface PromptCardProps {
@@ -19,14 +19,13 @@ export function PromptCard({
   return (
     <div className="flex flex-col items-center gap-4 w-full">
       {/* Outer card */}
-      <div className="w-full rounded-[10px] border border-lm-border-subtle bg-lm-bg-card p-2">
+      <div className="w-full rounded-[10px] border border-lm-border-subtle bg-lm-bg-card/80 p-2">
         {/* Inner bordered area */}
-        <div className="flex flex-col items-center gap-4 rounded-[10px] border border-lm-border px-2 py-2.5">
+        <div className="flex flex-col items-center gap-6 rounded-[10px] px-2 py-2.5">
           {/* Content */}
-          <div className="flex w-full flex-col gap-2.5">
+          <div className="flex w-full flex-col gap-4">
             {/* Category tag */}
             <div className="flex items-center gap-1 rounded-2xl">
-              <Star className="size-4 text-lm-gold-star" fill="var(--lm-gold-star)" />
               <p className="text-[10px] font-black uppercase leading-none tracking-[1px] text-lm-gold-muted">
                 {categoryTag}
               </p>
@@ -40,11 +39,10 @@ export function PromptCard({
           <button
             type="button"
             onClick={onStartModule}
-            className="rounded-[4px] bg-lm-green px-4 py-2"
+            className="flex items-center justify-center gap-1.5 rounded-lg border border-border bg-transparent px-3 py-2.5 text-xs font-medium text-primary transition-colors hover:bg-primary/5 active:scale-[0.97]"
           >
-            <p className="text-[14px] font-normal leading-[1.2] text-white">
-              Start Module
-            </p>
+            <span>Start Module</span>
+            <ArrowRight className="size-3.5 shrink-0" />
           </button>
         </div>
       </div>

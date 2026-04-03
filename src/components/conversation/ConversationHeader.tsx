@@ -47,7 +47,7 @@ export function ConversationHeader({
             Back
           </span>
         </button>
-        <span className="text-center text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+        <span className={`text-center text-[14px] leading-[1.2] text-[var(--lm-text-secondary)] ${isSummary ? 'font-normal' : 'font-semibold'}`}>
           {rightLabel}
         </span>
       </div>

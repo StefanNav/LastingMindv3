@@ -30,6 +30,7 @@ const state0: DemoConfig = {
   id: 'state-0',
   label: 'State 0',
   foundationStars: 0,
+  streak: 0,
   treeImage: TREE_IMAGE,
   promptCard: {
     categoryTag: 'Suggested first step',
@@ -146,6 +147,7 @@ const state1: DemoConfig = {
   id: 'state-1',
   label: 'State 1',
   foundationStars: 0,
+  streak: 1,
   treeImage: TREE_IMAGE,
   promptCard: {
     categoryTag: 'From Family',
@@ -281,6 +283,7 @@ const state2: DemoConfig = {
   id: 'state-2',
   label: 'State 2',
   foundationStars: 5,
+  streak: 5,
   treeImage: TREE_IMAGE,
   promptCard: {
     categoryTag: 'From Core Values',
@@ -458,6 +461,7 @@ const state3: DemoConfig = {
   id: 'state-3',
   label: 'State 3',
   foundationStars: 6,
+  streak: 7,
   treeImage: TREE_IMAGE,
   promptCard: {
     categoryTag: 'Phase 2',
@@ -694,6 +698,7 @@ const state4: DemoConfig = {
   id: 'state-4',
   label: 'State 4',
   foundationStars: 6,
+  streak: 10,
   treeImage: TREE_IMAGE,
   promptCard: {
     categoryTag: 'From Life Chapters',
@@ -962,6 +967,7 @@ const onboarding: DemoConfig = {
   id: 'onboarding',
   label: 'Onboarding',
   foundationStars: 0,
+  streak: 0,
   treeImage: TREE_IMAGE,
   promptCard: {
     categoryTag: 'Suggested first step',

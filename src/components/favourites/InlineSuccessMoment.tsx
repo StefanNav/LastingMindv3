@@ -16,32 +16,46 @@ export function InlineSuccessMoment({ answeredCount, totalQuestions, onDone }: I
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-      className="flex flex-col items-center gap-3 py-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
     >
       <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 }}
+        initial={{ scale: 0.92, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.92, opacity: 0 }}
+        transition={{
+          type: 'spring',
+          stiffness: 300,
+          damping: 26,
+          mass: 0.9,
+        }}
+        className="flex w-full max-w-[400px] flex-col items-center gap-4 rounded-xl border border-[var(--lm-border)] bg-[var(--lm-bg-card)] px-5 py-8"
+        style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
       >
-        <div className="flex size-12 items-center justify-center rounded-full bg-lm-green">
-          <Check className="size-6 text-white" />
-        </div>
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 }}
+        >
+          <div className="flex size-14 items-center justify-center rounded-full bg-lm-green">
+            <Check className="size-7 text-white" />
+          </div>
+        </motion.div>
+
+        <p className="text-[18px] font-semibold text-lm-green">Saved!</p>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="text-[14px] text-[var(--lm-text-secondary)]"
+        >
+          {answeredCount} of {totalQuestions} — keep going
+        </motion.p>
       </motion.div>
-
-      <p className="text-[14px] font-semibold text-lm-green">Saved!</p>
-
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-        className="text-[13px] text-[var(--lm-text-secondary)]"
-      >
-        {answeredCount} of {totalQuestions} — keep going
-      </motion.p>
     </motion.div>
   )
 }

@@ -206,6 +206,7 @@ export interface DemoConfig {
   id: DemoStateId
   label: string
   foundationStars: number
+  streak: number
   treeImage: string
   promptCard: DemoPromptCard
   homePhases: HomePhase[]
@@ -259,4 +260,57 @@ export interface LovedOneCreator {
   bio: string
   entryCount: number
   starCount: number
+}
+
+// ── Memory Profile types ──────────────────────────────────────────────────────
+
+export interface MemoryProfileUser {
+  name: string
+  avatarUrl: string | null
+  age: number
+  tagline: string
+}
+
+export interface MemoryProfileStats {
+  totalEntries: number
+  starsEarned: number
+  phasesComplete: number
+}
+
+export type ProfileCategoryStatus = 'not_started' | 'in_progress' | 'complete'
+
+export interface ProfileFoundationCategory {
+  categoryId: string
+  name: string
+  imageAsset: string
+  imageHeight?: number
+  imageWidth?: number
+  status: ProfileCategoryStatus
+  deliverableName?: string
+}
+
+export interface ProfileLifeChapter {
+  chapterNumber: number
+  dateRange: string
+  title: string
+}
+
+export interface ProfileLegacyModule {
+  moduleId: string
+  name: string
+  imageAsset: string
+  imageHeight?: number
+  imageWidth?: number
+  status: ProfileCategoryStatus
+  entryCount: number
+}
+
+export interface MemoryProfileData {
+  user: MemoryProfileUser
+  stats: MemoryProfileStats
+  foundationCategories: ProfileFoundationCategory[]
+  lifeChapters: ProfileLifeChapter[]
+  legacyModules: ProfileLegacyModule[]
+  phase1Complete: boolean
+  biographyReady: boolean
 }

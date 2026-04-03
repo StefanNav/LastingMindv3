@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
-import { ArrowLeft, Pencil, Check } from 'lucide-react'
+import { ConversationHeader } from '@/components/conversation/ConversationHeader'
+import { Pencil, Check } from 'lucide-react'
 import type { FavouritesAnswer } from '@/types/favourites'
 
 interface LocationState {
@@ -49,26 +50,26 @@ export function FavouritesSummaryPage() {
     <PageTransition>
       <div className="relative flex h-full flex-col bg-background">
         {/* Header */}
-        <div className="flex flex-col gap-1 px-4 pb-4 pt-[62px]">
-          <button
-            type="button"
-            onClick={() => navigate('/home')}
-            className="mb-2 flex w-fit items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
-          >
-            <ArrowLeft className="size-6 text-white" />
-            <span className="text-[14px] font-semibold leading-[1.2] text-white">Back</span>
-          </button>
+        <ConversationHeader
+          moduleTitle="Favourites"
+          rightLabel="Review answers"
+          progressPercent={100}
+          onBack={() => navigate('/home')}
+          showProgress={false}
+          variant="summary"
+        />
 
-          <h1 className="font-display text-[28px] font-normal leading-[1.2] text-foreground">
-            Your Favourites
-          </h1>
-          <p className="text-[14px] font-semibold text-[var(--lm-text-secondary)]">
-            Review your answers below. Tap edit to change anything.
-          </p>
-        </div>
-
-        {/* Scrollable card list */}
-        <div className="flex-1 overflow-y-auto px-4 pb-32">
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto pt-[180px] px-4 pb-32">
+          {/* Heading */}
+          <div className="pb-[20px]">
+            <p className="font-display text-[26px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
+              Your Favourites
+            </p>
+            <p className="text-[15px] font-normal text-[var(--lm-text-secondary)]">
+              Review your answers below. Tap edit to change anything.
+            </p>
+          </div>
           <div className="flex flex-col gap-3">
             {answers.map((answer, i) => (
               <motion.div
@@ -118,17 +119,21 @@ export function FavouritesSummaryPage() {
                         <button
                           type="button"
                           onClick={handleCancelEdit}
-                          className="flex-1 rounded-lg border border-[var(--lm-border)] px-3 py-2 text-[13px] font-semibold text-foreground"
+                          className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] px-5 py-4"
                         >
-                          Cancel
+                          <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
+                            Cancel
+                          </span>
                         </button>
                         <button
                           type="button"
                           onClick={() => handleSaveEdit(answer.categoryId)}
-                          className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-lm-green px-3 py-2 text-[13px] font-semibold text-white"
+                          className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-5 py-4"
                         >
-                          <Check className="size-3.5" />
-                          Save
+                          <Check className="size-5 text-white" />
+                          <span className="text-[16px] font-medium leading-[1.2] text-white">
+                            Save
+                          </span>
                         </button>
                       </div>
                     </div>

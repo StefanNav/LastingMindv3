@@ -1,6 +1,9 @@
-import { motion } from 'framer-motion'
-import { SlotAnswerInput } from './SlotAnswerInput'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Mic, Keyboard, Pause, CircleStop, Send, ChevronRight } from 'lucide-react'
 import type { FavouritesCategory, FavouritesInputMode } from '@/types/favourites'
+
+type CardStep = 'idle' | 'recording' | 'transcribed'
 
 interface QuestionCardProps {
   category: FavouritesCategory
@@ -9,51 +12,347 @@ interface QuestionCardProps {
   onSubmit: (answer: string) => void
 }
 
+function useLiveTranscription(mockAnswer: string, isRecording: boolean, isPaused: boolean) {
+  const [displayed, setDisplayed] = useState('')
+  const words = useRef<string[]>([])
+  const indexRef = useRef(0)
+
+  useEffect(() => {
+    if (isRecording && !isPaused) {
+      words.current = mockAnswer.split(' ')
+      const interval = setInterval(() => {
+        if (indexRef.current < words.current.length) {
+          setDisplayed((prev) =>
+            prev ? `${prev} ${words.current[indexRef.current]}` : words.current[indexRef.current],
+          )
+          indexRef.current += 1
+        }
+      }, 320)
+      return () => clearInterval(interval)
+    }
+  }, [isRecording, isPaused, mockAnswer])
+
+  const reset = () => {
+    setDisplayed('')
+    indexRef.current = 0
+  }
+
+  return { displayed, reset }
+}
+
+function useCompactWaveform(count: number, active: boolean) {
+  const [bars, setBars] = useState<number[]>(() =>
+    Array.from({ length: count }, () => Math.random() * 16 + 4),
+  )
+  useEffect(() => {
+    if (!active) return
+    const interval = setInterval(() => {
+      setBars(Array.from({ length: count }, () => Math.random() * 18 + 4))
+    }, 120)
+    return () => clearInterval(interval)
+  }, [count, active])
+  return bars
+}
+
 export function QuestionCard({ category, inputMode, onToggleMode, onSubmit }: QuestionCardProps) {
+  const [cardStep, setCardStep] = useState<CardStep>('idle')
+  const [isPaused, setIsPaused] = useState(false)
+  const [seconds, setSeconds] = useState(0)
+  const [text, setText] = useState('')
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const isRecording = cardStep === 'recording'
+  const bars = useCompactWaveform(20, isRecording && !isPaused)
+  const { displayed: liveText, reset: resetLive } = useLiveTranscription(
+    category.mockAnswer,
+    isRecording,
+    isPaused,
+  )
+
+  // Recording timer
+  useEffect(() => {
+    if (isRecording && !isPaused) {
+      timerRef.current = setInterval(() => setSeconds((s) => s + 1), 1000)
+      return () => { if (timerRef.current) clearInterval(timerRef.current) }
+    }
+    if (timerRef.current) clearInterval(timerRef.current)
+  }, [isRecording, isPaused])
+
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  const timeLabel = `${mins}:${secs.toString().padStart(2, '0')}`
+
+  const handleStartRecording = () => {
+    resetLive()
+    setCardStep('recording')
+    setIsPaused(false)
+    setSeconds(0)
+  }
+
+  const handleStopRecording = () => {
+    setCardStep('transcribed')
+    setText(category.mockAnswer)
+  }
+
+  const handleSubmitText = () => {
+    if (text.trim()) {
+      onSubmit(text.trim())
+      setText('')
+      setCardStep('idle')
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSubmitText()
+    }
+  }
+
+  // The answer box content varies by state
+  const isTextMode = cardStep === 'idle' && inputMode === 'text'
+  const showPlaceholder = cardStep === 'idle' && inputMode === 'voice'
+  const showLive = isRecording
+  const showTranscribed = cardStep === 'transcribed'
+
   return (
     <motion.div
-      initial={{ y: '120%', opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      exit={{ y: '120%', opacity: 0 }}
-      transition={{
-        type: 'spring',
-        stiffness: 260,
-        damping: 28,
-        mass: 1,
-      }}
-      className="absolute inset-x-4 bottom-6 z-20 flex flex-col gap-4 rounded-[28px] border border-white/60 px-6 py-7"
-      style={{
-        background: 'rgba(255, 255, 255, 0.85)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.12)',
-      }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
     >
-      {/* Category badge */}
-      <div className="flex items-center gap-1.5">
-        <span
-          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-extrabold uppercase tracking-[0.5px]"
-          style={{
-            background: 'rgba(50, 117, 30, 0.1)',
-            color: 'var(--lm-green)',
-          }}
-        >
-          {category.emoji} {category.name}
-        </span>
-      </div>
+      <motion.div
+        initial={{ scale: 0.92, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.92, opacity: 0 }}
+        transition={{
+          type: 'spring',
+          stiffness: 300,
+          damping: 26,
+          mass: 0.9,
+        }}
+        className="flex w-full max-w-[400px] flex-col gap-4 rounded-xl border border-[var(--lm-border)] bg-[var(--lm-bg-card)] px-5 py-5"
+        style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
+      >
+        {/* Category badge with decorative lines */}
+        <div className="flex items-center justify-center gap-3">
+          <div className="h-px flex-1 bg-lm-gold/40" />
+          <span className="inline-flex shrink-0 items-center gap-1.5 text-[12px] font-extrabold uppercase tracking-[0.5px] text-lm-gold">
+            {category.emoji} {category.name}
+          </span>
+          <div className="h-px flex-1 bg-lm-gold/40" />
+        </div>
 
-      {/* Question text */}
-      <p className="font-display text-[22px] font-bold leading-[1.3] text-foreground">
-        {category.question}
-      </p>
+        {/* Question text */}
+        <p className="font-display text-[24px] font-normal leading-[1.3] text-foreground">
+          {category.question}
+        </p>
 
-      {/* Answer input (voice/text toggle preserved) */}
-      <SlotAnswerInput
-        inputMode={inputMode}
-        onToggleMode={onToggleMode}
-        onSubmit={onSubmit}
-        mockAnswer={category.mockAnswer}
-      />
+        {/* Answer box — persistent across all states */}
+        <div className="relative min-h-[100px] overflow-hidden rounded-[10px] border border-[var(--lm-border)] bg-white p-3">
+          {showPlaceholder && (
+            <p className="text-[15px] leading-[1.5] text-[var(--lm-text-secondary)]">
+              Your answer will appear here...
+            </p>
+          )}
+
+          {showLive && (
+            <div className="text-[15px] leading-[1.5] text-[var(--lm-text-primary)]">
+              {liveText || (
+                <span className="text-[var(--lm-text-secondary)]">Listening...</span>
+              )}
+              <motion.span
+                className="ml-0.5 inline-block h-[18px] w-[2px] translate-y-[3px] bg-lm-green"
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.8, repeat: Infinity, repeatType: 'reverse' }}
+              />
+            </div>
+          )}
+
+          {showTranscribed && (
+            <p className="text-[15px] leading-[1.5] text-[var(--lm-text-primary)]">
+              {text}
+            </p>
+          )}
+
+          {isTextMode && (
+            <textarea
+              ref={textareaRef}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Type your answer here..."
+              className="absolute inset-0 w-full resize-none border-0 bg-transparent p-3 font-sans text-[15px] leading-[1.5] text-[var(--lm-text-primary)] outline-none placeholder:text-[var(--lm-text-secondary)]"
+              autoFocus
+            />
+          )}
+        </div>
+
+        {/* Recording bar slot — fixed height so the card never resizes */}
+        <div className="flex h-[28px] items-center justify-center">
+          {isRecording && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center justify-center gap-3"
+            >
+              <div className="size-2.5 rounded-full bg-red-600" />
+              <span className="text-[14px] font-semibold tabular-nums text-lm-green-dark">
+                {timeLabel}
+              </span>
+              <div className="flex h-[20px] items-center gap-[3px]">
+                {bars.map((height, i) => (
+                  <motion.div
+                    key={i}
+                    className="w-[2px] rounded-full bg-lm-green-dark/60"
+                    animate={{ height: isPaused ? 4 : height }}
+                    transition={{ duration: 0.1, ease: 'easeOut' }}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Action buttons — animated transitions, uniform sizing */}
+        <AnimatePresence mode="wait">
+          {/* Voice idle */}
+          {cardStep === 'idle' && inputMode === 'voice' && (
+            <motion.div
+              key="voice-idle-btns"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+              className="flex flex-col gap-2"
+            >
+              <button
+                type="button"
+                onClick={handleStartRecording}
+                className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-5 py-4"
+              >
+                <Mic className="size-5 text-white" />
+                <span className="text-[16px] font-medium leading-[1.2] text-white">
+                  Press to Talk
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={onToggleMode}
+                className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] px-5 py-4"
+              >
+                <Keyboard className="size-5 text-[#283227]" />
+                <span className="text-center text-[14px] font-medium leading-[1.2] text-[#283227]">
+                  Prefer to type? Switch to text
+                </span>
+              </button>
+            </motion.div>
+          )}
+
+          {/* Recording controls */}
+          {isRecording && (
+            <motion.div
+              key="recording-btns"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+              className="flex w-full gap-2"
+            >
+              <button
+                type="button"
+                onClick={() => setIsPaused((p) => !p)}
+                className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] border border-[#283227] px-5 py-4"
+              >
+                <Pause className="size-5 text-[#283227]" />
+                <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
+                  {isPaused ? 'Resume' : 'Pause'}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={handleStopRecording}
+                className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-[#d40016] px-5 py-4"
+              >
+                <CircleStop className="size-5 text-white" />
+                <span className="text-[16px] font-medium leading-[1.2] text-white">
+                  Stop
+                </span>
+              </button>
+            </motion.div>
+          )}
+
+          {/* Transcribed review */}
+          {cardStep === 'transcribed' && (
+            <motion.div
+              key="transcribed-btns"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+              className="flex w-full gap-2"
+            >
+              <button
+                type="button"
+                onClick={handleStartRecording}
+                className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] px-5 py-4"
+              >
+                <Mic className="size-5 text-[#283227]" />
+                <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
+                  Say more
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onSubmit(text.trim())}
+                className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-5 py-4"
+              >
+                <span className="text-[16px] font-medium leading-[1.2] text-white">
+                  Continue
+                </span>
+                <ChevronRight className="size-5 text-white" />
+              </button>
+            </motion.div>
+          )}
+
+          {/* Text mode */}
+          {isTextMode && (
+            <motion.div
+              key="text-btns"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+              className="flex flex-col gap-2"
+            >
+              <button
+                type="button"
+                onClick={handleSubmitText}
+                disabled={!text.trim()}
+                className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-5 py-4 disabled:opacity-40"
+              >
+                <Send className="size-5 text-white" />
+                <span className="text-[16px] font-medium leading-[1.2] text-white">
+                  Submit
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={onToggleMode}
+                className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] px-5 py-4"
+              >
+                <Mic className="size-5 text-[#283227]" />
+                <span className="text-center text-[14px] font-medium leading-[1.2] text-[#283227]">
+                  Prefer to talk? Switch to voice
+                </span>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </motion.div>
   )
 }

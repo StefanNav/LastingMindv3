@@ -15,6 +15,7 @@ interface AppContextValue {
   categoryDetails: Record<string, CategoryDetail>
   promptCard: DemoPromptCard
   foundationStars: number
+  streak: number
   treeImage: string
   demoStateOrder: DemoStateId[]
 }
@@ -62,6 +63,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     categoryDetails: demoConfig.categoryDetails,
     promptCard: demoConfig.promptCard,
     foundationStars: demoConfig.foundationStars,
+    streak: demoConfig.streak,
     treeImage: demoConfig.treeImage,
     demoStateOrder,
   }), [state, activeDemoId, onboardingKey, demoConfig])

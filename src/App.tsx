@@ -17,6 +17,7 @@ import { ReflectionSummaryPage } from '@/pages/ReflectionSummaryPage'
 import { FavouritesPage } from '@/pages/FavouritesPage'
 import { FavouritesSummaryPage } from '@/pages/FavouritesSummaryPage'
 import { FavouritesMilestonePage } from '@/pages/FavouritesMilestonePage'
+import { MemoryProfilePage } from '@/pages/MemoryProfilePage'
 import { conversationConfigs, foundationIntroData } from '@/data/mock'
 import { PageTransition } from '@/animations/PageTransition'
 import { useApp } from '@/app/AppProvider'
@@ -91,6 +92,7 @@ function App() {
               <Route path="/favourites" element={<FavouritesPage />} />
               <Route path="/favourites/summary" element={<FavouritesSummaryPage />} />
               <Route path="/favourites/milestone" element={<FavouritesMilestonePage />} />
+              <Route path="/profile" element={<MemoryProfilePage />} />
             </Routes>
           </AnimatePresence>
         </MobileShell>
