@@ -77,7 +77,7 @@ export function HomePage() {
         </div>
 
         {/* ── Hero heading ── */}
-        <div className="relative z-10 flex flex-col items-center gap-3 px-4 pt-3">
+        <div className="relative z-10 flex flex-col items-center gap-3 px-4 pt-1">
           <p className="w-full text-center font-display text-[26px] font-normal leading-[1.2] text-foreground">
             Continue your Journey, Alex
           </p>
@@ -90,7 +90,7 @@ export function HomePage() {
         </div>
 
         {/* ── Tree image ── */}
-        <div className="relative z-[2] mt-10 flex justify-center">
+        <div className="relative z-[2] mt-12 flex justify-center">
           <div className="relative h-[316px] w-[466px]">
             <img
               src={treeImage}
