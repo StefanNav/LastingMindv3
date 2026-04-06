@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 import type { ProfileLifeChapter } from '@/types'
 
@@ -8,6 +9,7 @@ interface LifeStorySectionProps {
 }
 
 export function LifeStorySection({ chapters, phase1Complete, onChapterTap }: LifeStorySectionProps) {
+  const navigate = useNavigate()
   // Locked — Phase 1 not complete
   if (!phase1Complete) {
     return (
@@ -28,6 +30,7 @@ export function LifeStorySection({ chapters, phase1Complete, onChapterTap }: Lif
         </p>
         <button
           type="button"
+          onClick={() => navigate('/life-chapters/define')}
           className="rounded-[4px] bg-lm-green px-6 py-2 text-sm font-medium text-white transition-transform active:scale-[0.97]"
         >
           Get started

@@ -72,7 +72,7 @@ export function CategoryNodeCard({ category, onClick, overrideFilledStars, tease
 
       {/* Title + status */}
       <div className="flex flex-col items-center gap-2">
-        <p className="font-bold text-[20px] leading-[1.2] text-lm-green-dark text-center">
+        <p className="font-semibold text-[18px] leading-[1.2] text-lm-green-dark text-center">
           {title}
         </p>
 
@@ -219,7 +219,7 @@ export function CategoryNodeCard({ category, onClick, overrideFilledStars, tease
               })}
             </div>
             {/* Status label */}
-            <p className={cn('font-bold text-[14px] leading-[1.2] text-center', labelColor)}>
+            <p className={cn('font-medium text-[13px] leading-[1.2] text-center', labelColor)}>
               {displayLabel}
             </p>
           </div>

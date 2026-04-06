@@ -41,7 +41,7 @@ export function PhaseToggle({ label, onPrevious, onNext, hasPrevious, hasNext }:
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className="w-[97px] text-center font-bold text-[16px] leading-[1.2] text-lm-gold"
+              className="w-[97px] text-center font-semibold text-[15px] leading-[1.2] text-lm-gold"
             >
               {label}
             </motion.p>

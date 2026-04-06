@@ -10,6 +10,7 @@ import { CategoryBottomSheet } from '@/components/sheets/CategoryBottomSheet'
 import { LockedFeatureCard } from '@/components/home/LockedFeatureCard'
 import { LockedFeatureSheet } from '@/components/sheets/LockedFeatureSheet'
 import type { LockedFeature } from '@/components/sheets/LockedFeatureSheet'
+import { LifeChaptersSheet } from '@/components/sheets/LifeChaptersSheet'
 import { module2IntroData } from '@/data/mock'
 import { useApp } from '@/app/AppProvider'
 import type { Category } from '@/types'
@@ -23,11 +24,13 @@ export function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const isSheetOpen = selectedCategory !== null
   const [selectedFeature, setSelectedFeature] = useState<LockedFeature | null>(null)
+  const [lifeChaptersSheetCategory, setLifeChaptersSheetCategory] = useState<Category | null>(null)
 
   useEffect(() => {
     setActivePhaseIndex(0)
     setSelectedCategory(null)
     setSelectedFeature(null)
+    setLifeChaptersSheetCategory(null)
   }, [activeDemoId])
 
   useEffect(() => {
@@ -41,6 +44,10 @@ export function HomePage() {
   }, [location.state, navigate, location.pathname])
 
   const handleCategoryClick = useCallback((category: Category) => {
+    if (category.id === 'cat-life-chapters' && category.status !== 'locked') {
+      setLifeChaptersSheetCategory(category)
+      return
+    }
     setSelectedCategory(category)
   }, [])
 
@@ -83,7 +90,7 @@ export function HomePage() {
 
         {/* ── Hero heading ── */}
         <div className="relative z-10 flex flex-col items-center gap-3 px-4 pt-1">
-          <p className="w-full text-center font-display text-[26px] font-normal leading-[1.2] text-foreground">
+          <p className="w-full text-center font-display text-[27px] font-normal leading-[1.2] text-foreground">
             Continue your Journey, Alex
           </p>
 
@@ -119,7 +126,7 @@ export function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="text-center font-display text-[28px] font-normal leading-[1.2] text-foreground"
+              className="text-center font-display text-[27px] font-normal leading-[1.2] text-foreground"
             >
               {activePhase.title}
             </motion.p>
@@ -211,6 +218,12 @@ export function HomePage() {
         onClose={handleSheetClose}
         onBeginModule={handleBeginModule}
         onContinueFoundation={handleContinueFoundation}
+      />
+
+      <LifeChaptersSheet
+        isOpen={lifeChaptersSheetCategory !== null}
+        category={lifeChaptersSheetCategory}
+        onClose={() => setLifeChaptersSheetCategory(null)}
       />
     </PageTransition>
   )

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { MoreHorizontal } from 'lucide-react'
 import { PageTransition } from '@/animations/PageTransition'
 import { useApp } from '@/app/AppProvider'
@@ -13,9 +13,26 @@ import { BiographyCTA } from '@/components/profile/BiographyCTA'
 import { ProfileMenuSheet } from '@/components/profile/ProfileMenuSheet'
 
 export function MemoryProfilePage() {
-  const { activeDemoId } = useApp()
+  const { activeDemoId, lifeChapters } = useApp()
   const profile = getProfileData(activeDemoId)
   const [menuOpen, setMenuOpen] = useState(false)
+
+  // Prefer runtime chapters (user-defined) over demo data
+  const resolvedChapters = useMemo(() => {
+    if (lifeChapters.length > 0) {
+      return lifeChapters.map((ch, i) => {
+        const parts: string[] = []
+        if (ch.startYear !== null) parts.push(String(ch.startYear))
+        if (ch.endYear !== null) parts.push(ch.endYear === 'Present' ? 'Present' : String(ch.endYear))
+        return {
+          chapterNumber: i + 1,
+          dateRange: parts.join(' – '),
+          title: ch.title,
+        }
+      })
+    }
+    return profile.lifeChapters
+  }, [lifeChapters, profile.lifeChapters])
 
   return (
     <PageTransition>
@@ -29,22 +46,16 @@ export function MemoryProfilePage() {
       </div>
 
       <div className="relative z-10 flex flex-col gap-5 p-6 pt-14">
-        {/* Page header */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1" />
-          <h2 className="font-display text-2xl font-semibold text-foreground">
-            Memory profile
-          </h2>
-          <div className="flex flex-1 justify-end">
-            <button
-              type="button"
-              onClick={() => setMenuOpen(true)}
-              className="shrink-0 rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted"
-              aria-label="More options"
-            >
-              <MoreHorizontal className="size-5" />
-            </button>
-          </div>
+        {/* Menu button */}
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            className="shrink-0 rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted"
+            aria-label="More options"
+          >
+            <MoreHorizontal className="size-5" />
+          </button>
         </div>
 
         {/* Identity block */}
@@ -62,7 +73,7 @@ export function MemoryProfilePage() {
         <div className="mt-2" />
         <ProfileSectionLabel label="Life Story" variant="gold" />
         <LifeStorySection
-          chapters={profile.lifeChapters}
+          chapters={resolvedChapters}
           phase1Complete={profile.phase1Complete}
         />
 

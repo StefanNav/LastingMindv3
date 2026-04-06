@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useMemo, type ReactNode } from 'react'
-import type { AppState, DemoStateId, DemoConfig, DemoPromptCard, HomePhase, CategoryDetail } from '@/types'
+import type { AppState, DemoStateId, DemoConfig, DemoPromptCard, HomePhase, CategoryDetail, LifeChapter } from '@/types'
 import { mockCreator, mockPhases } from '@/data/mock'
 import { demoStates, demoStateOrder } from '@/data/demoStates'
 
@@ -24,6 +24,9 @@ interface AppContextValue {
   incrementModule2Run: (categoryId: string) => void
   module1Completions: Record<string, boolean>
   markModule1Complete: (categoryId: string) => void
+  lifeChapters: LifeChapter[]
+  saveLifeChapters: (chapters: LifeChapter[]) => void
+  hasDefinedChapters: boolean
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -51,6 +54,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [hasCompletedFirstModule, setHasCompletedFirstModule] = useState(false)
   const [module2Runs, setModule2Runs] = useState<Record<string, number>>({})
   const [module1Completions, setModule1Completions] = useState<Record<string, boolean>>({})
+  const [lifeChapters, setLifeChapters] = useState<LifeChapter[]>([])
+
+  const saveLifeChapters = (chapters: LifeChapter[]) => setLifeChapters(chapters)
+  const hasDefinedChapters = lifeChapters.length > 0
 
   const markFirstModuleComplete = () => setHasCompletedFirstModule(true)
   const incrementModule2Run = (categoryId: string) =>
@@ -87,7 +94,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     incrementModule2Run,
     module1Completions,
     markModule1Complete,
-  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions])
+    lifeChapters,
+    saveLifeChapters,
+    hasDefinedChapters,
+  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters])
 
   return (
     <AppContext.Provider value={value}>

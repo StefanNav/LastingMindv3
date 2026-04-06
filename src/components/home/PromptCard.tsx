@@ -19,30 +19,27 @@ export function PromptCard({
   return (
     <div className="flex flex-col items-center gap-4 w-full">
       {/* Outer card */}
-      <div className="w-full rounded-[10px] border border-lm-border-subtle bg-lm-bg-card/80 p-2">
+      <div className="w-full rounded-[10px] bg-lm-bg-card/80 p-2">
         {/* Inner bordered area */}
-        <div className="flex flex-col items-center gap-6 rounded-[10px] px-2 py-2.5">
-          {/* Content */}
-          <div className="flex w-full flex-col gap-4">
-            {/* Category tag */}
-            <div className="flex items-center gap-1 rounded-2xl">
-              <p className="text-[10px] font-black uppercase leading-none tracking-[1px] text-lm-gold-muted">
-                {categoryTag}
-              </p>
-            </div>
-            {/* Question */}
-            <p className="w-full text-center font-display text-[16px] font-medium leading-[1.2] text-foreground">
-              {question}
+        <div className="flex flex-col items-center rounded-[10px] px-2 py-2.5">
+          {/* Category tag */}
+          <div className="flex w-full items-center gap-1 rounded-2xl">
+            <p className="text-[10px] font-bold uppercase leading-none tracking-[1px] text-lm-gold">
+              {categoryTag}
             </p>
           </div>
+          {/* Question */}
+          <p className="mt-5 w-full text-center text-[16px] font-medium leading-[1.2] text-foreground">
+            {question}
+          </p>
           {/* Start Module button */}
           <button
             type="button"
             onClick={onStartModule}
-            className="flex items-center justify-center gap-1.5 rounded-lg border border-border bg-transparent px-3 py-2.5 text-xs font-medium text-primary transition-colors hover:bg-primary/5 active:scale-[0.97]"
+            className="mt-3 flex items-center justify-center gap-1.5 rounded-lg bg-transparent px-3 py-2.5 text-[13px] font-medium text-primary active:scale-[0.97]"
           >
             <span>Start Module</span>
-            <ArrowRight className="size-3.5 shrink-0" />
+            <ArrowRight className="size-3.5 shrink-0" strokeWidth={2} />
           </button>
         </div>
       </div>

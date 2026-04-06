@@ -20,6 +20,8 @@ import { FavoritesMilestonePage } from '@/pages/FavoritesMilestonePage'
 import { CoreValuesPage } from '@/pages/CoreValuesPage'
 import { CoreValuesSummaryPage } from '@/pages/CoreValuesSummaryPage'
 import { MemoryProfilePage } from '@/pages/MemoryProfilePage'
+import { DefineChaptersPage } from '@/pages/DefineChaptersPage'
+import { LifeChaptersHubPage } from '@/pages/LifeChaptersHubPage'
 import { conversationConfigs, foundationIntroData, module2IntroData } from '@/data/mock'
 import { PageTransition } from '@/animations/PageTransition'
 import { useApp } from '@/app/AppProvider'
@@ -122,6 +124,8 @@ function App() {
               <Route path="/core-values" element={<CoreValuesPage />} />
               <Route path="/core-values/summary" element={<CoreValuesSummaryPage />} />
               <Route path="/profile" element={<MemoryProfilePage />} />
+              <Route path="/life-chapters" element={<LifeChaptersHubPage />} />
+              <Route path="/life-chapters/define" element={<DefineChaptersPage />} />
             </Routes>
           </AnimatePresence>
         </MobileShell>

@@ -17,7 +17,7 @@ export function LockedFeatureCard({ image, title, subtitle, onClick }: LockedFea
         className="h-[60px] w-[60px] shrink-0 object-contain"
       />
       <div className="flex flex-col gap-1">
-        <p className="font-display text-[16px] font-semibold leading-tight text-foreground">
+        <p className="text-[15px] font-semibold leading-tight text-foreground">
           {title}
         </p>
         <p className="text-[13px] leading-snug text-muted-foreground">

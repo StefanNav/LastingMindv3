@@ -287,6 +287,21 @@ export interface LovedOneCreator {
   starCount: number
 }
 
+// ── Life Chapters types ─────────────────────────────────────────────────────
+
+export interface SuggestedChapter {
+  defaultTitle: string
+  dateRangePrompt: string
+  description: string
+}
+
+export interface LifeChapter {
+  id: string
+  title: string
+  startYear: number | null
+  endYear: number | 'Present' | null
+}
+
 // ── Memory Profile types ──────────────────────────────────────────────────────
 
 export interface MemoryProfileUser {
