@@ -13,7 +13,7 @@ export function FoundationProgressCard({ onContinue }: FoundationProgressCardPro
     <div className="px-4">
       <div className="flex flex-col items-center gap-2.5 rounded-[10px] bg-lm-bg-card p-3 shadow-[0px_3px_6px_0px_rgba(0,0,0,0.16)]">
         <div className="flex w-full flex-col items-center">
-          <p className="text-center font-display text-[18px] font-medium leading-[1.2] text-foreground">
+          <p className="text-center text-[16px] font-semibold leading-[1.2] text-foreground">
             Foundation Progress
           </p>
         </div>
@@ -38,9 +38,9 @@ export function FoundationProgressCard({ onContinue }: FoundationProgressCardPro
         <button
           type="button"
           onClick={onContinue}
-          className="flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-2.5"
+          className="flex w-full items-center justify-center rounded-lg bg-lm-green px-4 py-3"
         >
-          <p className="text-[16px] leading-[1.2] text-white">
+          <p className="text-sm font-semibold text-white">
             Continue your Foundation
           </p>
         </button>

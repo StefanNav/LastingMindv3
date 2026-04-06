@@ -34,13 +34,13 @@ export function RecentEntryCard({ entries, totalCount, onViewAll }: RecentEntryC
           >
             <div className="flex gap-3">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-lm-green bg-[#fffcf5]">
-                <p className="font-display text-[20px] font-bold leading-none text-lm-green">
+                <p className="text-base font-bold leading-none text-lm-green">
                   {entry.memberInitial}
                 </p>
               </div>
               <div className="flex flex-1 flex-col gap-1.5">
                 <div className="flex flex-col gap-1">
-                  <p className="font-display text-[18px] font-medium leading-[1.2] text-foreground">
+                  <p className="text-[16px] font-semibold leading-[1.2] text-foreground">
                     {entry.title}
                   </p>
                   <p className="text-[14px] font-medium leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">

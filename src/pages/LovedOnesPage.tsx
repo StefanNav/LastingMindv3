@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Mic, MessageCircle, Sparkles, Send, MoreHorizontal, UserPlus } from 'lucide-react'
+import { Mic, MessageCircle, Sparkles, Send, MoreHorizontal, UserPlus, Star } from 'lucide-react'
 import { PageTransition } from '@/animations/PageTransition'
 import { mockLovedOnes } from '@/data/lovedOnesData'
 import type { LovedOneCreator } from '@/types'
@@ -40,7 +40,7 @@ function CreatorCard({ creator }: { creator: LovedOneCreator }) {
             <p className="font-display text-lg font-normal leading-tight text-foreground">{creator.name}</p>
             <div className="flex shrink-0 items-center gap-2 text-xs font-medium text-muted-foreground">
               <span>{creator.entryCount} entries</span>
-              <span><span className="text-lm-gold-star">★</span> {creator.starCount}</span>
+              <span className="flex items-center gap-0.5"><Star className="size-3" fill="var(--lm-gold-star)" stroke="var(--lm-gold-star)" strokeWidth={1.5} /> {creator.starCount}</span>
             </div>
           </div>
           <p className="text-sm leading-snug text-foreground/80">{creator.bio}</p>

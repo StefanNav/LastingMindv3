@@ -51,10 +51,10 @@ export function LockedContent({ category, onContinueFoundation }: LockedContentP
         </div>
 
         <div className="flex flex-col items-center gap-3 text-center">
-          <p className="font-display text-[26px] font-normal leading-[1.2] text-foreground">
+          <p className="font-display text-[22px] font-normal leading-[1.2] text-foreground">
             Complete your foundation to unlock
           </p>
-          <p className="text-[16px] font-normal leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+          <p className="text-sm leading-snug text-[var(--lm-text-secondary)]">
             You'll define the chapters of your life and tell your story in depth. We will use everything you've shared in Phase 1 to guide the conversation.
           </p>
         </div>

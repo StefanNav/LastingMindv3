@@ -102,7 +102,7 @@ export function HomePage() {
         </div>
 
         {/* ── Tree image ── */}
-        <div className="relative z-[2] mt-12 flex justify-center">
+        <div className="relative z-[2] mt-[58px] flex justify-center">
           <div className="relative h-[316px] w-[466px]">
             <img
               src={treeImage}

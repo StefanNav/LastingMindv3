@@ -39,7 +39,7 @@ export function StartedContent({ category, detail, onBeginModule }: StartedConte
         <CategorySheetHeader category={category} />
 
         <div className="flex flex-col items-center px-5 text-center">
-          <p className="font-display text-[26px] font-normal leading-[1.2] text-foreground">
+          <p className="font-display text-[22px] font-normal leading-[1.2] text-foreground">
             {detail.subtitle || detail.heading}
           </p>
         </div>

@@ -1,22 +1,11 @@
 import { cn } from '@/lib/utils'
 import type { ProfileLegacyModule } from '@/types'
 
+
 interface ProfileLegacyGridProps {
   modules: ProfileLegacyModule[]
   phase1Complete: boolean
   onModuleTap?: (moduleId: string) => void
-}
-
-const statusText = (mod: ProfileLegacyModule): string => {
-  if (mod.status === 'complete' || mod.status === 'in_progress') {
-    if (mod.entryCount > 0) return `${mod.entryCount} ${mod.entryCount === 1 ? 'entry' : 'entries'}`
-  }
-  return 'Not started'
-}
-
-const statusColor = (mod: ProfileLegacyModule): string => {
-  if (mod.entryCount > 0) return 'text-lm-gold-muted'
-  return 'text-[var(--lm-text-tertiary)]'
 }
 
 export function ProfileLegacyGrid({ modules, phase1Complete, onModuleTap }: ProfileLegacyGridProps) {
@@ -44,11 +33,6 @@ export function ProfileLegacyGrid({ modules, phase1Complete, onModuleTap }: Prof
           {/* Name */}
           <p className="text-[13px] font-bold leading-tight text-lm-green-dark text-center">
             {mod.name}
-          </p>
-
-          {/* Status */}
-          <p className={cn('text-[10px] font-semibold leading-tight text-center', statusColor(mod))}>
-            {statusText(mod)}
           </p>
         </button>
       ))}

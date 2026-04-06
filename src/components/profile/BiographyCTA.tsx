@@ -1,5 +1,3 @@
-import { cn } from '@/lib/utils'
-
 interface BiographyCTAProps {
   biographyReady: boolean
   phase1Complete: boolean
@@ -10,21 +8,33 @@ export function BiographyCTA({ biographyReady, phase1Complete, onTap }: Biograph
   // Hidden if Phase 1 not even complete
   if (!phase1Complete) return null
 
+  if (biographyReady) {
+    return (
+      <button
+        type="button"
+        onClick={onTap}
+        className="flex w-full items-center justify-center rounded-lg bg-lm-green px-4 py-3 text-sm font-semibold text-white transition-transform active:scale-[0.98]"
+      >
+        Read your biography
+      </button>
+    )
+  }
+
   return (
-    <button
-      type="button"
-      onClick={biographyReady ? onTap : undefined}
-      disabled={!biographyReady}
-      className={cn(
-        'flex w-full items-center justify-center rounded-[4px] px-10 py-4 transition-transform',
-        biographyReady
-          ? 'bg-lm-green active:scale-[0.98]'
-          : 'bg-lm-green/40 cursor-not-allowed',
-      )}
-    >
-      <span className="text-[16px] font-medium leading-[1.2] text-white">
-        {biographyReady ? 'Read your biography' : 'Complete your Life Story to unlock'}
-      </span>
-    </button>
+    <div className="flex items-center gap-4 rounded-[10px] bg-lm-bg-card/40 px-5 py-4 shadow-card backdrop-blur-sm">
+      <img
+        src="/images/bio.png"
+        alt=""
+        className="size-16 shrink-0 object-contain"
+      />
+      <div className="flex flex-col gap-0.5">
+        <p className="text-sm font-semibold leading-snug text-foreground">
+          Your biography is being written
+        </p>
+        <p className="text-xs leading-snug text-muted-foreground">
+          Complete your Life Story to unlock it.
+        </p>
+      </div>
+    </div>
   )
 }

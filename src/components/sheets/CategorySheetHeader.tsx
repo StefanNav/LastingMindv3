@@ -57,7 +57,7 @@ export function CategorySheetHeader({ category }: CategorySheetHeaderProps) {
               />
             ))}
           </div>
-          <p className="text-center text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-tertiary)]">
+          <p className="text-center text-[13px] font-medium leading-[1.2] text-[var(--lm-text-tertiary)]">
             {statusLabel[status]}
           </p>
         </div>

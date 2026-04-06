@@ -36,11 +36,11 @@ export function ZeroStateContent({ category, detail, onBeginModule }: ZeroStateC
         <CategorySheetHeader category={category} />
 
         <div className="flex flex-col items-center gap-3 px-5 text-center">
-          <p className="font-display text-[26px] font-normal leading-[1.2] text-foreground">
+          <p className="font-display text-[22px] font-normal leading-[1.2] text-foreground">
             {detail.heading}
           </p>
           {detail.subtitle && (
-            <p className="text-[16px] font-normal leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+            <p className="text-sm leading-snug text-[var(--lm-text-secondary)]">
               {detail.subtitle}
             </p>
           )}

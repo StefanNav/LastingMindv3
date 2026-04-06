@@ -153,10 +153,10 @@ export function LockedFeatureSheet({ isOpen, feature, onClose }: LockedFeatureSh
                   </div>
 
                   <div className="flex flex-col items-center gap-3 text-center">
-                    <p className="font-display text-[26px] font-normal leading-[1.2] text-foreground">
+                    <p className="font-display text-[22px] font-normal leading-[1.2] text-foreground">
                       {feature.title}
                     </p>
-                    <p className="text-[16px] font-normal leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+                    <p className="text-sm leading-snug text-[var(--lm-text-secondary)]">
                       {feature.description}
                     </p>
                   </div>
@@ -164,11 +164,11 @@ export function LockedFeatureSheet({ isOpen, feature, onClose }: LockedFeatureSh
 
                 {/* Unlock instructions */}
                 <motion.div variants={itemVariants} className="px-6">
-                  <div className="flex flex-col items-center gap-3 rounded-[10px] bg-lm-bg-card/60 px-5 py-5 text-center shadow-card">
+                  <div className="flex flex-col items-center gap-3 rounded-[10px] bg-lm-bg-card/40 p-5 text-center shadow-card backdrop-blur-sm">
                     <p className="text-[11px] font-bold uppercase tracking-widest text-lm-gold">
                       How to unlock
                     </p>
-                    <p className="text-[15px] leading-[1.4] text-[var(--lm-text-secondary)]">
+                    <p className="text-sm leading-snug text-[var(--lm-text-secondary)]">
                       {feature.unlockMessage}
                     </p>
                   </div>

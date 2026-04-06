@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Lock } from 'lucide-react'
+import { X, Lock, Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { MemoryProfileData, ProfileCategoryStatus } from '@/types'
 
@@ -46,12 +46,13 @@ function StarDisplay({ earned, total }: { earned: number; total: number }) {
   return (
     <div className="flex gap-1">
       {Array.from({ length: total }).map((_, i) => (
-        <span
+        <Star
           key={i}
-          className={cn('text-base', i < earned ? 'text-lm-gold-star' : 'text-foreground/15')}
-        >
-          ★
-        </span>
+          className="size-4"
+          fill={i < earned ? 'var(--lm-gold-star)' : 'none'}
+          stroke={i < earned ? 'var(--lm-gold-star)' : 'var(--lm-text-tertiary)'}
+          strokeWidth={1.5}
+        />
       ))}
     </div>
   )
@@ -111,8 +112,8 @@ export function StatsRow({ profile }: StatsRowProps) {
           onClick={() => setShowStarsModal(true)}
           className="flex flex-col items-center"
         >
-          <p className="text-sm font-bold text-foreground">
-            <span className="text-lm-gold-star">★</span> {totalStars}
+          <p className="flex items-center gap-1 text-sm font-bold text-foreground">
+            <Star className="size-3.5" fill="var(--lm-gold-star)" stroke="var(--lm-gold-star)" strokeWidth={1.5} /> {totalStars}
           </p>
           <p className="text-[11px] text-muted-foreground">stars</p>
         </button>
@@ -237,15 +238,15 @@ export function StatsRow({ profile }: StatsRowProps) {
                 <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Legend</p>
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-lm-gold-star">★★★</span>
+                    <span className="flex gap-0.5">{Array.from({ length: 3 }).map((_, i) => <Star key={i} className="size-3.5" fill="var(--lm-gold-star)" stroke="var(--lm-gold-star)" strokeWidth={1.5} />)}</span>
                     <span className="text-[11px] text-muted-foreground">Complete — full depth</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm"><span className="text-lm-gold-star">★</span><span className="text-foreground/15">★★</span></span>
+                    <span className="flex gap-0.5"><Star className="size-3.5" fill="var(--lm-gold-star)" stroke="var(--lm-gold-star)" strokeWidth={1.5} /><Star className="size-3.5" fill="none" stroke="var(--lm-text-tertiary)" strokeWidth={1.5} /><Star className="size-3.5" fill="none" stroke="var(--lm-text-tertiary)" strokeWidth={1.5} /></span>
                     <span className="text-[11px] text-muted-foreground">Started — keep going</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-foreground/15">★★★</span>
+                    <span className="flex gap-0.5">{Array.from({ length: 3 }).map((_, i) => <Star key={i} className="size-3.5" fill="none" stroke="var(--lm-text-tertiary)" strokeWidth={1.5} />)}</span>
                     <span className="text-[11px] text-muted-foreground">Not yet started</span>
                   </div>
                 </div>
@@ -306,20 +307,26 @@ export function StatsRow({ profile }: StatsRowProps) {
               {/* Legend */}
               <div className="mt-4 rounded-[8px] bg-foreground/[0.03] px-4 py-3">
                 <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Legend</p>
-                <div className="flex items-center gap-5">
-                  {Array.from({ length: TOTAL_PHASES }).map((_, i) => (
-                    <div key={i} className="flex items-center gap-1.5">
+                <div className="flex flex-col gap-1.5">
+                  {[
+                    { opacity: 0.25, label: 'Getting started', range: '1–3 stars' },
+                    { opacity: 0.45, label: 'Building momentum', range: '4–6 stars' },
+                    { opacity: 0.65, label: 'Making progress', range: '7–10 stars' },
+                    { opacity: 0.82, label: 'Going deep', range: '11–14 stars' },
+                    { opacity: 1, label: 'Flourishing', range: '15–18 stars' },
+                  ].map((tier) => (
+                    <div key={tier.label} className="flex items-center gap-2">
                       <div
-                        className="size-2.5 rounded-full"
-                        style={{ backgroundColor: `rgba(76, 127, 83, ${phaseOpacity(i)})` }}
+                        className="size-2.5 shrink-0 rounded-full"
+                        style={{ backgroundColor: `rgba(76, 127, 83, ${tier.opacity})` }}
                       />
-                      <span className="text-[11px] text-muted-foreground">Phase {i + 1}</span>
+                      <span className="text-[11px] text-muted-foreground">{tier.label} · {tier.range}</span>
                     </div>
                   ))}
-                </div>
-                <div className="mt-2 flex items-center gap-1.5">
-                  <div className="size-2.5 rounded-full bg-foreground/15" />
-                  <span className="text-[11px] text-muted-foreground">Not yet complete</span>
+                  <div className="flex items-center gap-2">
+                    <div className="size-2.5 shrink-0 rounded-full bg-foreground/15" />
+                    <span className="text-[11px] text-muted-foreground">Not yet started</span>
+                  </div>
                 </div>
               </div>
             </motion.div>

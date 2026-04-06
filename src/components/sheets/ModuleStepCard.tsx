@@ -23,7 +23,7 @@ export function ModuleStepCard({ module, stepLabel, ctaLabel, onBegin }: ModuleS
       <div
         className={cn(
           'flex flex-col gap-4 rounded-[10px] p-3',
-          isActive && 'bg-lm-bg-card shadow-[0px_3px_6px_0px_rgba(0,0,0,0.16)]',
+          isActive && 'bg-lm-bg-card shadow-[0px_3px_6px_0px_rgba(0,0,0,0.16)] backdrop-blur-sm',
           isCompleted && 'border border-[#e7ebd9] bg-white opacity-70',
           isLocked && 'border border-[#e7ebd9] bg-white opacity-50',
         )}
@@ -47,7 +47,7 @@ export function ModuleStepCard({ module, stepLabel, ctaLabel, onBegin }: ModuleS
                 Module Complete
               </p>
             ) : (
-              <p className="flex-1 font-display text-[18px] font-medium leading-[1.2] text-foreground">
+              <p className="flex-1 text-[16px] font-semibold leading-[1.2] text-foreground">
                 {module.title}
               </p>
             )}
@@ -63,7 +63,7 @@ export function ModuleStepCard({ module, stepLabel, ctaLabel, onBegin }: ModuleS
           </div>
 
           {isCompleted ? (
-            <p className="font-display text-[18px] font-medium leading-[1.2] text-foreground">
+            <p className="text-[16px] font-semibold leading-[1.2] text-foreground">
               {module.title}
             </p>
           ) : (
@@ -77,9 +77,9 @@ export function ModuleStepCard({ module, stepLabel, ctaLabel, onBegin }: ModuleS
           <button
             type="button"
             onClick={onBegin}
-            className="flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-2.5"
+            className="flex w-full items-center justify-center rounded-lg bg-lm-green px-4 py-3"
           >
-            <p className="text-[16px] leading-[1.2] text-white">
+            <p className="text-sm font-semibold text-white">
               {ctaLabel ?? 'Lets Begin'}
             </p>
           </button>

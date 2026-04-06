@@ -150,10 +150,10 @@ export function LifeChaptersSheet({ isOpen, category, onClose }: LifeChaptersShe
                   <CategorySheetHeader category={category} />
 
                   <div className="flex flex-col items-center gap-3 px-5 text-center">
-                    <p className="font-display text-[26px] font-normal leading-[1.2] text-foreground">
+                    <p className="font-display text-[22px] font-normal leading-[1.2] text-foreground">
                       {hasDefinedChapters ? 'Your Life Chapters' : 'Define Your Life Chapters'}
                     </p>
-                    <p className="text-[16px] font-normal leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+                    <p className="text-sm leading-snug text-[var(--lm-text-secondary)]">
                       {hasDefinedChapters
                         ? `You've defined ${lifeChapters.length} chapter${lifeChapters.length === 1 ? '' : 's'}. Each one becomes a storytelling session.`
                         : 'Map out the chapters of your life — the moments and stages that made you who you are.'}
@@ -177,7 +177,7 @@ export function LifeChaptersSheet({ isOpen, category, onClose }: LifeChaptersShe
                               <p className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
                                 Ch. {i + 1}
                               </p>
-                              <p className="font-display text-sm font-normal leading-tight text-foreground">
+                              <p className="text-sm font-medium leading-tight text-foreground">
                                 {ch.title}
                               </p>
                             </div>

@@ -36,6 +36,7 @@ export function MemoryProfilePage() {
 
   return (
     <PageTransition>
+      <div className="bg-[var(--lm-bg-primary)]">
       {/* Background image — sticky within scroll container */}
       <div className="pointer-events-none sticky top-0 z-0 h-0">
         <img
@@ -66,7 +67,7 @@ export function MemoryProfilePage() {
 
         {/* ── Foundation ── */}
         <div className="mt-2" />
-        <ProfileSectionLabel label="Foundation" />
+        <ProfileSectionLabel label="Foundation" variant="gold" />
         <ProfileFoundationGrid categories={profile.foundationCategories} />
 
         {/* ── Life Story ── */}
@@ -93,6 +94,7 @@ export function MemoryProfilePage() {
 
         {/* Bottom padding for nav bar */}
         <div className="pb-4" />
+      </div>
       </div>
 
       {/* Menu bottom sheet */}

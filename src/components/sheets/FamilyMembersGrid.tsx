@@ -8,7 +8,7 @@ interface FamilyMembersGridProps {
 
 export function FamilyMembersGrid({ members, onAddMember }: FamilyMembersGridProps) {
   return (
-    <div className="border-y border-black/25 bg-lm-bg-card px-4 py-5">
+    <div className="border-y border-border bg-lm-bg-card px-4 py-5">
       <div className="flex flex-col gap-6">
         <div className="flex items-start justify-between">
           <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
@@ -30,12 +30,12 @@ export function FamilyMembersGrid({ members, onAddMember }: FamilyMembersGridPro
           {members.map((member) => (
             <div key={member.id} className="flex flex-col items-center gap-2">
               <div className={`flex size-10 items-center justify-center overflow-hidden rounded-full ${member.entryCount > 0 ? 'border border-lm-green bg-[#fffcf5]' : 'border border-dashed border-[var(--lm-text-secondary)] bg-[#fffcf5]'}`}>
-                <p className={`font-display text-[20px] font-bold leading-none ${member.entryCount > 0 ? 'text-lm-green' : 'text-[var(--lm-text-secondary)]'}`}>
+                <p className={`text-base font-bold leading-none ${member.entryCount > 0 ? 'text-lm-green' : 'text-[var(--lm-text-secondary)]'}`}>
                   {member.initial}
                 </p>
               </div>
               <div className="flex flex-col items-center gap-[2px]">
-                <p className="text-center text-[16px] font-bold leading-none text-foreground">
+                <p className="text-center text-sm font-semibold leading-none text-foreground">
                   {member.name}
                 </p>
                 <p className="text-center text-[14px] font-semibold leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
