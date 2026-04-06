@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import type { FavouritesCategory } from '@/types/favourites'
+import type { FavoritesCategory } from '@/types/favorites'
 
 const ITEM_HEIGHT = 60
 const VISIBLE_ITEMS = 5
@@ -8,7 +8,7 @@ const ANGLE_PER_ROW = 22
 const VIEWPORT_HEIGHT = ITEM_HEIGHT * VISIBLE_ITEMS
 
 interface SlotReelProps {
-  categories: FavouritesCategory[]
+  categories: FavoritesCategory[]
   targetIndex: number
   isSpinning: boolean
   onSpinComplete: () => void
@@ -19,8 +19,8 @@ export function SlotReel({ categories, targetIndex, isSpinning, onSpinComplete }
   const completedRef = useRef(false)
   const totalItems = categories.length
 
-  // Centre offset so target item sits in the middle row
-  const centreOffset = Math.floor(VISIBLE_ITEMS / 2)
+  // Center offset so target item sits in the middle row
+  const centerOffset = Math.floor(VISIBLE_ITEMS / 2)
   // Start in the 2nd copy so categories appear above the highlight
   const initialY = -(totalItems * ITEM_HEIGHT)
 
@@ -98,10 +98,10 @@ export function SlotReel({ categories, targetIndex, isSpinning, onSpinComplete }
     ...categories, ...categories, ...categories,
   ]
 
-  const translateY = useTransform(springY, (v) => v + centreOffset * ITEM_HEIGHT)
+  const translateY = useTransform(springY, (v) => v + centerOffset * ITEM_HEIGHT)
 
   // The pixel center of the viewport
-  const viewportCentre = centreOffset * ITEM_HEIGHT + ITEM_HEIGHT / 2
+  const viewportCenter = centerOffset * ITEM_HEIGHT + ITEM_HEIGHT / 2
 
   return (
     <div
@@ -112,7 +112,7 @@ export function SlotReel({ categories, targetIndex, isSpinning, onSpinComplete }
       <div
         className="pointer-events-none absolute left-0 right-0 z-10 rounded-lg border border-lm-green/20 bg-lm-green/8"
         style={{
-          top: centreOffset * ITEM_HEIGHT,
+          top: centerOffset * ITEM_HEIGHT,
           height: ITEM_HEIGHT,
         }}
       />
@@ -128,8 +128,8 @@ export function SlotReel({ categories, targetIndex, isSpinning, onSpinComplete }
             index={i}
             springY={springY}
             itemHeight={ITEM_HEIGHT}
-            centreOffset={centreOffset}
-            viewportCentre={viewportCentre}
+            centerOffset={centerOffset}
+            viewportCenter={viewportCenter}
           />
         ))}
       </motion.div>
@@ -143,19 +143,19 @@ interface ReelItemProps {
   index: number
   springY: ReturnType<typeof useSpring>
   itemHeight: number
-  centreOffset: number
-  viewportCentre: number
+  centerOffset: number
+  viewportCenter: number
 }
 
-function ReelItem({ emoji, name, index, springY, itemHeight, centreOffset, viewportCentre }: ReelItemProps) {
+function ReelItem({ emoji, name, index, springY, itemHeight, centerOffset, viewportCenter }: ReelItemProps) {
   // Item's pixel position in the viewport as the reel scrolls
   const itemScreenY = useTransform(springY, (v) => {
-    const yOffset = v + centreOffset * itemHeight
+    const yOffset = v + centerOffset * itemHeight
     return index * itemHeight + yOffset + itemHeight / 2
   })
 
   // Barrel transforms — matching birthday picker wheel
-  const offset = useTransform(itemScreenY, (y) => (y - viewportCentre) / itemHeight)
+  const offset = useTransform(itemScreenY, (y) => (y - viewportCenter) / itemHeight)
 
   const rotateX = useTransform(offset, (o) => -o * ANGLE_PER_ROW)
 

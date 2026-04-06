@@ -18,6 +18,12 @@ interface AppContextValue {
   streak: number
   treeImage: string
   demoStateOrder: DemoStateId[]
+  hasCompletedFirstModule: boolean
+  markFirstModuleComplete: () => void
+  module2Runs: Record<string, number>
+  incrementModule2Run: (categoryId: string) => void
+  module1Completions: Record<string, boolean>
+  markModule1Complete: (categoryId: string) => void
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -42,6 +48,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const [activeDemoId, setActiveDemoId] = useState<DemoStateId>(DEFAULT_DEMO)
   const [onboardingKey, setOnboardingKey] = useState(0)
+  const [hasCompletedFirstModule, setHasCompletedFirstModule] = useState(false)
+  const [module2Runs, setModule2Runs] = useState<Record<string, number>>({})
+  const [module1Completions, setModule1Completions] = useState<Record<string, boolean>>({})
+
+  const markFirstModuleComplete = () => setHasCompletedFirstModule(true)
+  const incrementModule2Run = (categoryId: string) =>
+    setModule2Runs((prev) => ({ ...prev, [categoryId]: (prev[categoryId] ?? 0) + 1 }))
+  const markModule1Complete = (categoryId: string) =>
+    setModule1Completions((prev) => ({ ...prev, [categoryId]: true }))
 
   const demoConfig = demoStates[activeDemoId]
 
@@ -66,7 +81,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     streak: demoConfig.streak,
     treeImage: demoConfig.treeImage,
     demoStateOrder,
-  }), [state, activeDemoId, onboardingKey, demoConfig])
+    hasCompletedFirstModule,
+    markFirstModuleComplete,
+    module2Runs,
+    incrementModule2Run,
+    module1Completions,
+    markModule1Complete,
+  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions])
 
   return (
     <AppContext.Provider value={value}>

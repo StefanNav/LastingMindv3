@@ -3,16 +3,16 @@ import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
 import { ConversationHeader } from '@/components/conversation/ConversationHeader'
-import { SlotMachineBody } from '@/components/favourites/SlotMachineBody'
-import { SlotReel } from '@/components/favourites/SlotReel'
-import { SlotHandle } from '@/components/favourites/SlotHandle'
-import type { SlotHandleRef } from '@/components/favourites/SlotHandle'
-import { QuestionCard } from '@/components/favourites/QuestionCard'
-import { InlineSuccessMoment } from '@/components/favourites/InlineSuccessMoment'
-import { SparkParticles } from '@/components/favourites/SparkParticles'
+import { SlotMachineBody } from '@/components/favorites/SlotMachineBody'
+import { SlotReel } from '@/components/favorites/SlotReel'
+import { SlotHandle } from '@/components/favorites/SlotHandle'
+import type { SlotHandleRef } from '@/components/favorites/SlotHandle'
+import { QuestionCard } from '@/components/favorites/QuestionCard'
+import { InlineSuccessMoment } from '@/components/favorites/InlineSuccessMoment'
+import { SparkParticles } from '@/components/favorites/SparkParticles'
 import { useSlotMachineFlow } from '@/hooks/useSlotMachineFlow'
 
-export function FavouritesPage() {
+export function FavoritesPage() {
   const navigate = useNavigate()
   const flow = useSlotMachineFlow()
   const [sparkTrigger, setSparkTrigger] = useState(0)
@@ -21,7 +21,7 @@ export function FavouritesPage() {
   // Navigate to summary when all questions complete
   useEffect(() => {
     if (flow.step === 'complete') {
-      navigate('/favourites/summary', { state: { answers: flow.answers } })
+      navigate('/favorites/summary', { state: { answers: flow.answers } })
     }
   }, [flow.step, flow.answers, navigate])
 
@@ -43,7 +43,7 @@ export function FavouritesPage() {
       <div className="relative flex h-full flex-col bg-background">
         {/* Header */}
         <ConversationHeader
-          moduleTitle="Favourites"
+          moduleTitle="Favorites"
           rightLabel={headerRightLabel}
           progressPercent={flow.progressPercent}
           onBack={() => navigate('/home')}

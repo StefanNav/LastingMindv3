@@ -1,0 +1,112 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
+import { PageTransition } from '@/animations/PageTransition'
+import { ConversationHeader } from '@/components/conversation/ConversationHeader'
+import { CardDeck } from '@/components/core-values/CardDeck'
+import { CoreValuesAnswerModal } from '@/components/core-values/CoreValuesAnswerModal'
+import { InlineSuccessMoment } from '@/components/favorites/InlineSuccessMoment'
+import { useCoreValuesFlow } from '@/hooks/useCoreValuesFlow'
+
+export function CoreValuesPage() {
+  const navigate = useNavigate()
+  const flow = useCoreValuesFlow()
+
+  // Navigate to summary when all cards are answered
+  useEffect(() => {
+    if (flow.step === 'complete') {
+      navigate('/core-values/summary', { state: { answers: flow.answers } })
+    }
+  }, [flow.step, flow.answers, navigate])
+
+  const headerRightLabel =
+    flow.step === 'complete'
+      ? 'All Done!'
+      : `${flow.answeredCount} / ${flow.totalCards} cards`
+
+  const [showModal, setShowModal] = useState(false)
+
+  // Reset modal when step leaves 'revealed'
+  useEffect(() => {
+    if (flow.step !== 'revealed') {
+      setShowModal(false)
+    }
+  }, [flow.step])
+
+  return (
+    <PageTransition>
+      <div className="relative flex h-full flex-col bg-background">
+        {/* Header */}
+        <ConversationHeader
+          moduleTitle="Core Values"
+          rightLabel={headerRightLabel}
+          progressPercent={flow.progressPercent}
+          onBack={() => navigate('/home')}
+        />
+
+        {/* Content area — card deck centered */}
+        <div className="flex flex-1 flex-col px-4 pb-8 pt-[120px]">
+          <div className="flex flex-1 flex-col items-center justify-center">
+            <CardDeck
+              remainingCards={flow.remainingCards}
+              currentCard={flow.currentCard}
+              isShuffling={flow.step === 'shuffling'}
+              isFlipping={flow.step === 'flipping'}
+              isRevealed={flow.step === 'revealed'}
+              hasEverTapped={flow.hasEverTapped}
+              onTap={flow.tapCard}
+              onShuffleComplete={flow.shuffleComplete}
+              onFlipComplete={flow.flipComplete}
+            />
+          </div>
+
+          {/* CTA — appears after card flip settles */}
+          <AnimatePresence>
+            {flow.step === 'revealed' && !showModal && (
+              <motion.div
+                key="answer-cta"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ delay: 0.3, duration: 0.25 }}
+                className="mt-auto flex flex-col items-center gap-2 pt-4"
+              >
+                <button
+                  type="button"
+                  onClick={() => setShowModal(true)}
+                  className="flex w-full max-w-[260px] items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4 transition-transform active:scale-95"
+                >
+                  <span className="text-[16px] font-medium leading-[1.2] text-white">
+                    Answer this question
+                  </span>
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Answer modal + success moment overlays */}
+        <AnimatePresence>
+          {showModal && flow.currentCard && (
+            <CoreValuesAnswerModal
+              key={`modal-${flow.currentCard.id}`}
+              category={flow.currentCard}
+              inputMode={flow.inputMode}
+              onToggleMode={flow.toggleInputMode}
+              onSubmit={flow.submitAnswer}
+              onDismiss={flow.dismissModal}
+            />
+          )}
+          {flow.step === 'success' && (
+            <InlineSuccessMoment
+              key="success-moment"
+              answeredCount={flow.answeredCount}
+              totalQuestions={flow.totalCards}
+              onDone={flow.successDone}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+    </PageTransition>
+  )
+}

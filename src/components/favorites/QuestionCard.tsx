@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Mic, Keyboard, Pause, CircleStop, Send, ChevronRight } from 'lucide-react'
-import type { FavouritesCategory, FavouritesInputMode } from '@/types/favourites'
+import type { FavoritesCategory, FavoritesInputMode } from '@/types/favorites'
 
 type CardStep = 'idle' | 'recording' | 'transcribed'
 
 interface QuestionCardProps {
-  category: FavouritesCategory
-  inputMode: FavouritesInputMode
+  category: FavoritesCategory
+  inputMode: FavoritesInputMode
   onToggleMode: () => void
   onSubmit: (answer: string) => void
 }

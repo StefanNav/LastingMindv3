@@ -8,6 +8,7 @@ import { FeatureTourCarousel } from '@/components/onboarding/FeatureTourCarousel
 import { CategoryGridSlide } from '@/components/onboarding/CategoryGridSlide'
 import { FamilyDetailSlide } from '@/components/onboarding/FamilyDetailSlide'
 import { ChatPreviewSlide } from '@/components/onboarding/ChatPreviewSlide'
+import { TreeGrowthSlide } from '@/components/onboarding/TreeGrowthSlide'
 import { PreparingSlide } from '@/components/onboarding/PreparingSlide'
 import { SplashScreen } from '@/components/onboarding/SplashScreen'
 import { UserTypeScreen } from '@/components/onboarding/UserTypeScreen'
@@ -173,13 +174,7 @@ export function OnboardingPage() {
             {
               id: 'tour-trees',
               heading: 'As your Lasting Mind deepens, your tree grows',
-              content: (
-                <div className="flex h-[220px] w-full items-end justify-center gap-3">
-                  <img src="/images/onboarding/tree 1.2.png" alt="" className="h-[82px] object-contain" />
-                  <img src="/images/Tree 1.png" alt="" className="h-[121px] object-contain" />
-                  <img src="/images/onboarding/Tree 2.2.png" alt="" className="h-[98px] object-contain" />
-                </div>
-              ),
+              content: <TreeGrowthSlide />,
             },
             {
               id: 'tour-chat',

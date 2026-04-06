@@ -125,6 +125,7 @@ export function GuidedConversationPage({ config, onComplete, onBack, onExit }: G
                 key={`recording-${flow.currentQuestionIndex}`}
                 text={flow.currentQuestion.mockUserResponse}
                 label="Transcribing your answer"
+                liveTranscribe
               />
             )}
 

@@ -42,7 +42,7 @@ export const mockHomePhases: HomePhase[] = [
       { id: 'cat-friends', title: 'Friends', image: '/images/Freinds 1.png', imageHeight: 156, imageWidth: 270, status: 'budding', totalModules: 3 },
       { id: 'cat-career', title: 'Career', image: '/images/Career 1.png', imageHeight: 145, imageWidth: 240, status: 'growing', totalModules: 3 },
       { id: 'cat-education', title: 'Education', image: '/images/Education 1.png', imageHeight: 145, imageWidth: 240, status: 'growing', currentModule: 1, totalModules: 3 },
-      { id: 'cat-favourites', title: 'Favourites', image: '/images/Favourites 1.png', imageHeight: 156, imageWidth: 196, status: 'not_started', totalModules: 3 },
+      { id: 'cat-favorites', title: 'Favorites', image: '/images/Favorites 1.png', imageHeight: 156, imageWidth: 196, status: 'not_started', totalModules: 3 },
       { id: 'cat-core-values', title: 'Core Values', image: '/images/Core Values 1.png', imageHeight: 145, imageWidth: 250, status: 'not_started', totalModules: 3 },
     ],
   },
@@ -308,18 +308,18 @@ export const mockCategoryDetails: Record<string, CategoryDetail> = {
     entriesComplete: 1,
     entriesToNextStar: 4,
   },
-  'cat-favourites': {
-    categoryId: 'cat-favourites',
-    heading: 'Tell us about your favourites',
+  'cat-favorites': {
+    categoryId: 'cat-favorites',
+    heading: 'Tell us about your favorites',
     subtitle: 'Complete both modules to earn your first star',
     modules: [
-      { id: 'mod-fav-1', title: 'Your favourite things', description: 'Foods, places, songs, movies — the things you love most.', duration: '5min', completed: false, locked: false },
-      { id: 'mod-fav-2', title: 'Why they matter', description: 'What makes these favourites special to you?', duration: '5min', completed: false, locked: true },
+      { id: 'mod-fav-1', title: 'Your favorite things', description: 'Foods, places, songs, movies — the things you love most.', duration: '5min', completed: false, locked: false },
+      { id: 'mod-fav-2', title: 'Why they matter', description: 'What makes these favorites special to you?', duration: '5min', completed: false, locked: true },
     ],
     growthActions: [
-      { id: 'ga-13', label: 'Share a favourite childhood memory' },
-      { id: 'ga-14', label: 'Record your all-time favourite song' },
-      { id: 'ga-15', label: 'Tell us about a favourite place' },
+      { id: 'ga-13', label: 'Share a favorite childhood memory' },
+      { id: 'ga-14', label: 'Record your all-time favorite song' },
+      { id: 'ga-15', label: 'Tell us about a favorite place' },
     ],
   },
   'cat-core-values': {
@@ -371,12 +371,12 @@ export const foundationIntroData: Record<string, ModuleIntroData> = {
     moduleTitle: 'Your School Years',
     description: "We'll have a quick conversation about the places you learned and the experiences that shaped your mind. Just talk naturally, there are no wrong answers.",
   },
-  'cat-favourites': {
-    categoryId: 'cat-favourites',
-    categoryLabel: 'Favourites',
-    image: '/images/Favourites 1.png',
+  'cat-favorites': {
+    categoryId: 'cat-favorites',
+    categoryLabel: 'Favorites',
+    image: '/images/Favorites 1.png',
     imageHeight: 156,
-    moduleTitle: 'Your Favourite Things',
+    moduleTitle: 'Your Favorite Things',
     description: "Spin the slot machine to land on a category, then tell us about the things you love most. Ten quick questions, just have fun with it.",
   },
   'cat-core-values': {
@@ -467,17 +467,17 @@ export const module2IntroData: Record<string, Module2IntroData> = {
       { id: 'edu-aa', label: 'Associate Degree', subtitle: 'Greenfield Community College' },
     ],
   },
-  'cat-favourites': {
-    categoryId: 'cat-favourites',
-    categoryLabel: 'Favourites',
-    image: '/images/Favourites 1.png',
+  'cat-favorites': {
+    categoryId: 'cat-favorites',
+    categoryLabel: 'Favorites',
+    image: '/images/Favorites 1.png',
     imageWidth: 242,
     moduleTitle: 'Why they matter',
     description: 'Pick a category, then tell us what makes it special to you. Just talk naturally.',
     selectionType: 'radio-cards',
     disabledButtonText: 'Select a category to begin',
     options: [
-      { id: 'fav-food', label: 'Food & Cooking', subtitle: 'Recipes, meals, and flavours you love' },
+      { id: 'fav-food', label: 'Food & Cooking', subtitle: 'Recipes, meals, and flavors you love' },
       { id: 'fav-music', label: 'Music & Songs', subtitle: 'The soundtrack to your life' },
       { id: 'fav-places', label: 'Places & Travel', subtitle: 'Destinations that stayed with you' },
       { id: 'fav-movies', label: 'Movies & Shows', subtitle: 'Stories that moved you' },
@@ -502,6 +502,65 @@ export const module2IntroData: Record<string, Module2IntroData> = {
 }
 
 export const reflectionConfigs: Record<string, ReflectionConfig> = {
+  'cat-core-values': {
+    categoryId: 'cat-core-values',
+    moduleId: 'mod-val-2',
+    moduleTitle: 'Values in Action',
+    subjectName: 'Honesty',
+    subjectRelation: 'Core Value',
+    openReflectionMessage: "Feel free to share openly about what this value means to you and how it's shaped your life. I'll capture everything.",
+    summaryHeading: "Here's a summary of what you shared",
+    questions: [
+      {
+        id: 'rq-val-1',
+        categoryLabel: 'Values in Action',
+        promptText: "Can you tell me about a time when holding onto this value cost you something — but you'd do it again?",
+        mockUserResponse: "I once turned down a promotion because the role required me to let go of a team member I knew was doing good work. My boss didn't understand, but I couldn't live with myself if I'd done it just to get ahead.",
+      },
+      {
+        id: 'rq-val-2',
+        categoryLabel: 'Values in Action',
+        promptText: 'Where did this value come from? Was there someone who taught it to you, or did life teach it to you the hard way?',
+        mockUserResponse: "My grandfather. He ran a small hardware store and never once shortchanged a customer. He used to say, 'Your name is the only thing you take with you.' That stuck with me for life.",
+      },
+      {
+        id: 'rq-val-3',
+        categoryLabel: 'Values in Action',
+        promptText: "Was there a moment when this value was tested — when it would have been easier to let it go? What happened?",
+        mockUserResponse: "At work, a colleague took credit for something I'd built. I could have made a scene, but I just kept doing good work. Eventually the truth came out on its own.",
+      },
+      {
+        id: 'rq-val-4',
+        categoryLabel: 'Values in Action',
+        promptText: 'How has this value shaped the way you raise your family or treat the people closest to you?',
+        mockUserResponse: "I've always told my kids that I'd rather hear a hard truth than a comfortable lie. It wasn't always easy for them growing up, but now they come to me with everything.",
+      },
+      {
+        id: 'rq-val-5',
+        categoryLabel: 'Values in Action',
+        promptText: "If you had to explain this value to a grandchild in one story, what story would you tell?",
+        mockUserResponse: "I'd tell them about the time I found a wallet with $600 in it at the grocery store. I tracked down the owner — turned out she was a single mom who'd just cashed her paycheck. The look on her face was worth more than any amount of money.",
+      },
+      {
+        id: 'rq-val-6',
+        categoryLabel: 'Values in Action',
+        promptText: "Has your understanding of this value changed over the years? What does it mean to you now that it didn't when you were younger?",
+        mockUserResponse: "When I was young I thought honesty meant never telling a lie. Now I think it's more about being honest with yourself — knowing who you are and not pretending to be something you're not.",
+      },
+      {
+        id: 'rq-val-7',
+        categoryLabel: 'Values in Action',
+        promptText: "What's a small, everyday way this value shows up in your life — something most people wouldn't even notice?",
+        mockUserResponse: "I always return my shopping cart. Sounds silly, but it's about doing the right thing even when nobody's watching. That's the whole point.",
+      },
+      {
+        id: 'rq-val-8',
+        categoryLabel: 'Values in Action',
+        promptText: "If this value could speak, what would it say to the next generation about why it still matters?",
+        mockUserResponse: "It would say: the world will try to convince you that cutting corners is smart. Don't believe it. The long way around is usually the one you can be proud of.",
+      },
+    ],
+  },
   'cat-family': {
     categoryId: 'cat-family',
     moduleId: 'mod-fam-2',

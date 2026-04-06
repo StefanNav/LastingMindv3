@@ -14,14 +14,16 @@ import { GuidedConversationPage } from '@/pages/GuidedConversationPage'
 import { ReflectionPromptPage } from '@/pages/ReflectionPromptPage'
 import { ReflectionPage } from '@/pages/ReflectionPage'
 import { ReflectionSummaryPage } from '@/pages/ReflectionSummaryPage'
-import { FavouritesPage } from '@/pages/FavouritesPage'
-import { FavouritesSummaryPage } from '@/pages/FavouritesSummaryPage'
-import { FavouritesMilestonePage } from '@/pages/FavouritesMilestonePage'
+import { FavoritesPage } from '@/pages/FavoritesPage'
+import { FavoritesSummaryPage } from '@/pages/FavoritesSummaryPage'
+import { FavoritesMilestonePage } from '@/pages/FavoritesMilestonePage'
+import { CoreValuesPage } from '@/pages/CoreValuesPage'
+import { CoreValuesSummaryPage } from '@/pages/CoreValuesSummaryPage'
 import { MemoryProfilePage } from '@/pages/MemoryProfilePage'
-import { conversationConfigs, foundationIntroData } from '@/data/mock'
+import { conversationConfigs, foundationIntroData, module2IntroData } from '@/data/mock'
 import { PageTransition } from '@/animations/PageTransition'
 import { useApp } from '@/app/AppProvider'
-import type { ModuleCompletionState } from '@/types'
+import type { ModuleCompletionState, RewardCardData } from '@/types'
 
 function KeyedOnboarding() {
   const { onboardingKey } = useApp()
@@ -31,6 +33,7 @@ function KeyedOnboarding() {
 function ConversationRoute() {
   const { categoryId } = useParams<{ categoryId: string }>()
   const navigate = useNavigate()
+  const { hasCompletedFirstModule, markFirstModuleComplete, markModule1Complete } = useApp()
   const config = categoryId ? conversationConfigs[categoryId] : undefined
   const introData = categoryId ? foundationIntroData[categoryId] : undefined
 
@@ -44,10 +47,27 @@ function ConversationRoute() {
     )
   }
 
+  const mod2 = categoryId ? module2IntroData[categoryId] : undefined
+
   return (
     <GuidedConversationPage
       config={config}
       onComplete={() => {
+        // Build reward card data from conversation summary items
+        const rewardCardData: RewardCardData = {
+          categoryImage: introData?.image ?? '',
+          categoryLabel: introData?.categoryLabel ?? categoryId,
+          moduleTitle: config.moduleTitle,
+          items: config.summaryItems.map((si) => ({
+            id: si.id,
+            initial: si.name.charAt(0),
+            label: si.name.split(' ')[0],
+            sublabel: si.label,
+          })),
+          itemCountLabel: `${config.summaryItems.length} ${(introData?.categoryLabel ?? categoryId).toLowerCase()} members recorded`,
+          date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+        }
+
         const completionState: ModuleCompletionState = {
           categoryId,
           moduleNumber: 1,
@@ -56,7 +76,14 @@ function ConversationRoute() {
           starEarned: false,
           totalStars: 0,
           totalStarsNeeded: 6,
+          isFirstModuleEver: !hasCompletedFirstModule,
+          rewardCardData,
+          nextModule: mod2
+            ? { title: mod2.moduleTitle, description: mod2.description, duration: '5min' }
+            : undefined,
         }
+        markFirstModuleComplete()
+        markModule1Complete(categoryId)
         navigate('/success', { state: completionState })
       }}
       onBack={() => navigate(`/intro/${categoryId}`)}
@@ -89,9 +116,11 @@ function App() {
               <Route path="/reflection/:categoryId" element={<ReflectionPromptPage />} />
               <Route path="/reflect/:categoryId" element={<ReflectionPage />} />
               <Route path="/reflection/:categoryId/summary" element={<ReflectionSummaryPage />} />
-              <Route path="/favourites" element={<FavouritesPage />} />
-              <Route path="/favourites/summary" element={<FavouritesSummaryPage />} />
-              <Route path="/favourites/milestone" element={<FavouritesMilestonePage />} />
+              <Route path="/favorites" element={<FavoritesPage />} />
+              <Route path="/favorites/summary" element={<FavoritesSummaryPage />} />
+              <Route path="/favorites/milestone" element={<FavoritesMilestonePage />} />
+              <Route path="/core-values" element={<CoreValuesPage />} />
+              <Route path="/core-values/summary" element={<CoreValuesSummaryPage />} />
               <Route path="/profile" element={<MemoryProfilePage />} />
             </Routes>
           </AnimatePresence>

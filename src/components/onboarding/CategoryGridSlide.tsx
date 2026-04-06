@@ -4,7 +4,7 @@ const categories = [
   { label: 'Family', image: '/images/Family 1.png' },
   { label: 'Friends', image: '/images/Freinds 1.png' },
   { label: 'Career', image: '/images/Career 1.png' },
-  { label: 'What matters', image: '/images/Favourites 1.png' },
+  { label: 'What matters', image: '/images/Favorites 1.png' },
 ]
 
 const stagger = {

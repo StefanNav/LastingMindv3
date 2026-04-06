@@ -146,6 +146,11 @@ export function Module2IntroPage() {
                     state: { selectedMember: selectedLabel },
                   })
                 }
+              } else if (categoryId === 'cat-core-values' && selectedOption) {
+                const selectedLabel = data.options.find(o => o.id === selectedOption)?.label ?? ''
+                navigate(`/reflection/${categoryId}`, {
+                  state: { selectedMember: selectedLabel },
+                })
               }
             }}
             className={cn(

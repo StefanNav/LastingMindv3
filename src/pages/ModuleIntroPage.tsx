@@ -92,7 +92,7 @@ export function ModuleIntroPage() {
         <div className="shrink-0 px-4 pb-[50px] pt-4">
           <button
             type="button"
-            onClick={() => navigate(categoryId === 'cat-favourites' ? '/favourites' : `/conversation/${categoryId}`)}
+            onClick={() => navigate(categoryId === 'cat-favorites' ? '/favorites' : categoryId === 'cat-core-values' ? '/core-values' : `/conversation/${categoryId}`)}
             className="flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-4"
           >
             <span className="text-[16px] font-medium leading-[1.2] text-white">

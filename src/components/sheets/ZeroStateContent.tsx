@@ -40,7 +40,7 @@ export function ZeroStateContent({ category, detail, onBeginModule }: ZeroStateC
             {detail.heading}
           </p>
           {detail.subtitle && (
-            <p className="text-[16px] font-semibold leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+            <p className="text-[16px] font-normal leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
               {detail.subtitle}
             </p>
           )}

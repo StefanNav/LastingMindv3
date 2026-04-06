@@ -7,6 +7,9 @@ import { PromptCard } from '@/components/home/PromptCard'
 import { PhaseToggle } from '@/components/home/PhaseToggle'
 import { CategoryNodeCard } from '@/components/cards/CategoryNodeCard'
 import { CategoryBottomSheet } from '@/components/sheets/CategoryBottomSheet'
+import { LockedFeatureCard } from '@/components/home/LockedFeatureCard'
+import { LockedFeatureSheet } from '@/components/sheets/LockedFeatureSheet'
+import type { LockedFeature } from '@/components/sheets/LockedFeatureSheet'
 import { module2IntroData } from '@/data/mock'
 import { useApp } from '@/app/AppProvider'
 import type { Category } from '@/types'
@@ -19,10 +22,12 @@ export function HomePage() {
   const activePhase = homePhases[activePhaseIndex]
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const isSheetOpen = selectedCategory !== null
+  const [selectedFeature, setSelectedFeature] = useState<LockedFeature | null>(null)
 
   useEffect(() => {
     setActivePhaseIndex(0)
     setSelectedCategory(null)
+    setSelectedFeature(null)
   }, [activeDemoId])
 
   useEffect(() => {
@@ -61,7 +66,7 @@ export function HomePage() {
 
   return (
     <PageTransition>
-      <div className="relative flex flex-col bg-background overflow-x-hidden">
+      <div className="relative flex flex-col overflow-x-hidden">
         {/* ── Background image layer ── */}
         <div className="pointer-events-none absolute left-1/2 -top-[65px] h-[687px] w-[1030px] -translate-x-1/2 z-0">
           <img
@@ -151,9 +156,54 @@ export function HomePage() {
             ))}
           </motion.div>
         </AnimatePresence>
+
+        {/* ── Locked feature cards (Phase 1 only) ── */}
+        {activePhase.id === 'foundation' && (
+          <div className="relative z-[6] flex flex-col gap-4 px-4 pb-8 mt-4">
+            {/* Section divider */}
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-lm-gold/30" />
+              <p className="shrink-0 text-[11px] font-bold uppercase tracking-widest text-lm-gold">
+                Earn 6 Stars to Unlock
+              </p>
+              <div className="h-px flex-1 bg-lm-gold/30" />
+            </div>
+
+            <LockedFeatureCard
+              image="/images/RecordVoice.png"
+              title="Give your LastingMind your voice"
+              subtitle="Your family will hear your stories the way only you can tell them."
+              onClick={() => setSelectedFeature({
+                id: 'voice-clone',
+                image: '/images/RecordVoice.png',
+                title: 'Give your LastingMind your voice',
+                description: 'Record a voice sample and your LastingMind will use it to narrate your stories, memories, and letters in your own voice — so your family hears you, not a machine.',
+                unlockMessage: 'Earn at least 1 star in every Phase 1 category to unlock Voice Clone. Complete both modules in a category to earn your first star.',
+              })}
+            />
+            <LockedFeatureCard
+              image="/images/Audience.png"
+              title="Your family can now meet your LastingMind"
+              subtitle="Invite them to start asking questions."
+              onClick={() => setSelectedFeature({
+                id: 'invite-audience',
+                image: '/images/Audience.png',
+                title: 'Your family can now meet your LastingMind',
+                description: 'Once unlocked, you can invite loved ones to interact with your LastingMind — they\'ll be able to ask questions, explore your stories, and connect with the legacy you\'re building.',
+                unlockMessage: 'Earn at least 1 star in every Phase 1 category to unlock Audience Invites. Complete both modules in a category to earn your first star.',
+              })}
+            />
+          </div>
+        )}
       </div>
 
       {/* ── Bottom Sheet ── fixed within MobileShell via transform-gpu containing block */}
+      <LockedFeatureSheet
+        isOpen={selectedFeature !== null}
+        feature={selectedFeature}
+        onClose={() => setSelectedFeature(null)}
+      />
+
       <CategoryBottomSheet
         isOpen={isSheetOpen}
         category={selectedCategory}

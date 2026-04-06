@@ -213,6 +213,28 @@ export interface DemoConfig {
   categoryDetails: Record<string, CategoryDetail>
 }
 
+export interface RewardCardItem {
+  id: string
+  initial: string
+  label: string
+  sublabel?: string
+}
+
+export interface NextModuleData {
+  title: string
+  description: string
+  duration: string
+}
+
+export interface RewardCardData {
+  categoryImage: string
+  categoryLabel: string
+  moduleTitle: string
+  items: RewardCardItem[]
+  itemCountLabel: string
+  date: string
+}
+
 export interface ModuleCompletionState {
   categoryId: string
   moduleNumber: 1 | 2
@@ -221,6 +243,9 @@ export interface ModuleCompletionState {
   starEarned: boolean
   totalStars: number
   totalStarsNeeded: number
+  isFirstModuleEver?: boolean
+  rewardCardData?: RewardCardData
+  nextModule?: NextModuleData
 }
 
 export interface ReflectionQuestion {

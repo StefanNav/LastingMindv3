@@ -3,8 +3,9 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { PageTransition } from '@/animations/PageTransition'
 import { ConversationHeader } from '@/components/conversation/ConversationHeader'
-import { reflectionConfigs } from '@/data/mock'
-import type { ModuleCompletionState, ReflectionMethod, ConversationInputMode } from '@/types'
+import { reflectionConfigs, foundationIntroData } from '@/data/mock'
+import { useApp } from '@/app/AppProvider'
+import type { ModuleCompletionState, RewardCardData, ReflectionMethod, ConversationInputMode } from '@/types'
 import { module2IntroData } from '@/data/mock'
 
 interface SummaryLocationState {
@@ -21,8 +22,10 @@ export function ReflectionSummaryPage() {
   const location = useLocation()
   const locationState = location.state as SummaryLocationState | null
 
+  const { module2Runs, incrementModule2Run, foundationStars } = useApp()
   const config = categoryId ? reflectionConfigs[categoryId] : undefined
   const introData = categoryId ? module2IntroData[categoryId] : undefined
+  const categoryIntroData = categoryId ? foundationIntroData[categoryId] : undefined
 
   const [isEditing, setIsEditing] = useState(false)
   const [editedText, setEditedText] = useState(locationState?.mockResponseText ?? '')
@@ -41,15 +44,43 @@ export function ReflectionSummaryPage() {
   const isGuided = locationState.reflectionMethod === 'guided'
 
   const handleSaveAndFinish = () => {
+    const runs = module2Runs[categoryId] ?? 0
+    const isStarEarned = runs >= 1
+
+    // Compute real total stars: base from demo + dynamic from session + the one being earned now
+    const dynamicStars = Object.values(module2Runs).reduce(
+      (sum, r) => sum + Math.floor(r / 2), 0,
+    )
+    const computedTotalStars = foundationStars + dynamicStars + (isStarEarned ? 1 : 0)
+
+    const rewardCardData: RewardCardData = {
+      categoryImage: categoryIntroData?.image ?? '',
+      categoryLabel: introData?.categoryLabel ?? categoryId,
+      moduleTitle: config.moduleTitle,
+      items: [{
+        id: 'story-subject',
+        initial: config.subjectName.charAt(0),
+        label: `About ${config.subjectName}`,
+        sublabel: `${config.subjectName} - ${config.subjectRelation}`,
+      }],
+      itemCountLabel: '1 entry',
+      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+    }
+
     const completionState: ModuleCompletionState = {
       categoryId,
       moduleNumber: 2,
       moduleTitle: config.moduleTitle,
       categoryLabel: introData?.categoryLabel ?? categoryId,
-      starEarned: true,
-      totalStars: 1,
+      starEarned: isStarEarned,
+      totalStars: computedTotalStars,
       totalStarsNeeded: 6,
+      rewardCardData,
+      nextModule: introData
+        ? { title: introData.moduleTitle, description: introData.description, duration: '5min' }
+        : undefined,
     }
+    incrementModule2Run(categoryId)
     navigate('/success', { state: completionState })
   }
 

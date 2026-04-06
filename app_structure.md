@@ -40,16 +40,50 @@ Phase 4: Keep Growing      ← always visible; open-ended ongoing mode
 - Modules within a category must be completed in order (Module 1 before Module 2).
 - Categories can be completed in any order.
 
+### Suggested Completion Order
+
+The app suggests the following default order. Users can deviate, but the app's next-step suggestions always follow this sequence, skipping any already-completed categories:
+
+1. Family
+2. Friends
+3. Career
+4. Education
+5. Favorites
+6. Core Values
+
+> If a user completes a category out of sequence, the next-step suggestion logic identifies the first incomplete category in the default order above and surfaces that.
+
 ### Categories & Modules
 
 | Category | Module 1 | Module 2 | Star Awarded |
 |---|---|---|---|
 | Family | Who's in Your Family | Tell a Story About Someone | After Module 2 |
 | Friends | Your Circle | A Friend Story | After Module 2 |
-| Favorites | Slot Machine | Expand on Your Favorites _(questions TBD)_ | After Module 2 |
 | Career | Career Journey | A Career Story | After Module 2 |
 | Education | Where You Learned | A School Memory | After Module 2 |
-| Core Values | Random Card | Expand on Your Values _(questions TBD)_ | After Module 2 |
+| Favorites | Slot Machine | Expand on Your Favorites | After Module 2 |
+| Core Values | Random Card | Expand on Your Values | After Module 2 |
+
+### The Reward Card
+
+Every time a user completes an input method — a guided conversation, a story, a slot machine session — they receive a **reward card**. The card is a visual artifact representing that specific interaction.
+
+- Each input completion = one card. A module requiring two stories produces two separate cards.
+- Cards are specific to what was shared (e.g. the Family module card shows the listed family members; a story card reflects the subject of the story told).
+- The reward card appears in every success flow immediately after the save confirmation screens.
+
+### Tree Growth in Phase 1
+
+Tree growth happens at two points during Phase 1 — not one:
+
+| Trigger | Tree Behaviour |
+|---|---|
+| Module 1 complete | No tree reaction |
+| Stars 2–5 earned | Tree pulses or glows briefly — reacts but does not grow |
+| **First star earned (star 1)** | **Tree grows — a contained, meaningful growth moment** |
+| **Final star earned (star 6)** | **Tree grows dramatically — the full Phase 1 growth (Sapling → Young Tree)** |
+
+> The first star triggers a visible but contained tree growth. The final star triggers the full dramatic Sapling → Young Tree animation. These are distinct moments with distinct animation scales.
 
 ### What Unlocks at Phase 1 Completion
 
@@ -57,7 +91,7 @@ Phase 4: Keep Growing      ← always visible; open-ended ongoing mode
 - Phase 3: Leave Your Legacy
 - Voice Clone setup
 - Invite first audience member
-- Tree grows: Sapling → Young Tree (major animation — see demo_mode.md)
+- Tree grows: Sapling → Young Tree (full-screen animation — see reward_system_flows.md)
 
 ---
 
@@ -89,7 +123,7 @@ Unlocks alongside Phase 2. Can be worked on in parallel with Phase 2.
 | Letters to Loved Ones | 1. Define recipients → 2. Write/record letters | Letter preview |
 | Voice Messages | 1. Record messages | Playback preview |
 | Life's Big Moments | 1. Define moments → 2. Write entries | Entry preview |
-| How I Hope to Be Remembered | 1. AI-guided conversation → 2. Edit & refine | Formatted memoir |
+| How I Hope to Be Remembered | 1. Guided conversation → 2. Edit & refine | Formatted memoir |
 
 ### Phase 3 Milestone Unlocks (all 4 categories complete)
 
@@ -102,7 +136,7 @@ Unlocks alongside Phase 2. Can be worked on in parallel with Phase 2.
 
 ## 5. Phase 4: Keep Growing
 
-Always visible. Becomes the primary engagement mode after Phase 3 completes. Open-ended — no modules, no stars, no completion state. Driven by Open Journal, AI-suggested prompts, and audience questions.
+Always visible. Becomes the primary engagement mode after Phase 3 completes. Open-ended — no modules, no stars, no completion state. Driven by Open Journal, suggested prompts, and audience questions.
 
 ---
 
@@ -121,46 +155,67 @@ Every module uses one of the following four methods.
 
 ## 7. Success Screen Flows
 
-Every completed module ends in one of three flows depending on star outcome. All flows share the same save prefix.
+Every completed module ends in one of four flows. Flows C and D are decoupled — C handles the star earned moment (reusable across any category or phase), and D is appended only when tree growth is triggered. Full screen-by-screen definitions are in `reward_system_flows.md`.
 
 ### Shared Prefix (all flows)
-1. **Saving Indicator** — "Saving your story…" Never skippable.
-2. **Save Confirmed** — "Saved. Your LastingMind is growing." Always appears before any celebration.
+1. **Saving Indicator** — `"Saving your story…"` Never skippable.
+2. **Save Confirmed** — `"Saved. Your LastingMind is growing."` Always before any celebration.
 
 ---
 
-### Flow 1 — Module Complete, No Star
-_Trigger: Module 1 of any category completed_
+### Flow A — First Module Ever, No Star
+_Trigger: The very first module the user has ever completed. Shown exactly once._
 
-- Deliverable preview (partial artifact)
-- Progress indicator: "1 of 2 modules complete"
-- Faint empty star with label: "Complete [Category] Module 2 to earn your star"
-- CTA: "Begin Module 2" (primary) / "Choose another category" (secondary)
-
----
-
-### Flow 2 — Module Complete, Star Earned (Not Final)
-_Trigger: Module 2 complete, total stars < 6_
-
-- Full deliverable shown
-- Animated star awarded for this category
-- Running tally: "X of 6 stars earned"
-- Tree pulses/glows briefly — reacts but does **not** grow yet
-- All 6 star slots shown with ghost tree alongside: "Earn all 6 stars to unlock your tree's next stage"
-- Next suggested category highlighted
-- CTA: "Continue to [next category]" (primary) / "Return home" (secondary)
+- Reward Card
+- Encouragement Screen (orienting copy)
+- Summary Screen (module completed + next module suggested)
 
 ---
 
-### Flow 3 — Final Star, Phase 1 Complete
-_Trigger: 6th and final Foundation star earned_
+### Flow B — Module 1 Complete, No Star, Star Teaser
+_Trigger: Any Module 1 completion after the very first one._
 
-- Full deliverable shown
-- All 6 stars animate together — brief pause beat
-- **Full-screen tree growth animation**: Sapling → Young Tree. No UI chrome.
-- Phase 1 celebration screen — family-impact framing, stats
-- Unlocks revealed one at a time: Voice Clone → Invite Audience → Phase 2 + Phase 3
-- CTA: Enter Phase 2
+- Reward Card
+- Encouragement Screen (stage-specific copy)
+- Star Teaser / Summary Screen (star warming up, Module 2 surfaced as next step)
 
+---
 
-_Last updated: March 2026. Companion file: `demo_mode.md`. Reference docs: LM2 UX Product Vision, LM2 Design Plan, LM2 Research & Design Implications._
+### Flow C — Star Earned
+_Trigger: Any Module 2 completion that awards a star, any category, any phase._
+
+- Reward Card
+- Star Earned Animation (multi-screen, star glows and fills with colour)
+- Map Screen (all 6 Foundation category slots, current star status, stage-specific copy)
+
+> Flow C is reusable for any star in any category or phase. Tree growth is not part of this flow — that is Flow D.
+
+---
+
+### Flow D — Tree Growth
+_Trigger: Appended after Flow C for first star (stars = 1) and final Foundation star (stars = 6) only. Does not trigger for stars 2–5._
+
+**First star variant:**
+- Tree Growth Animation (TreeStage1 → TreeStage2)
+- Progress / Summary Screen (tree shown, completed modules, suggested next module)
+
+**Final star / Phase 1 complete variant:**
+- Final Star Animation (all 6 stars together, pause beat)
+- Full-Screen Tree Growth Animation (TreeStage2 → TreeStage3)
+- Phase 1 Celebration Screen (family-impact framing, stats)
+- Unlocks Revealed sequentially: Voice Clone → Invite Audience → Phase 2 + Phase 3
+- Enter Phase 2 CTA
+
+### Tree Stage Image Assets
+
+| Asset Label | Stage | When Shown |
+|-------------|-------|------------|
+| `TreeStage1` | Seed / Sprout | New user, no stars earned |
+| `TreeStage2` | Sapling | After first star earned |
+| `TreeStage3` | Young Tree | After Phase 1 complete (6th star) |
+| `TreeStage4` | Mature Tree | After Phase 2 complete |
+| `TreeStage5`+ | Further stages | Subsequent phase completions |
+
+---
+
+_Companion files: `reward_system_flows.md` (full flow definitions), `reward_system_copy.md` (copy for each flow and stage)._

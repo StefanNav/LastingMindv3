@@ -12,7 +12,7 @@ export function AiThinking() {
     >
       <div className="flex items-center gap-2 rounded-[10px] bg-white/90 px-5 py-[10px] shadow-[0px_3px_6px_0px_rgba(0,0,0,0.16)]">
         <span className="text-[18px] font-medium leading-[1.2] text-[var(--lm-text-primary)]">
-          AI is thinking
+          Thinking
         </span>
         <ThinkingDots />
       </div>

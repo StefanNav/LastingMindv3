@@ -5,10 +5,11 @@ import type { CategoryModule } from '@/types'
 interface ModuleStepCardProps {
   module: CategoryModule
   stepLabel: string
+  ctaLabel?: string
   onBegin?: () => void
 }
 
-export function ModuleStepCard({ module, stepLabel, onBegin }: ModuleStepCardProps) {
+export function ModuleStepCard({ module, stepLabel, ctaLabel, onBegin }: ModuleStepCardProps) {
   const isActive = !module.completed && !module.locked
   const isCompleted = module.completed
   const isLocked = module.locked
@@ -79,7 +80,7 @@ export function ModuleStepCard({ module, stepLabel, onBegin }: ModuleStepCardPro
             className="flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-2.5"
           >
             <p className="text-[16px] leading-[1.2] text-white">
-              Lets Begin
+              {ctaLabel ?? 'Lets Begin'}
             </p>
           </button>
         )}

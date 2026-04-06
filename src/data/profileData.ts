@@ -14,7 +14,7 @@ const FOUNDATION_IMAGES: Record<string, ImageRef> = {
   friends:    { imageAsset: '/images/Freinds 1.png',     imageHeight: 156, imageWidth: 270 },
   career:     { imageAsset: '/images/Career 1.png',      imageHeight: 145, imageWidth: 240 },
   education:  { imageAsset: '/images/Education 1.png',   imageHeight: 145, imageWidth: 240 },
-  favourites: { imageAsset: '/images/Favourites 1.png',  imageHeight: 156, imageWidth: 196 },
+  favorites:  { imageAsset: '/images/Favorites 1.png',  imageHeight: 156, imageWidth: 196 },
   coreValues: { imageAsset: '/images/Core Values 1.png', imageHeight: 145, imageWidth: 250 },
 }
 
@@ -40,7 +40,7 @@ function buildFoundation(statuses: Record<string, { status: FoundationStatus; de
   const categories = [
     { key: 'family',     id: 'cat-family',      name: 'Family',      images: FOUNDATION_IMAGES.family },
     { key: 'friends',    id: 'cat-friends',     name: 'Friends',     images: FOUNDATION_IMAGES.friends },
-    { key: 'favourites', id: 'cat-favourites',  name: 'Favourites',  images: FOUNDATION_IMAGES.favourites },
+    { key: 'favorites',  id: 'cat-favorites',   name: 'Favorites',   images: FOUNDATION_IMAGES.favorites },
     { key: 'career',     id: 'cat-career',      name: 'Career',      images: FOUNDATION_IMAGES.career },
     { key: 'education',  id: 'cat-education',   name: 'Education',   images: FOUNDATION_IMAGES.education },
     { key: 'coreValues', id: 'cat-core-values', name: 'Core Values', images: FOUNDATION_IMAGES.coreValues },
@@ -78,7 +78,7 @@ function buildLegacy(overrides?: Partial<Record<string, { status: ProfileLegacyM
 const allNotStarted: Record<string, { status: FoundationStatus }> = {
   family: { status: 'not_started' },
   friends: { status: 'not_started' },
-  favourites: { status: 'not_started' },
+  favorites: { status: 'not_started' },
   career: { status: 'not_started' },
   education: { status: 'not_started' },
   coreValues: { status: 'not_started' },
@@ -87,7 +87,7 @@ const allNotStarted: Record<string, { status: FoundationStatus }> = {
 const allInProgress: Record<string, { status: FoundationStatus }> = {
   family: { status: 'in_progress' },
   friends: { status: 'in_progress' },
-  favourites: { status: 'in_progress' },
+  favorites: { status: 'in_progress' },
   career: { status: 'in_progress' },
   education: { status: 'in_progress' },
   coreValues: { status: 'in_progress' },
@@ -96,7 +96,7 @@ const allInProgress: Record<string, { status: FoundationStatus }> = {
 const allComplete: Record<string, { status: FoundationStatus; deliverableName: string }> = {
   family: { status: 'complete', deliverableName: 'Family tree' },
   friends: { status: 'complete', deliverableName: 'Friend map' },
-  favourites: { status: 'complete', deliverableName: 'Personality card' },
+  favorites: { status: 'complete', deliverableName: 'Personality card' },
   career: { status: 'complete', deliverableName: 'Career timeline' },
   education: { status: 'complete', deliverableName: 'Education story' },
   coreValues: { status: 'complete', deliverableName: 'Values compass' },

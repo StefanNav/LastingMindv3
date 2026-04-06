@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Home, MessageSquareMore, Users, CircleUserRound } from 'lucide-react'
+import { Home, MessageCircleMore, Users, CircleUserRound } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DemoDropdown } from './DemoDropdown'
 
@@ -11,14 +11,14 @@ interface MobileShellProps {
 const navItems = [
   { icon: Home, label: 'Home', path: '/home' },
   { icon: Users, label: 'Loved Ones', path: '/loved-ones' },
-  { icon: MessageSquareMore, label: 'Session', path: '/session' },
+  { icon: MessageCircleMore, label: 'Session', path: '/session' },
   { icon: CircleUserRound, label: 'Profile', path: '/profile' },
 ]
 
 export function MobileShell({ children }: MobileShellProps) {
   const location = useLocation()
   const navigate = useNavigate()
-  const hideNav = location.pathname === '/onboarding' || location.pathname.startsWith('/intro') || location.pathname.startsWith('/conversation') || location.pathname.startsWith('/reflection') || location.pathname.startsWith('/reflect') || location.pathname.startsWith('/favourites') || /^\/loved-ones\/[^/]+\//.test(location.pathname)
+  const hideNav = location.pathname === '/onboarding' || location.pathname === '/success' || location.pathname.startsWith('/intro') || location.pathname.startsWith('/conversation') || location.pathname.startsWith('/reflection') || location.pathname.startsWith('/reflect') || location.pathname.startsWith('/favorites') || location.pathname.startsWith('/core-values') || /^\/loved-ones\/[^/]+\//.test(location.pathname)
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
@@ -45,8 +45,19 @@ export function MobileShell({ children }: MobileShellProps) {
           </div>
         </div>
 
+        {/* Onboarding background — fixed behind scrolling home content */}
+        {location.pathname === '/home' && (
+          <div className="pointer-events-none absolute inset-x-0 top-0 bottom-20" style={{ zIndex: -1 }}>
+            <img
+              src="/images/onboarding/OnboardingBackground.png"
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          </div>
+        )}
+
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
           {children}
         </main>
 

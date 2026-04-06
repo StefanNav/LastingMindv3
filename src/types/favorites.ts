@@ -1,4 +1,4 @@
-export interface FavouritesCategory {
+export interface FavoritesCategory {
   id: string
   emoji: string
   name: string
@@ -6,7 +6,7 @@ export interface FavouritesCategory {
   mockAnswer: string
 }
 
-export interface FavouritesAnswer {
+export interface FavoritesAnswer {
   categoryId: string
   emoji: string
   categoryName: string
@@ -22,14 +22,14 @@ export type SlotMachineStep =
   | 'success'
   | 'complete'
 
-export type FavouritesInputMode = 'voice' | 'text'
+export type FavoritesInputMode = 'voice' | 'text'
 
 export interface SlotMachineState {
   step: SlotMachineStep
-  inputMode: FavouritesInputMode
+  inputMode: FavoritesInputMode
   currentCategoryIndex: number
   answeredCount: number
-  answers: FavouritesAnswer[]
+  answers: FavoritesAnswer[]
   categoryOrder: number[]
-  currentCategory: FavouritesCategory | null
+  currentCategory: FavoritesCategory | null
 }

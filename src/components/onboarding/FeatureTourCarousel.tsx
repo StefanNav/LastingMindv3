@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, type ReactNode } from 'react'
+import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ProgressBar } from './ProgressBar'
 import { horizontalSlideVariants } from './animations'
@@ -23,6 +23,12 @@ export function FeatureTourCarousel({
 }: FeatureTourCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState<1 | -1>(1)
+  const [paused, setPaused] = useState(false)
+
+  // Track elapsed time so we can resume with the remaining duration
+  const elapsedRef = useRef(0)
+  const startRef = useRef(Date.now())
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const goForward = useCallback(() => {
     if (currentIndex >= slides.length - 1) {
@@ -39,11 +45,53 @@ export function FeatureTourCarousel({
     setCurrentIndex((i) => i - 1)
   }, [currentIndex])
 
-  // Auto-advance timer
+  // Reset elapsed tracking when slide changes
   useEffect(() => {
-    const timer = setTimeout(goForward, duration)
-    return () => clearTimeout(timer)
-  }, [currentIndex, duration, goForward])
+    elapsedRef.current = 0
+    startRef.current = Date.now()
+  }, [currentIndex])
+
+  // Auto-advance timer — restarts on resume, clears on pause
+  useEffect(() => {
+    if (paused) {
+      // Snapshot how far we got
+      elapsedRef.current += Date.now() - startRef.current
+      if (timerRef.current) clearTimeout(timerRef.current)
+      return
+    }
+    const remaining = Math.max(0, duration - elapsedRef.current)
+    startRef.current = Date.now()
+    timerRef.current = setTimeout(goForward, remaining)
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [paused, currentIndex, duration, goForward])
+
+  // Press-and-hold handlers — distinguish tap (< 200ms) from hold
+  const HOLD_THRESHOLD = 200
+  const downAtRef = useRef(0)
+  const wasHoldRef = useRef(false)
+
+  const handlePointerDown = useCallback(() => {
+    downAtRef.current = Date.now()
+    wasHoldRef.current = false
+    setPaused(true)
+  }, [])
+
+  const handlePointerUp = useCallback(() => {
+    wasHoldRef.current = Date.now() - downAtRef.current >= HOLD_THRESHOLD
+    setPaused(false)
+  }, [])
+
+  const handleTapBack = useCallback(() => {
+    if (wasHoldRef.current) return
+    goBack()
+  }, [goBack])
+
+  const handleTapForward = useCallback(() => {
+    if (wasHoldRef.current) return
+    goForward()
+  }, [goForward])
 
   const slide = slides[currentIndex]
 
@@ -56,10 +104,11 @@ export function FeatureTourCarousel({
           totalSteps={slides.length}
           animated
           duration={duration}
+          paused={paused}
         />
       </div>
 
-      {/* Heading — stays outside AnimatePresence so it transitions with content */}
+      {/* Slide content area */}
       <div className="relative flex-1 overflow-hidden">
         <AnimatePresence mode="wait" custom={direction} initial={false}>
           <motion.div
@@ -72,33 +121,41 @@ export function FeatureTourCarousel({
             className="absolute inset-0 flex flex-col"
           >
             {/* Heading */}
-            <div className="mt-4 px-4 text-center">
+            <div className="mt-8 px-6 text-center">
               <h1 className="font-display text-[28px] font-semibold leading-[1.15] tracking-tight text-foreground text-center">
                 {slide.heading}
               </h1>
             </div>
 
             {/* Content */}
-            <div className="flex flex-1 items-center justify-center overflow-hidden px-4">
+            <div className="flex flex-1 items-center justify-center overflow-hidden px-6 pb-6">
               {slide.content}
             </div>
           </motion.div>
         </AnimatePresence>
 
-        {/* Invisible tap zones */}
+        {/* Invisible tap zones — press-and-hold pauses, tap navigates */}
         <div className="absolute inset-0 z-10 flex">
           {/* Left 30% — go back */}
           <button
             type="button"
             className="h-full w-[30%] cursor-default"
-            onClick={goBack}
+            onClick={handleTapBack}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
+            onPointerCancel={handlePointerUp}
             aria-label="Previous slide"
           />
           {/* Right 70% — go forward */}
           <button
             type="button"
             className="h-full w-[70%] cursor-default"
-            onClick={goForward}
+            onClick={handleTapForward}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
+            onPointerCancel={handlePointerUp}
             aria-label="Next slide"
           />
         </div>

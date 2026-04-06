@@ -4,17 +4,21 @@ import { motion } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
 import { ConversationHeader } from '@/components/conversation/ConversationHeader'
 import { Pencil, Check } from 'lucide-react'
-import type { FavouritesAnswer } from '@/types/favourites'
+import { module2IntroData } from '@/data/mock'
+import { useApp } from '@/app/AppProvider'
+import type { CoreValuesAnswer } from '@/types/coreValues'
+import type { ModuleCompletionState, RewardCardData } from '@/types'
 
 interface LocationState {
-  answers: FavouritesAnswer[]
+  answers: CoreValuesAnswer[]
 }
 
-export function FavouritesSummaryPage() {
+export function CoreValuesSummaryPage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { markModule1Complete } = useApp()
   const locationState = location.state as LocationState | null
-  const [answers, setAnswers] = useState<FavouritesAnswer[]>(locationState?.answers ?? [])
+  const [answers, setAnswers] = useState<CoreValuesAnswer[]>(locationState?.answers ?? [])
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editText, setEditText] = useState('')
 
@@ -28,7 +32,7 @@ export function FavouritesSummaryPage() {
     )
   }
 
-  const handleStartEdit = (answer: FavouritesAnswer) => {
+  const handleStartEdit = (answer: CoreValuesAnswer) => {
     setEditingId(answer.categoryId)
     setEditText(answer.answer)
   }
@@ -46,12 +50,46 @@ export function FavouritesSummaryPage() {
     setEditText('')
   }
 
+  const mod2 = module2IntroData['cat-core-values']
+
+  const handleSaveValues = () => {
+    const rewardCardData: RewardCardData = {
+      categoryImage: '/images/Core Values 1.png',
+      categoryLabel: 'Core Values',
+      moduleTitle: 'What You Stand For',
+      items: answers.map((a) => ({
+        id: a.categoryId,
+        initial: a.cardLabel.charAt(0),
+        label: a.categoryName,
+        sublabel: a.answer,
+      })),
+      itemCountLabel: `${answers.length} values recorded`,
+      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+    }
+
+    const completionState: ModuleCompletionState = {
+      categoryId: 'cat-core-values',
+      moduleNumber: 1,
+      moduleTitle: 'What You Stand For',
+      categoryLabel: 'Core Values',
+      starEarned: false,
+      totalStars: 0,
+      totalStarsNeeded: 6,
+      rewardCardData,
+      nextModule: mod2
+        ? { title: mod2.moduleTitle, description: mod2.description, duration: '5min' }
+        : undefined,
+    }
+    markModule1Complete('cat-core-values')
+    navigate('/success', { state: completionState })
+  }
+
   return (
     <PageTransition>
       <div className="relative flex h-full flex-col bg-background">
         {/* Header */}
         <ConversationHeader
-          moduleTitle="Favourites"
+          moduleTitle="Core Values"
           rightLabel="Review answers"
           progressPercent={100}
           onBack={() => navigate('/home')}
@@ -60,16 +98,17 @@ export function FavouritesSummaryPage() {
         />
 
         {/* Scrollable content */}
-        <div className="flex-1 overflow-y-auto pt-[180px] px-4 pb-32">
+        <div className="flex-1 overflow-y-auto px-4 pb-32 pt-[180px]">
           {/* Heading */}
           <div className="pb-[20px]">
             <p className="font-display text-[26px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
-              Your Favourites
+              Your Core Values
             </p>
             <p className="text-[15px] font-normal text-[var(--lm-text-secondary)]">
-              Review your answers below. Tap edit to change anything.
+              Review your answers before we save your profile.
             </p>
           </div>
+
           <div className="flex flex-col gap-3">
             {answers.map((answer, i) => (
               <motion.div
@@ -83,7 +122,9 @@ export function FavouritesSummaryPage() {
                 {/* Card header */}
                 <div className="flex items-center justify-between border-b border-[var(--lm-border-subtle)] px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-[20px]">{answer.emoji}</span>
+                    <span className="text-[12px] font-bold uppercase tracking-[0.5px] text-lm-green">
+                      {answer.cardLabel}
+                    </span>
                     <span className="text-[14px] font-bold text-foreground">
                       {answer.categoryName}
                     </span>
@@ -150,13 +191,11 @@ export function FavouritesSummaryPage() {
         <div className="absolute inset-x-0 bottom-0 border-t border-[var(--lm-border-subtle)] bg-background/95 px-4 pb-[50px] pt-4 backdrop-blur-sm">
           <button
             type="button"
-            onClick={() =>
-              navigate('/favourites/milestone', { state: { answers } })
-            }
+            onClick={handleSaveValues}
             className="flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-4"
           >
             <span className="text-[16px] font-medium leading-[1.2] text-white">
-              Save my favourites
+              Save my values
             </span>
           </button>
         </div>

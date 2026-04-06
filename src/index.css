@@ -144,3 +144,27 @@
 .animate-pulse-glow {
   animation: pulse-glow 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
+
+/* Sparkling gold border glow */
+@keyframes border-sparkle {
+  0% {
+    box-shadow: 0 0 6px 0 rgba(229, 168, 63, 0.3),
+                0 0 2px 0 rgba(248, 182, 0, 0.15);
+  }
+  33% {
+    box-shadow: 0 0 12px 2px rgba(229, 168, 63, 0.45),
+                0 0 4px 0 rgba(248, 182, 0, 0.3);
+  }
+  66% {
+    box-shadow: 0 0 8px 1px rgba(196, 131, 18, 0.35),
+                0 0 3px 0 rgba(248, 182, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 6px 0 rgba(229, 168, 63, 0.3),
+                0 0 2px 0 rgba(248, 182, 0, 0.15);
+  }
+}
+
+.reward-card-border-sparkle {
+  animation: border-sparkle 3s ease-in-out infinite;
+}

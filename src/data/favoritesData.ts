@@ -1,6 +1,6 @@
-import type { FavouritesCategory } from '@/types/favourites'
+import type { FavoritesCategory } from '@/types/favorites'
 
-export const favouritesCategories: FavouritesCategory[] = [
+export const favoritesCategories: FavoritesCategory[] = [
   {
     id: 'fav-food',
     emoji: '🍕',
@@ -40,7 +40,7 @@ export const favouritesCategories: FavouritesCategory[] = [
     id: 'fav-seasons',
     emoji: '🌿',
     name: 'Seasons',
-    question: "What's your favourite season, and what do you love most about it?",
+    question: "What's your favorite season, and what do you love most about it?",
     mockAnswer: "Autumn. The smell of the air changes, the leaves turn, and there's this feeling like everything is settling down for a rest.",
   },
   {
@@ -61,8 +61,8 @@ export const favouritesCategories: FavouritesCategory[] = [
     id: 'fav-home',
     emoji: '🏡',
     name: 'Home',
-    question: "What's your favourite thing about the place you call home?",
-    mockAnswer: "The back porch. I can sit out there in the evening with a cup of tea and just listen to the birds. It's my favourite place in the world.",
+    question: "What's your favorite thing about the place you call home?",
+    mockAnswer: "The back porch. I can sit out there in the evening with a cup of tea and just listen to the birds. It's my favorite place in the world.",
   },
   {
     id: 'fav-pride',
@@ -73,4 +73,4 @@ export const favouritesCategories: FavouritesCategory[] = [
   },
 ]
 
-export const TOTAL_QUESTIONS = favouritesCategories.length
+export const TOTAL_QUESTIONS = favoritesCategories.length

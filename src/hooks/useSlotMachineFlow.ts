@@ -1,6 +1,6 @@
 import { useReducer, useCallback, useMemo } from 'react'
-import { favouritesCategories, TOTAL_QUESTIONS } from '@/data/favouritesData'
-import type { SlotMachineState, FavouritesAnswer } from '@/types/favourites'
+import { favoritesCategories, TOTAL_QUESTIONS } from '@/data/favoritesData'
+import type { SlotMachineState, FavoritesAnswer } from '@/types/favorites'
 
 // Shuffle helper (Fisher-Yates)
 function shuffleArray(arr: number[]): number[] {
@@ -40,14 +40,14 @@ function slotReducer(state: SlotMachineState, action: SlotAction): SlotMachineSt
 
     case 'SPIN_COMPLETE': {
       const catIdx = state.categoryOrder[state.currentCategoryIndex]
-      const cat = favouritesCategories[catIdx]
+      const cat = favoritesCategories[catIdx]
       return { ...state, step: 'landed', currentCategory: cat }
     }
 
     case 'SUBMIT_ANSWER': {
       const cat = state.currentCategory
       if (!cat) return state
-      const answer: FavouritesAnswer = {
+      const answer: FavoritesAnswer = {
         categoryId: cat.id,
         emoji: cat.emoji,
         categoryName: cat.name,
@@ -102,7 +102,7 @@ export function useSlotMachineFlow() {
   const progressPercent = (state.answeredCount / TOTAL_QUESTIONS) * 100
 
   const reelCategories = useMemo(() => {
-    return state.categoryOrder.map((idx) => favouritesCategories[idx])
+    return state.categoryOrder.map((idx) => favoritesCategories[idx])
   }, [state.categoryOrder])
 
   const targetReelIndex = state.currentCategoryIndex

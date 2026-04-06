@@ -1,12 +1,22 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
-import { Star, Check, ArrowRight } from 'lucide-react'
-import { ThinkingDots } from '@/components/ui/ThinkingDots'
+import { Check } from 'lucide-react'
+import { SavingScreen } from '@/components/success/SavingScreen'
+import { SavedScreen } from '@/components/success/SavedScreen'
+import { FlowA } from '@/components/success/FlowA'
+import { FlowB } from '@/components/success/FlowB'
+import { FlowC } from '@/components/success/FlowC'
 import type { ModuleCompletionState } from '@/types'
 
-type SuccessStep = 'saving' | 'saved' | 'result'
+type SuccessStep = 'saving' | 'saved' | 'flow'
+
+function determineFlow(state: ModuleCompletionState): 'A' | 'B' | 'C' {
+  if (state.moduleNumber === 1) return 'A'
+  if (state.moduleNumber === 2 && !state.starEarned) return 'B'
+  return 'C'
+}
 
 export function SuccessPage() {
   const location = useLocation()
@@ -14,14 +24,14 @@ export function SuccessPage() {
   const completionState = location.state as ModuleCompletionState | null
   const [step, setStep] = useState<SuccessStep>('saving')
 
-  // Auto-advance through saving → saved → result
+  // Auto-advance through saving → saved → flow
   useEffect(() => {
     if (step === 'saving') {
       const timer = setTimeout(() => setStep('saved'), 2000)
       return () => clearTimeout(timer)
     }
     if (step === 'saved') {
-      const timer = setTimeout(() => setStep('result'), 1500)
+      const timer = setTimeout(() => setStep('flow'), 1500)
       return () => clearTimeout(timer)
     }
   }, [step])
@@ -50,162 +60,25 @@ export function SuccessPage() {
     )
   }
 
-  const { categoryId, categoryLabel } = completionState
+  const flow = determineFlow(completionState)
+
+  // All flows take over the full screen (own background/layout)
+  if (step === 'flow') {
+    return (
+      <PageTransition>
+        {flow === 'A' && <FlowA completionState={completionState} />}
+        {flow === 'B' && <FlowB completionState={completionState} />}
+        {flow === 'C' && <FlowC completionState={completionState} />}
+      </PageTransition>
+    )
+  }
 
   return (
     <PageTransition>
       <div className="flex h-full flex-col items-center justify-center bg-[var(--lm-bg-primary)] px-6">
         <AnimatePresence mode="wait">
-          {/* Step 1: Saving */}
-          {step === 'saving' && (
-            <motion.div
-              key="saving"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-              className="flex flex-col items-center gap-5"
-            >
-              <ThinkingDots size="md" />
-              <p className="font-display text-[22px] font-normal leading-[1.3] text-foreground">
-                Saving your story…
-              </p>
-            </motion.div>
-          )}
-
-          {/* Step 2: Saved */}
-          {step === 'saved' && (
-            <motion.div
-              key="saved"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-              className="flex flex-col items-center gap-5"
-            >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 }}
-              >
-                <div className="flex size-14 items-center justify-center rounded-full bg-lm-green">
-                  <Check className="size-8 text-white" />
-                </div>
-              </motion.div>
-              <p className="text-center font-display text-[22px] font-normal leading-[1.3] text-foreground">
-                Saved. Your LastingMind is growing.
-              </p>
-            </motion.div>
-          )}
-
-          {/* Step 3: Result */}
-          {step === 'result' && completionState.starEarned && (
-            <motion.div
-              key="result-star"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-              className="flex w-full flex-col items-center gap-8"
-            >
-              {/* Star earned heading */}
-              <div className="flex flex-col items-center gap-3">
-                <p className="font-display text-[26px] font-normal leading-[1.2] text-foreground">
-                  Star Earned!
-                </p>
-                <p className="text-[16px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
-                  {completionState.totalStars} of {completionState.totalStarsNeeded} stars earned
-                </p>
-              </div>
-
-              {/* Animated star */}
-              <motion.div
-                initial={{ scale: 0, rotate: -30 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
-              >
-                <Star className="size-20 fill-[var(--lm-gold-star)] text-[var(--lm-gold-star)]" strokeWidth={1.2} />
-              </motion.div>
-
-              <p className="max-w-[260px] text-center text-[14px] font-semibold leading-[1.4] text-[var(--lm-text-secondary)]">
-                You earned a star for {categoryLabel}. Keep going to unlock your tree's next stage.
-              </p>
-
-              {/* CTAs */}
-              <div className="flex w-full flex-col gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={() => navigate('/home')}
-                  className="flex w-full items-center justify-center gap-2 rounded-[4px] bg-lm-green px-10 py-4"
-                >
-                  <span className="text-[16px] font-medium leading-[1.2] text-white">
-                    Continue
-                  </span>
-                  <ArrowRight className="size-5 text-white" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate('/home')}
-                  className="flex w-full items-center justify-center rounded-[4px] border border-[var(--lm-border)] bg-transparent px-10 py-4"
-                >
-                  <span className="text-[16px] font-medium leading-[1.2] text-foreground">
-                    Return Home
-                  </span>
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Flow 1 — Module 1 complete, no star */}
-          {step === 'result' && !completionState.starEarned && (
-            <motion.div
-              key="result-no-star"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-              className="flex w-full flex-col items-center gap-8"
-            >
-              {/* Progress indicator */}
-              <div className="flex flex-col items-center gap-3">
-                <p className="font-display text-[26px] font-normal leading-[1.2] text-foreground">
-                  Module Complete
-                </p>
-                <p className="text-[16px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
-                  1 of 2 modules complete
-                </p>
-              </div>
-
-              {/* Faint empty star */}
-              <div className="flex flex-col items-center gap-3">
-                <Star className="size-16 text-[var(--lm-border)] opacity-40" strokeWidth={1.2} />
-                <p className="max-w-[260px] text-center text-[14px] font-semibold leading-[1.4] text-[var(--lm-text-secondary)]">
-                  Complete {categoryLabel} Module 2 to earn your star
-                </p>
-              </div>
-
-              {/* CTAs */}
-              <div className="flex w-full flex-col gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={() => navigate(`/intro2/${categoryId}`)}
-                  className="flex w-full items-center justify-center gap-2 rounded-[4px] bg-lm-green px-10 py-4"
-                >
-                  <span className="text-[16px] font-medium leading-[1.2] text-white">
-                    Begin Module 2
-                  </span>
-                  <ArrowRight className="size-5 text-white" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate('/home')}
-                  className="flex w-full items-center justify-center rounded-[4px] border border-[var(--lm-border)] bg-transparent px-10 py-4"
-                >
-                  <span className="text-[16px] font-medium leading-[1.2] text-foreground">
-                    Choose another category
-                  </span>
-                </button>
-              </div>
-            </motion.div>
-          )}
+          {step === 'saving' && <SavingScreen />}
+          {step === 'saved' && <SavedScreen />}
         </AnimatePresence>
       </div>
     </PageTransition>

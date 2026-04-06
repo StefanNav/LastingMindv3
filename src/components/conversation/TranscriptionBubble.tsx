@@ -6,16 +6,19 @@ import { ThinkingDots } from '@/components/ui/ThinkingDots'
 interface TranscriptionBubbleProps {
   text: string
   label?: string
+  liveTranscribe?: boolean
   showDotsIndicator?: boolean
   showTapToEdit?: boolean
   onTapToEdit?: () => void
   onEditingChange?: (isEditing: boolean) => void
 }
 
-export function TranscriptionBubble({ text, label, showDotsIndicator, showTapToEdit, onEditingChange }: TranscriptionBubbleProps) {
+export function TranscriptionBubble({ text, label, liveTranscribe, showDotsIndicator, showTapToEdit, onEditingChange }: TranscriptionBubbleProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editedText, setEditedText] = useState(text)
+  const [revealedCount, setRevealedCount] = useState(liveTranscribe ? 0 : -1)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const words = useRef(text.split(' '))
 
   const autoResize = useCallback(() => {
     const ta = textareaRef.current
@@ -42,7 +45,28 @@ export function TranscriptionBubble({ text, label, showDotsIndicator, showTapToE
     onEditingChange?.(false)
   }
 
-  const displayText = isEditing ? editedText : editedText
+  // Live transcription: reveal words one at a time
+  useEffect(() => {
+    if (!liveTranscribe) return
+    setRevealedCount(0)
+    words.current = text.split(' ')
+    const interval = setInterval(() => {
+      setRevealedCount((c) => {
+        if (c >= words.current.length) {
+          clearInterval(interval)
+          return c
+        }
+        return c + 1
+      })
+    }, 280)
+    return () => clearInterval(interval)
+  }, [liveTranscribe, text])
+
+  const liveText = liveTranscribe && revealedCount >= 0
+    ? words.current.slice(0, revealedCount).join(' ')
+    : null
+
+  const displayText = liveText ?? (isEditing ? editedText : editedText)
 
   return (
     <motion.div
@@ -60,7 +84,9 @@ export function TranscriptionBubble({ text, label, showDotsIndicator, showTapToE
         )}
 
         {showDotsIndicator && !label && (
-          <ThinkingDots />
+          <div className="pt-1">
+            <ThinkingDots />
+          </div>
         )}
 
         {isEditing ? (

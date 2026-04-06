@@ -2,29 +2,53 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
 import { Share2 } from 'lucide-react'
-import type { FavouritesAnswer } from '@/types/favourites'
-import type { ModuleCompletionState } from '@/types'
+import { module2IntroData } from '@/data/mock'
+import { useApp } from '@/app/AppProvider'
+import type { FavoritesAnswer } from '@/types/favorites'
+import type { ModuleCompletionState, RewardCardData } from '@/types'
 
 interface LocationState {
-  answers: FavouritesAnswer[]
+  answers: FavoritesAnswer[]
 }
 
-export function FavouritesMilestonePage() {
+export function FavoritesMilestonePage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { markModule1Complete } = useApp()
   const locationState = location.state as LocationState | null
   const answers = locationState?.answers ?? []
 
+  const mod2 = module2IntroData['cat-favorites']
+
   const handleKeepGoing = () => {
+    const rewardCardData: RewardCardData = {
+      categoryImage: '/images/Favorites 1.png',
+      categoryLabel: 'Favorites',
+      moduleTitle: 'Your Favorite Things',
+      items: answers.map((a) => ({
+        id: a.categoryId,
+        initial: a.emoji,
+        label: a.categoryName,
+        sublabel: a.answer,
+      })),
+      itemCountLabel: `${answers.length} favorites recorded`,
+      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+    }
+
     const completionState: ModuleCompletionState = {
-      categoryId: 'cat-favourites',
+      categoryId: 'cat-favorites',
       moduleNumber: 1,
-      moduleTitle: 'Your Favourite Things',
-      categoryLabel: 'Favourites',
+      moduleTitle: 'Your Favorite Things',
+      categoryLabel: 'Favorites',
       starEarned: false,
       totalStars: 0,
       totalStarsNeeded: 6,
+      rewardCardData,
+      nextModule: mod2
+        ? { title: mod2.moduleTitle, description: mod2.description, duration: '5min' }
+        : undefined,
     }
+    markModule1Complete('cat-favorites')
     navigate('/success', { state: completionState })
   }
 
@@ -36,7 +60,7 @@ export function FavouritesMilestonePage() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'My Favourites — LastingMind',
+          title: 'My Favorites — LastingMind',
           text,
         })
       } catch {
@@ -80,7 +104,7 @@ export function FavouritesMilestonePage() {
             {/* Card header */}
             <div className="bg-lm-green px-5 py-4">
               <p className="text-center font-display text-[18px] font-semibold leading-[1.2] text-white">
-                My Favourite Things
+                My Favorite Things
               </p>
               <p className="mt-0.5 text-center text-[12px] font-medium text-white/70">
                 LastingMind
