@@ -105,7 +105,7 @@ export function HomePage() {
         </div>
 
         {/* ── Hero heading ── */}
-        <div className="relative z-10 flex flex-col items-center gap-3 px-4 pt-1">
+        <div className="relative z-10 flex flex-col items-center gap-5 px-4 pt-1">
           <p className="w-full text-center font-display text-[27px] font-normal leading-[1.2] text-foreground">
             Continue your Journey, Alex
           </p>

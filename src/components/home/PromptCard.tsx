@@ -13,16 +13,19 @@ const SWIPE_THRESHOLD = 50
 
 const cardVariants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 200 : -200,
+    x: direction > 0 ? 300 : -300,
     opacity: 0,
+    rotate: direction > 0 ? 4 : -4,
   }),
   center: {
     x: 0,
     opacity: 1,
+    rotate: 0,
   },
   exit: (direction: number) => ({
-    x: direction > 0 ? -200 : 200,
+    x: direction > 0 ? -300 : 300,
     opacity: 0,
+    rotate: direction > 0 ? -4 : 4,
   }),
 }
 
@@ -76,10 +79,9 @@ export function PromptCard({ cards, onCardTap }: PromptCardCarouselProps) {
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
-      {/* Outer card — clickable */}
+      {/* Fixed-height wrapper — prevents layout shift during swipe */}
       <div
-        className="relative w-full h-[130px] overflow-hidden rounded-[10px] bg-lm-bg-card/80 p-2 cursor-pointer active:scale-[0.98] transition-transform"
-        onClick={handleCardTap}
+        className="relative w-full h-[148px] overflow-hidden"
         role="button"
         tabIndex={0}
         onKeyDown={(e) => {
@@ -89,6 +91,7 @@ export function PromptCard({ cards, onCardTap }: PromptCardCarouselProps) {
         }}
       >
         <AnimatePresence initial={false} custom={direction}>
+          {/* Each card is a self-contained visual unit that swipes as a whole */}
           <motion.div
             key={activeIndex}
             custom={direction}
@@ -96,16 +99,19 @@ export function PromptCard({ cards, onCardTap }: PromptCardCarouselProps) {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             drag={cards.length > 1 ? 'x' : false}
             dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.15}
+            dragElastic={0.7}
+            whileDrag={{ scale: 0.97, cursor: 'grabbing' }}
+            whileTap={{ scale: 0.98 }}
             onDragStart={() => { isDragging.current = true }}
             onDragEnd={handleDragEnd}
-            className="absolute inset-0 flex flex-col items-center justify-between rounded-[10px] px-4 py-3"
+            onClick={handleCardTap}
+            className="absolute inset-0 flex flex-col items-center justify-between rounded-[10px] bg-lm-bg-card/80 px-5 py-4 cursor-grab"
           >
             {/* Category tag */}
-            <div className="flex w-full items-center gap-1 rounded-2xl">
+            <div className="flex w-full items-center gap-1">
               <p className="text-[10px] font-bold uppercase leading-none tracking-[1px] text-lm-gold">
                 {activeCard.categoryTag}
               </p>
