@@ -200,6 +200,8 @@ export type DemoStateId = 'onboarding' | 'state-0' | 'state-1' | 'state-2' | 'st
 export interface DemoPromptCard {
   categoryTag: string
   question: string
+  categoryId: string
+  moduleId: string
 }
 
 export interface DemoConfig {
@@ -208,7 +210,7 @@ export interface DemoConfig {
   foundationStars: number
   streak: number
   treeImage: string
-  promptCard: DemoPromptCard
+  promptCards: DemoPromptCard[]
   homePhases: HomePhase[]
   categoryDetails: Record<string, CategoryDetail>
 }
@@ -353,6 +355,72 @@ export interface MemoryProfileData {
   legacyModules: ProfileLegacyModule[]
   phase1Complete: boolean
   biographyReady: boolean
+}
+
+// ── Guided Conversation (V2) types ───────────────────────────────────────────
+
+export interface GuidedQuestion {
+  id: string
+  questionText: string
+  followUpChips: string[] // includes "Move on" as last item
+  mockUserResponse: string
+  mockAiResponse: string // LM's response after user answers
+}
+
+export interface GuidedConversationConfig {
+  categoryId: string
+  moduleId: string
+  moduleTitle: string
+  categoryLabel: string
+  questions: GuidedQuestion[]
+  closingMessage: string
+  confirmationCTALabel: string // e.g. "Save my family"
+}
+
+export interface GuidedMessage {
+  id: string
+  sender: 'user' | 'lastingmind'
+  content: string
+  inputType: 'voice' | 'text'
+  timestamp: number
+}
+
+export interface GuidedSummaryEntry {
+  id: string
+  label: string
+  content: string
+  inputType: 'voice' | 'text'
+  questionId: string
+}
+
+// ── Phase 4 types ────────────────────────────────────────────────────────────
+
+export interface Phase4Category {
+  id: string
+  title: string
+  subtitle: string
+  icon: string          // Lucide icon name used as placeholder until image assets are added
+  iconColor: string     // Tailwind color class for the icon background
+  lastActiveAt?: string // ISO timestamp of last activity
+}
+
+// ── Legacy item types ────────────────────────────────────────────────────────
+
+export type LegacyItemStatus = 'not_started' | 'in_progress' | 'complete'
+
+export interface LegacyItem {
+  id: string
+  name: string
+  description: string
+  icon: string       // Lucide icon name placeholder
+  iconColor: string  // Tailwind color class for the icon background
+  image?: string     // Optional image path — when set, renders image instead of icon
+}
+
+export interface AddedLegacyItem {
+  id: string
+  status: LegacyItemStatus
+  addedAt: string // ISO timestamp
 }
 
 // ── Chat types ───────────────────────────────────────────────────────────────

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
-import { Star, ArrowRight } from 'lucide-react'
+import { Star } from 'lucide-react'
 import { useApp } from '@/app/AppProvider'
+import { RewardPrimaryCTA } from './RewardCTAs'
 import type { CategoryStatus } from '@/types'
 
 const STAR_COUNT = 3
@@ -15,9 +16,9 @@ const statusLabelMap: Record<CategoryStatus, string> = {
 }
 
 function statusColorClass(status: CategoryStatus): string {
-  if (status === 'not_started') return 'text-[#737373]'
+  if (status === 'not_started') return 'text-muted-foreground'
   if (status === 'started') return 'text-lm-green'
-  return 'text-[#c48312]'
+  return 'text-lm-gold'
 }
 
 function deriveStatus(baseStatus: CategoryStatus, mod1Done: boolean, stars: number): CategoryStatus {
@@ -65,22 +66,22 @@ export function FoundationMapScreen({
       }}
     >
       {/* Headline */}
-      <div className="px-4 pt-[80px]">
-        <p className="font-display text-[28px] font-semibold leading-[1.2] text-foreground text-center">
+      <div className="px-6 pt-[80px]">
+        <p className="font-display text-2xl font-semibold leading-tight text-foreground text-center">
           {headline}
         </p>
-        <p className="mt-4 text-[18px] font-medium leading-[1.2] tracking-[0.5px] text-foreground text-center">
+        <p className="mt-3 text-[15px] font-medium leading-snug text-muted-foreground text-center">
           {subheadline}
         </p>
       </div>
 
       {/* Foundation divider */}
-      <div className="flex items-center gap-4 px-4 pt-8">
-        <div className="h-px flex-1 bg-[#c48312]/40" />
-        <p className="font-display text-[22px] font-semibold leading-[1.2] tracking-[0.5px] text-[#c48312]">
+      <div className="flex items-center gap-3 px-6 pt-8">
+        <div className="h-px flex-1 bg-lm-gold/30" />
+        <p className="shrink-0 text-[11px] font-bold uppercase tracking-widest text-lm-gold">
           Foundation
         </p>
-        <div className="h-px flex-1 bg-[#c48312]/40" />
+        <div className="h-px flex-1 bg-lm-gold/30" />
       </div>
 
       {/* 3×2 category grid */}
@@ -108,11 +109,11 @@ export function FoundationMapScreen({
               transition={{ duration: 0.3, delay: 0.1 + idx * 0.06 }}
               className={`flex w-[124px] flex-col items-center gap-3 rounded-[10px] border p-3 ${
                 isEarned
-                  ? 'border-[#c48312] bg-[rgba(255,248,234,0.7)]'
-                  : 'border-[#b7b7b7] bg-[rgba(255,248,234,0.4)]'
+                  ? 'border-lm-gold bg-lm-bg-card/70'
+                  : 'border-border/50 bg-lm-bg-card/40'
               }`}
             >
-              <p className="text-[18px] font-medium leading-[1.2] tracking-[0.5px] text-foreground text-center">
+              <p className="text-[13px] font-bold leading-tight text-foreground text-center">
                 {cat.title}
               </p>
               <div className="flex items-center gap-4">
@@ -126,7 +127,7 @@ export function FoundationMapScreen({
                   />
                 ))}
               </div>
-              <p className={`text-[14px] font-semibold leading-[1.2] tracking-[0.5px] text-center ${labelColor}`}>
+              <p className={`text-[11px] font-medium leading-tight text-center ${labelColor}`}>
                 {label}
               </p>
             </motion.div>
@@ -138,17 +139,8 @@ export function FoundationMapScreen({
       <div className="flex-1" />
 
       {/* Continue button */}
-      <div className="px-4 pb-[30px]">
-        <button
-          type="button"
-          onClick={onContinue}
-          className="flex w-full flex-col items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4"
-        >
-          <ArrowRight className="size-6 text-white" />
-          <span className="text-[18px] font-medium leading-[1.2] text-white">
-            Continue
-          </span>
-        </button>
+      <div className="px-4 pb-[30px] pt-4">
+        <RewardPrimaryCTA label="Continue" onClick={onContinue} />
       </div>
     </motion.div>
   )

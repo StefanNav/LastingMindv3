@@ -4,11 +4,10 @@ import { AnimatePresence } from 'framer-motion'
 import { RewardCard } from './RewardCard'
 import { EncouragementScreen } from './EncouragementScreen'
 import { SummaryScreen } from './SummaryScreen'
+import { useApp } from '@/app/AppProvider'
 import type { ModuleCompletionState, CategoryModule } from '@/types'
 
 type FlowAStep = 'reward_card' | 'encouragement' | 'summary'
-
-const TREE_IMAGE = '/images/Tree 1.png'
 
 const encouragementCopy: Record<string, string> = {
   'cat-family': "Family lays the foundation for everything that follows",
@@ -28,6 +27,7 @@ interface FlowAProps {
 export function FlowA({ completionState }: FlowAProps) {
   const [step, setStep] = useState<FlowAStep>('reward_card')
   const navigate = useNavigate()
+  const { treeImage } = useApp()
 
   const { categoryId, categoryLabel, rewardCardData, nextModule } = completionState
 
@@ -78,7 +78,7 @@ export function FlowA({ completionState }: FlowAProps) {
       {step === 'encouragement' && (
         <EncouragementScreen
           headline={headline}
-          treeImage={TREE_IMAGE}
+          treeImage={treeImage}
           onContinue={() => setStep('summary')}
         />
       )}
@@ -86,7 +86,7 @@ export function FlowA({ completionState }: FlowAProps) {
       {step === 'summary' && (
         <SummaryScreen
           headline="Keep going to grow your tree!"
-          treeImage={TREE_IMAGE}
+          treeImage={treeImage}
           completedModule={completedModule}
           nextModule={nextModuleCard}
           categoryLabel={categoryLabel}

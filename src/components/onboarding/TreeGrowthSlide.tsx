@@ -7,8 +7,8 @@ const CH = 327
 
 // Morph: TreeStage2 → TreeStage3
 const TREE_IMAGES = [
-  '/images/TreeStage2.png',
-  '/images/treeFinal.png',
+  '/images/TreeStage2_V2.png',
+  '/images/TreeStage3_V2.png',
 ]
 
 // Delay before morph starts (ms)

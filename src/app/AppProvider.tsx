@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useMemo, type ReactNode } from 'react'
-import type { AppState, DemoStateId, DemoConfig, DemoPromptCard, HomePhase, CategoryDetail, LifeChapter, ChatMessage } from '@/types'
+import type { AppState, DemoStateId, DemoConfig, DemoPromptCard, HomePhase, CategoryDetail, LifeChapter, ChatMessage, LegacyItemStatus } from '@/types'
 import { mockCreator, mockPhases } from '@/data/mock'
 import { demoStates, demoStateOrder } from '@/data/demoStates'
 
@@ -13,7 +13,7 @@ interface AppContextValue {
   demoConfig: DemoConfig
   homePhases: HomePhase[]
   categoryDetails: Record<string, CategoryDetail>
-  promptCard: DemoPromptCard
+  promptCards: DemoPromptCard[]
   foundationStars: number
   streak: number
   treeImage: string
@@ -32,6 +32,10 @@ interface AppContextValue {
   chatMessages: ChatMessage[]
   addChatMessage: (msg: ChatMessage) => void
   clearChatMessages: () => void
+  addedLegacyItemIds: string[]
+  addLegacyItem: (id: string) => void
+  legacyItemStatuses: Record<string, LegacyItemStatus>
+  updateLegacyItemStatus: (id: string, status: LegacyItemStatus) => void
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -62,6 +66,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [lifeChapters, setLifeChapters] = useState<LifeChapter[]>([])
   const [chatFirstTimeExperience, setChatFirstTimeExperience] = useState(true)
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
+  const [addedLegacyItemIds, setAddedLegacyItemIds] = useState<string[]>([])
+  const [legacyItemStatuses, setLegacyItemStatuses] = useState<Record<string, LegacyItemStatus>>({})
 
   const saveLifeChapters = (chapters: LifeChapter[]) => setLifeChapters(chapters)
   const hasDefinedChapters = lifeChapters.length > 0
@@ -69,6 +75,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const setChatFirstTimeComplete = () => setChatFirstTimeExperience(false)
   const addChatMessage = (msg: ChatMessage) => setChatMessages((prev) => [...prev, msg])
   const clearChatMessages = () => setChatMessages([])
+
+  const addLegacyItem = (id: string) => {
+    setAddedLegacyItemIds((prev) => prev.includes(id) ? prev : [...prev, id])
+    setLegacyItemStatuses((prev) => ({ ...prev, [id]: prev[id] ?? 'not_started' }))
+  }
+  const updateLegacyItemStatus = (id: string, status: LegacyItemStatus) =>
+    setLegacyItemStatuses((prev) => ({ ...prev, [id]: status }))
 
   const markFirstModuleComplete = () => setHasCompletedFirstModule(true)
   const incrementModule2Run = (categoryId: string) =>
@@ -86,6 +99,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Reset chat state on demo switch so tutorial replays correctly
     setChatFirstTimeExperience(true)
     setChatMessages([])
+    setAddedLegacyItemIds([])
+    setLegacyItemStatuses({})
   }
 
   const value = useMemo<AppContextValue>(() => ({
@@ -97,7 +112,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     demoConfig,
     homePhases: demoConfig.homePhases,
     categoryDetails: demoConfig.categoryDetails,
-    promptCard: demoConfig.promptCard,
+    promptCards: demoConfig.promptCards,
     foundationStars: demoConfig.foundationStars,
     streak: demoConfig.streak,
     treeImage: demoConfig.treeImage,
@@ -116,7 +131,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     chatMessages,
     addChatMessage,
     clearChatMessages,
-  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters, chatFirstTimeExperience, chatMessages])
+    addedLegacyItemIds,
+    addLegacyItem,
+    legacyItemStatuses,
+    updateLegacyItemStatus,
+  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters, chatFirstTimeExperience, chatMessages, addedLegacyItemIds, legacyItemStatuses])
 
   return (
     <AppContext.Provider value={value}>

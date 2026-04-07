@@ -20,7 +20,7 @@ export function SavedScreen() {
           <Check className="size-8 text-white" />
         </div>
       </motion.div>
-      <p className="text-center font-display text-[22px] font-normal leading-[1.3] text-foreground">
+      <p className="text-center font-display text-2xl font-semibold leading-tight text-foreground">
         Saved. Your LastingMind is growing.
       </p>
     </motion.div>

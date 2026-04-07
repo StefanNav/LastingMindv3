@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { RewardSecondaryCTA } from './RewardCTAs'
 
 interface UnlockItem {
   image: string
@@ -56,8 +57,8 @@ export function FoundationUnlockSummaryScreen({
       }}
     >
       {/* Headline */}
-      <div className="px-4 pt-[80px]">
-        <p className="font-display text-[26px] font-semibold leading-[1.2] text-foreground text-center">
+      <div className="px-6 pt-[80px]">
+        <p className="font-display text-2xl font-semibold leading-tight text-foreground text-center">
           You've unlocked new features!
         </p>
       </div>
@@ -66,7 +67,7 @@ export function FoundationUnlockSummaryScreen({
       <div className="flex items-start justify-center pt-4">
         <div className="h-[200px] w-full max-w-[402px] overflow-hidden">
           <img
-            src="/images/TreeStage3.png"
+            src="/images/TreeStage3_V2.png"
             alt="Your growing tree"
             className="h-full w-full object-contain"
           />
@@ -75,8 +76,8 @@ export function FoundationUnlockSummaryScreen({
 
       {/* Unlocks card */}
       <div className="flex flex-col gap-2 px-4 pt-4">
-        <div className="flex flex-col gap-4 rounded-[10px] border border-[#e7ebd9] bg-[#fffcf4] p-3">
-          <p className="text-[14px] font-medium leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+        <div className="flex flex-col gap-4 rounded-[10px] bg-lm-bg-card/40 p-3 shadow-card backdrop-blur-sm">
+          <p className="text-[13px] font-semibold leading-tight text-muted-foreground">
             New Unlocks
           </p>
           <div className="flex flex-col gap-2.5">
@@ -95,10 +96,10 @@ export function FoundationUnlockSummaryScreen({
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <p className="flex-1 text-[16px] font-semibold leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+                <p className="flex-1 text-[15px] font-semibold leading-tight text-foreground">
                   {item.title}
                 </p>
-                <p className="text-[14px] font-medium leading-[1.2] tracking-[0.5px] text-lm-green">
+                <p className="text-[13px] font-medium leading-tight text-lm-green">
                   {item.status}
                 </p>
               </motion.div>
@@ -109,10 +110,10 @@ export function FoundationUnlockSummaryScreen({
 
       {/* Suggested next */}
       <div className="flex flex-col gap-2 px-4 pt-4">
-        <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+        <p className="text-[13px] font-semibold leading-tight text-muted-foreground">
           Suggested
         </p>
-        <div className="flex flex-col gap-4 rounded-[10px] bg-[#fffcf4] p-3 shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]">
+        <div className="flex flex-col gap-4 rounded-[10px] bg-lm-bg-card/40 p-3 shadow-card backdrop-blur-sm">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
               <div className="size-8 shrink-0 overflow-hidden rounded-full">
@@ -122,22 +123,22 @@ export function FoundationUnlockSummaryScreen({
                   className="h-full w-full object-cover"
                 />
               </div>
-              <p className="flex-1 font-display text-[18px] font-medium leading-[1.2] text-foreground">
+              <p className="flex-1 font-display text-[15px] font-semibold leading-tight text-foreground">
                 Start Your Life Chapters
               </p>
             </div>
-            <p className="text-[14px] font-medium leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+            <p className="text-[13px] font-medium leading-snug text-muted-foreground">
               Define the chapters of your life — the moments that shaped who you are.
             </p>
           </div>
           <button
             type="button"
             onClick={onStartLifeChapters}
-            className="flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-2.5"
+            className="flex w-full items-center justify-center rounded-lg bg-lm-green px-4 py-3 transition-transform active:scale-[0.97]"
           >
-            <p className="text-[16px] leading-[1.2] text-white">
+            <span className="text-sm font-semibold text-white">
               Start Life Chapters
-            </p>
+            </span>
           </button>
         </div>
       </div>
@@ -146,16 +147,8 @@ export function FoundationUnlockSummaryScreen({
       <div className="flex-1" />
 
       {/* Done for now */}
-      <div className="px-4 pb-[30px]">
-        <button
-          type="button"
-          onClick={onDone}
-          className="flex w-full items-center justify-center rounded-[10px] border border-lm-border bg-[#e7ebd9] p-[10px]"
-        >
-          <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
-            Done for now
-          </span>
-        </button>
+      <div className="px-4 pb-[30px] pt-4">
+        <RewardSecondaryCTA onClick={onDone} />
       </div>
     </motion.div>
   )

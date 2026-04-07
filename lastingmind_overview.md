@@ -34,7 +34,9 @@ LastingMind 2.0 is a structured, guided experience that takes a Legacy Creator t
 
 **Phase 2 — Tell Your Story.** The creator moves from facts to narrative, walking through the chapters of their life in depth — sharing stories, emotions, and memories that bring their history to life. This is the emotional core of the product.
 
-**Phase 3 — Leave Your Legacy.** The most personal content: letters to loved ones, voice messages, reflections on how they hope to be remembered, and wisdom they want to pass on.
+**Phase 3 — Leave Your Legacy.** The creator shares wisdom and builds personal legacy items. Phase 3 contains two default cards: Wisdom & Advice (a structured module) and Leave Something Behind (an add-action card that opens a bottom sheet). From the bottom sheet, the user can add any of 7 legacy items — Letters to Loved Ones, Voice Messages, Video Messages, Milestone Messages, Ethical Will, Stories to Remember Me By, and Build My Obituary. Each added item appears as a card in the Phase 3 section with its own status (Not started / In progress / Complete).
+
+**Phase 4 — Keep Growing.** A set of 6 always-available activity categories that the creator can use at any time, with no lock condition and no completion state. The categories are: Open Journalling, Open Reflection, Capture a Conversation, Fill in the Gaps, Question of the Day, and Questions from Loved Ones. Phase 4 uses horizontal activity cards distinct from the Phase 1–3 square grid cards.
 
 As the creator progresses, a growing tree on the home screen reflects the depth and breadth of what they've shared — serving as both a progress indicator and an emotional symbol of what they're building.
 

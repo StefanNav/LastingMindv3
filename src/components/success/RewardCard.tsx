@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { RewardPrimaryCTA } from './RewardCTAs'
 import type { RewardCardItem } from '@/types'
 
 interface RewardCardProps {
@@ -32,7 +32,7 @@ export function RewardCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-      className="relative flex h-full flex-col bg-[var(--lm-bg-primary)]"
+      className="flex h-full flex-col bg-[var(--lm-bg-primary)]"
       style={{
         backgroundImage: 'url(/images/bg-texture.png)',
         backgroundSize: 'cover',
@@ -40,11 +40,11 @@ export function RewardCard({
       }}
     >
       {/* Header text */}
-      <div className="flex flex-col gap-2 px-6 pt-[74px] text-center">
-        <p className="font-display text-[26px] font-semibold leading-[1.2] text-foreground">
+      <div className="flex flex-col gap-2 px-6 pt-[80px] text-center">
+        <p className="font-display text-2xl font-semibold leading-tight text-foreground">
           {headline}
         </p>
-        <p className="text-[18px] font-medium leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+        <p className="text-[15px] font-medium leading-snug text-muted-foreground">
           {subheadline}
         </p>
       </div>
@@ -71,12 +71,12 @@ export function RewardCard({
                   className="h-full w-full object-contain"
                 />
               </div>
-              <p className="text-[18px] font-semibold leading-[1.2] text-lm-green-dark">
+              <p className="text-[15px] font-semibold leading-tight text-lm-green-dark">
                 {categoryLabel}
               </p>
             </div>
             <div className="mt-3 flex w-full flex-col items-center gap-3">
-              <p className="font-display text-[26px] font-normal leading-[1.2] text-foreground text-center">
+              <p className="font-display text-2xl font-normal leading-tight text-foreground text-center">
                 {moduleTitle}
               </p>
             </div>
@@ -96,7 +96,7 @@ export function RewardCard({
                     {item.label}
                   </p>
                   {item.sublabel && (
-                    <p className="text-[14px] font-semibold leading-[1.2] tracking-[0.5px] text-[#5d6056]">
+                    <p className="text-[13px] font-semibold leading-tight text-muted-foreground">
                       {item.sublabel}
                     </p>
                   )}
@@ -106,7 +106,7 @@ export function RewardCard({
           </div>
 
           {/* Footer */}
-          <div className="flex w-full items-center gap-1.5 border-t border-black/25 py-4 text-[14px] font-semibold leading-[1.2] text-[#5d6056]">
+          <div className="flex w-full items-center gap-1.5 border-t border-border py-4 text-[13px] font-semibold leading-tight text-muted-foreground">
             <p className="flex-1">{itemCountLabel}</p>
             <p className="text-center">{date}</p>
           </div>
@@ -116,21 +116,9 @@ export function RewardCard({
       {/* Spacer */}
       <div className="flex-1" />
 
-      {/* Reserve space for the absolute button */}
-      <div className="h-[120px] shrink-0" />
-
-      {/* Continue button — absolutely positioned so it doesn't shift the card */}
-      <div className="absolute inset-x-0 bottom-0 px-4 py-[30px]">
-        <button
-          type="button"
-          onClick={onContinue}
-          className="flex w-full flex-col items-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4"
-        >
-          <ArrowRight className="size-6 text-white" />
-          <span className="text-[18px] font-medium leading-[1.2] text-white">
-            Continue
-          </span>
-        </button>
+      {/* Continue button */}
+      <div className="px-4 pb-[30px] pt-4 mt-auto">
+        <RewardPrimaryCTA label="Continue" onClick={onContinue} />
       </div>
     </motion.div>
   )

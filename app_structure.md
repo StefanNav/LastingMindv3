@@ -102,10 +102,9 @@ Unlocked when all 6 Foundation stars are earned. No internal locking — all Pha
 | Category | Modules | Success Artifact |
 |---|---|---|
 | Life Chapters | 1. Define Your Chapters → 2. Spark → Thread → Story per chapter | Generated biography paragraph per chapter |
-| Wisdom & Advice | 1. Quick Wisdom Round → 2. Lessons Learned → 3. Keys to Life | Wisdom profile + shareable wisdom cards |
 | Greatest Memories | 1. Define Your Moments → 2. Tell Each Story | Highlight reel |
 
-### Phase 2 Milestone Unlocks (all 3 categories complete)
+### Phase 2 Milestone Unlocks (all 2 categories complete)
 
 - Generated full biography
 - Shareable wisdom cards
@@ -118,14 +117,28 @@ Unlocked when all 6 Foundation stars are earned. No internal locking — all Pha
 
 Unlocks alongside Phase 2. Can be worked on in parallel with Phase 2.
 
-| Category | Modules | Success Artifact |
-|---|---|---|
-| Letters to Loved Ones | 1. Define recipients → 2. Write/record letters | Letter preview |
-| Voice Messages | 1. Record messages | Playback preview |
-| Life's Big Moments | 1. Define moments → 2. Write entries | Entry preview |
-| How I Hope to Be Remembered | 1. Guided conversation → 2. Edit & refine | Formatted memoir |
+### Default Cards (always present once Phase 3 is unlocked)
 
-### Phase 3 Milestone Unlocks (all 4 categories complete)
+| Card | Type | Behaviour |
+|---|---|---|
+| Wisdom & Advice | Standard category card (same design as Phase 1–2 cards) | Taps into the Wisdom & Advice module flow (Quick Wisdom Round → Lessons Learned → Keys to Life) |
+| Leave Something Behind | Add-action card (horizontal layout, + icon) | Opens a bottom sheet listing 7 addable legacy items |
+
+### Addable Legacy Items (via Leave Something Behind bottom sheet)
+
+| Item | Description |
+|---|---|
+| Letters to Loved Ones | Write a personal letter to someone who matters to you |
+| Voice Messages | Record a message in your own words and voice |
+| Video Messages | Capture yourself on camera for someone to watch one day |
+| Milestone Messages | Leave a message to be opened at a specific life moment |
+| Ethical Will | Share your values, hopes, and life lessons |
+| Stories to Remember Me By | Tell the stories you want your family to always have |
+| Build My Obituary | Write the story of your life in your own words |
+
+When a user adds an item, it appears as a horizontal activity card in the Phase 3 section below the Leave Something Behind card. Each added item shows a status label: Not started / In progress / Complete.
+
+### Phase 3 Milestone Unlocks
 
 - Letters queued for delivery
 - Full audience invite
@@ -136,7 +149,18 @@ Unlocks alongside Phase 2. Can be worked on in parallel with Phase 2.
 
 ## 5. Phase 4: Keep Growing
 
-Always visible. Becomes the primary engagement mode after Phase 3 completes. Open-ended — no modules, no stars, no completion state. Driven by Open Journal, suggested prompts, and audience questions.
+Always visible and always accessible — no lock condition, no completion state, no stars. Becomes the primary engagement mode after earlier phases are complete.
+
+| # | Category | Subtitle |
+|---|----------|----------|
+| 1 | Open Journalling | Write or record whatever's on your mind |
+| 2 | Open Reflection | Look back on a moment, a period, or a feeling |
+| 3 | Capture a Conversation | Record a real conversation with someone you love |
+| 4 | Fill in the Gaps | Answer questions your LastingMind doesn't know yet |
+| 5 | Question of the Day | A fresh prompt every day to keep your story growing |
+| 6 | Questions from Loved Ones | Answer what your family actually wants to know |
+
+Phase 4 uses horizontal activity cards (image/icon left, title + subtitle right) distinct from the Phase 1–3 square grid cards. Cards stack vertically as a full-width list. If the user has previously used a category, a "Last entry X days ago" label appears.
 
 ---
 

@@ -6,31 +6,37 @@ import { HomeHeader } from '@/components/home/HomeHeader'
 import { PromptCard } from '@/components/home/PromptCard'
 import { PhaseToggle } from '@/components/home/PhaseToggle'
 import { CategoryNodeCard } from '@/components/cards/CategoryNodeCard'
+import { HorizontalActivityCard } from '@/components/cards/HorizontalActivityCard'
+import { LeaveSomethingBehindCard } from '@/components/cards/LeaveSomethingBehindCard'
 import { CategoryBottomSheet } from '@/components/sheets/CategoryBottomSheet'
 import { LockedFeatureCard } from '@/components/home/LockedFeatureCard'
 import { LockedFeatureSheet } from '@/components/sheets/LockedFeatureSheet'
 import type { LockedFeature } from '@/components/sheets/LockedFeatureSheet'
+import { LegacyBottomSheet } from '@/components/sheets/LegacyBottomSheet'
 import { LifeChaptersSheet } from '@/components/sheets/LifeChaptersSheet'
 import { module2IntroData } from '@/data/mock'
+import { phase4Categories, availableLegacyItems } from '@/data/phase4Data'
 import { useApp } from '@/app/AppProvider'
-import type { Category } from '@/types'
+import type { Category, DemoPromptCard } from '@/types'
 
 export function HomePage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { homePhases, categoryDetails, promptCard, treeImage, activeDemoId } = useApp()
+  const { homePhases, categoryDetails, promptCards, treeImage, activeDemoId, addedLegacyItemIds, addLegacyItem, legacyItemStatuses } = useApp()
   const [activePhaseIndex, setActivePhaseIndex] = useState(0)
   const activePhase = homePhases[activePhaseIndex]
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const isSheetOpen = selectedCategory !== null
   const [selectedFeature, setSelectedFeature] = useState<LockedFeature | null>(null)
   const [lifeChaptersSheetCategory, setLifeChaptersSheetCategory] = useState<Category | null>(null)
+  const [legacySheetOpen, setLegacySheetOpen] = useState(false)
 
   useEffect(() => {
     setActivePhaseIndex(0)
     setSelectedCategory(null)
     setSelectedFeature(null)
     setLifeChaptersSheetCategory(null)
+    setLegacySheetOpen(false)
   }, [activeDemoId])
 
   useEffect(() => {
@@ -71,6 +77,16 @@ export function HomePage() {
     }
   }, [navigate])
 
+  const handlePromptCardTap = useCallback((card: DemoPromptCard) => {
+    const detail = categoryDetails[card.categoryId]
+    const isModule2 = detail?.modules?.[1]?.id === card.moduleId && module2IntroData[card.categoryId]
+    if (isModule2) {
+      navigate(`/intro2/${card.categoryId}`)
+    } else {
+      navigate(`/intro/${card.categoryId}`)
+    }
+  }, [navigate, categoryDetails])
+
   return (
     <PageTransition>
       <div className="relative flex flex-col overflow-x-hidden">
@@ -94,20 +110,27 @@ export function HomePage() {
             Continue your Journey, Alex
           </p>
 
-          {/* ── Prompt Card ── */}
+          {/* ── Prompt Card Carousel ── */}
           <PromptCard
-            categoryTag={promptCard.categoryTag}
-            question={promptCard.question}
+            cards={promptCards}
+            onCardTap={handlePromptCardTap}
           />
         </div>
 
         {/* ── Tree image ── */}
-        <div className="relative z-[2] mt-[58px] flex justify-center">
-          <div className="relative h-[316px] w-[466px]">
+        <div className={`relative z-[2] flex justify-center ${treeImage.includes('TreeStage1') ? 'mt-[134px]' : 'mt-[58px]'}`}>
+          <div className={`relative ${treeImage.includes('TreeStage1') ? 'h-[240px] w-[354px]' : 'h-[316px] w-[466px]'}`}>
             <img
               src={treeImage}
               alt="Legacy tree"
-              className="h-full w-full object-contain"
+              className="relative z-[1] h-full w-full object-contain"
+            />
+            {/* ── Gradient band: behind tree, in front of background, covers the seam ── */}
+            <div
+              className="absolute bottom-[25px] -left-[200px] -right-[200px] h-[80px] z-[0] blur-[6px]"
+              style={{
+                background: 'linear-gradient(to bottom, transparent 0%, rgba(253,247,234,0.8) 40%, rgba(253,247,234,1) 100%)',
+              }}
             />
           </div>
         </div>
@@ -154,13 +177,72 @@ export function HomePage() {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="relative z-[6] flex flex-col gap-8 px-4 pt-8 pb-8"
           >
-            {activePhase.categories.map((category) => (
-              <CategoryNodeCard
-                key={category.id}
-                category={category}
-                onClick={() => handleCategoryClick(category)}
-              />
-            ))}
+            {/* ── Phase 4: Keep Growing — horizontal activity cards ── */}
+            {activePhase.id === 'keep-growing' ? (
+              <div className="flex flex-col gap-3">
+                {phase4Categories.map((cat) => (
+                  <HorizontalActivityCard
+                    key={cat.id}
+                    title={cat.title}
+                    subtitle={cat.subtitle}
+                    icon={cat.icon}
+                    iconColor={cat.iconColor}
+                    onClick={() => navigate(`/phase4/${cat.id}`)}
+                  />
+                ))}
+              </div>
+            ) : activePhase.id === 'your-legacy' ? (
+              /* ── Phase 3: Leave Your Legacy — Wisdom + Leave Something Behind + added items ── */
+              <div className="flex flex-col gap-4">
+                {/* Wisdom & Advice — standard category card */}
+                {activePhase.categories.map((category) => (
+                  <CategoryNodeCard
+                    key={category.id}
+                    category={category}
+                    onClick={() => handleCategoryClick(category)}
+                  />
+                ))}
+
+                {/* Section divider */}
+                <div className="flex items-center gap-3 mt-4">
+                  <div className="h-px flex-1 bg-lm-gold/30" />
+                  <p className="shrink-0 text-[11px] font-bold uppercase tracking-widest text-lm-gold">
+                    Leave Your Legacy
+                  </p>
+                  <div className="h-px flex-1 bg-lm-gold/30" />
+                </div>
+
+                {/* Leave Something Behind card */}
+                <LeaveSomethingBehindCard onClick={() => setLegacySheetOpen(true)} />
+
+                {/* User-added legacy item cards */}
+                {addedLegacyItemIds.map((itemId) => {
+                  const item = availableLegacyItems.find((li) => li.id === itemId)
+                  if (!item) return null
+                  return (
+                    <HorizontalActivityCard
+                      key={item.id}
+                      title={item.name}
+                      subtitle={item.description}
+                      icon={item.icon}
+                      iconColor={item.iconColor}
+                      image={item.image}
+                      status={legacyItemStatuses[item.id] ?? 'not_started'}
+                      onClick={() => navigate(`/legacy/${item.id}`)}
+                    />
+                  )
+                })}
+              </div>
+            ) : (
+              /* ── Phases 1 & 2: standard category grid ── */
+              activePhase.categories.map((category) => (
+                <CategoryNodeCard
+                  key={category.id}
+                  category={category}
+                  onClick={() => handleCategoryClick(category)}
+                />
+              ))
+            )}
           </motion.div>
         </AnimatePresence>
 
@@ -224,6 +306,13 @@ export function HomePage() {
         isOpen={lifeChaptersSheetCategory !== null}
         category={lifeChaptersSheetCategory}
         onClose={() => setLifeChaptersSheetCategory(null)}
+      />
+
+      <LegacyBottomSheet
+        isOpen={legacySheetOpen}
+        onClose={() => setLegacySheetOpen(false)}
+        addedItemIds={addedLegacyItemIds}
+        onAddItem={addLegacyItem}
       />
     </PageTransition>
   )

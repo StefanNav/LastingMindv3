@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { RewardPrimaryCTA } from './RewardCTAs'
 
 interface EncouragementScreenProps {
   headline: string
@@ -27,8 +27,8 @@ export function EncouragementScreen({
       }}
     >
       {/* Headline */}
-      <div className="px-4 pt-[81px]">
-        <p className="font-display text-[26px] font-semibold leading-[1.2] text-foreground text-center">
+      <div className="px-6 pt-[80px]">
+        <p className="font-display text-2xl font-semibold leading-tight text-foreground text-center">
           {headline}
         </p>
       </div>
@@ -45,17 +45,8 @@ export function EncouragementScreen({
       </div>
 
       {/* Continue button */}
-      <div className="border-t border-black/25 bg-[var(--lm-bg-primary)] px-4 py-[30px]">
-        <button
-          type="button"
-          onClick={onContinue}
-          className="flex w-full flex-col items-center gap-2.5 rounded-[10px] bg-lm-green px-10 py-4"
-        >
-          <ArrowRight className="size-6 text-white" />
-          <span className="text-[18px] font-medium leading-[1.2] text-white">
-            Continue
-          </span>
-        </button>
+      <div className="px-4 pb-[30px] pt-4 mt-auto">
+        <RewardPrimaryCTA label="Continue" onClick={onContinue} />
       </div>
     </motion.div>
   )

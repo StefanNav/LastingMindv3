@@ -52,29 +52,22 @@ export const mockHomePhases: HomePhase[] = [
     label: 'Phase 2',
     categories: [
       { id: 'cat-life-chapters', title: 'Life Chapters', image: '/images/Life chapters 1.png', imageHeight: 156, imageWidth: 252, status: 'flourishing', totalModules: 3 },
-      { id: 'cat-wisdom', title: 'Wisdom', image: '/images/Wisdom 1.png', imageHeight: 156, imageWidth: 219, status: 'budding', totalModules: 3 },
       { id: 'cat-greatest-memories', title: 'Greatest Memories', image: '/images/Greatest Memories 1.png', imageHeight: 156, imageWidth: 270, status: 'growing', totalModules: 3 },
     ],
   },
   {
     id: 'your-legacy',
-    title: 'Your Legacy',
+    title: 'Leave Your Legacy',
     label: 'Phase 3',
     categories: [
-      { id: 'cat-letters', title: 'Letters to Loved Ones', image: '/images/Letters to loved ones 1.png', imageHeight: 156, imageWidth: 303, status: 'flourishing', totalModules: 3 },
-      { id: 'cat-voice-messages', title: 'Voice Messages', image: '/images/Voice message 1.png', imageHeight: 156, imageWidth: 233, status: 'budding', totalModules: 3 },
-      { id: 'cat-memoir', title: 'Memoir', image: '/images/Memoir 1.png', imageHeight: 156, imageWidth: 268, status: 'growing', totalModules: 3 },
+      { id: 'cat-wisdom', title: 'Wisdom & Advice', image: '/images/Wisdom 1.png', imageHeight: 156, imageWidth: 219, status: 'budding', totalModules: 3 },
     ],
   },
   {
     id: 'keep-growing',
     title: 'Keep Growing',
     label: 'Phase 4',
-    categories: [
-      { id: 'cat-open-journaling', title: 'Open Journaling', image: '/images/Open Journaling 1.png', imageHeight: 156, imageWidth: 236, status: 'flourishing', totalModules: 3 },
-      { id: 'cat-questions-loved-ones', title: 'Questions from Loved Ones', image: '/images/Questions from Loved ones.png', imageHeight: 156, imageWidth: 238, status: 'budding', totalModules: 3 },
-      { id: 'cat-reflective-questions', title: 'Reflective Questions', image: '/images/Reflective Questions.png', imageHeight: 156, imageWidth: 252, status: 'growing', totalModules: 3 },
-    ],
+    categories: [],
   },
 ]
 

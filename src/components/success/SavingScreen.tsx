@@ -12,7 +12,7 @@ export function SavingScreen() {
       className="flex flex-col items-center gap-5"
     >
       <ThinkingDots size="md" />
-      <p className="font-display text-[22px] font-normal leading-[1.3] text-foreground">
+      <p className="font-display text-2xl font-semibold leading-tight text-foreground">
         Saving your story…
       </p>
     </motion.div>

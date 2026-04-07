@@ -1,7 +1,9 @@
 import type { DemoConfig, DemoStateId } from '@/types'
 
-// ─── Shared image constants ───────────────────────────────────────────────────
-const TREE_IMAGE = '/images/Tree 1.png'
+// ─── Tree stage images (mapped to foundation star progress) ──────────────────
+const TREE_STAGE_1 = '/images/TreeStage1_V2.png'  // 0 stars — starting tree
+const TREE_STAGE_2 = '/images/TreeStage2_V2.png'  // 1-5 stars — first growth
+const TREE_STAGE_3 = '/images/TreeStage3_V2.png'  // 6 stars — fully grown
 
 // ─── Foundation category image refs (reused across all states) ────────────────
 const CAT_IMAGES = {
@@ -31,11 +33,15 @@ const state0: DemoConfig = {
   label: 'State 0',
   foundationStars: 0,
   streak: 0,
-  treeImage: TREE_IMAGE,
-  promptCard: {
-    categoryTag: 'Suggested first step',
-    question: 'Start with the people closest to you — tell us about your family.',
-  },
+  treeImage: TREE_STAGE_1,
+  promptCards: [
+    { categoryTag: 'Suggested first step', question: 'Start with the people closest to you — tell us about your family.', categoryId: 'cat-family', moduleId: 'mod-fam-1' },
+    { categoryTag: 'Friends', question: 'Share the people who have been there through it all.', categoryId: 'cat-friends', moduleId: 'mod-fri-1' },
+    { categoryTag: 'Career', question: 'Walk us through the jobs and roles that defined you.', categoryId: 'cat-career', moduleId: 'mod-car-1' },
+    { categoryTag: 'Education', question: 'Share memories from your time in school.', categoryId: 'cat-education', moduleId: 'mod-edu-1' },
+    { categoryTag: 'Favorites', question: 'Foods, places, songs, movies — the things you love most.', categoryId: 'cat-favorites', moduleId: 'mod-fav-1' },
+    { categoryTag: 'Core Values', question: 'The principles that have guided your life.', categoryId: 'cat-core-values', moduleId: 'mod-val-1' },
+  ],
   homePhases: [
     {
       id: 'foundation',
@@ -56,29 +62,22 @@ const state0: DemoConfig = {
       label: 'Phase 2',
       categories: [
         { id: 'cat-life-chapters',     title: 'Life Chapters',     ...CAT_IMAGES.lifeChapters,     status: 'locked', totalModules: 3 },
-        { id: 'cat-wisdom',            title: 'Wisdom & Advice',   ...CAT_IMAGES.wisdom,           status: 'locked', totalModules: 3 },
         { id: 'cat-greatest-memories', title: 'Greatest Memories', ...CAT_IMAGES.greatestMemories, status: 'locked', totalModules: 3 },
       ],
     },
     {
       id: 'your-legacy',
-      title: 'Your Legacy',
+      title: 'Leave Your Legacy',
       label: 'Phase 3',
       categories: [
-        { id: 'cat-letters',        title: 'Letters to Loved Ones', ...CAT_IMAGES.letters,       status: 'locked', totalModules: 3 },
-        { id: 'cat-voice-messages', title: 'Voice Messages',        ...CAT_IMAGES.voiceMessages, status: 'locked', totalModules: 3 },
-        { id: 'cat-memoir',         title: 'Memoir',                ...CAT_IMAGES.memoir,        status: 'locked', totalModules: 3 },
+        { id: 'cat-wisdom', title: 'Wisdom & Advice', ...CAT_IMAGES.wisdom, status: 'locked', totalModules: 3 },
       ],
     },
     {
       id: 'keep-growing',
       title: 'Keep Growing',
       label: 'Phase 4',
-      categories: [
-        { id: 'cat-open-journaling',      title: 'Open Journaling',          ...CAT_IMAGES.openJournaling,     status: 'locked', totalModules: 3 },
-        { id: 'cat-questions-loved-ones',  title: 'Questions from Loved Ones', ...CAT_IMAGES.questionsLovedOnes, status: 'locked', totalModules: 3 },
-        { id: 'cat-reflective-questions',  title: 'Reflective Questions',     ...CAT_IMAGES.reflectiveQuestions, status: 'locked', totalModules: 3 },
-      ],
+      categories: [],
     },
   ],
   categoryDetails: {
@@ -148,11 +147,15 @@ const state1: DemoConfig = {
   label: 'State 1',
   foundationStars: 0,
   streak: 1,
-  treeImage: TREE_IMAGE,
-  promptCard: {
-    categoryTag: 'From Family',
-    question: 'Tell us about a family member — share a story or memory.',
-  },
+  treeImage: TREE_STAGE_1,
+  promptCards: [
+    { categoryTag: 'Family', question: 'Share a story or a memory about someone in your family.', categoryId: 'cat-family', moduleId: 'mod-fam-2' },
+    { categoryTag: 'Friends', question: 'Tell us about a friend who changed your life.', categoryId: 'cat-friends', moduleId: 'mod-fri-2' },
+    { categoryTag: 'Career', question: 'What did your career teach you about life?', categoryId: 'cat-career', moduleId: 'mod-car-2' },
+    { categoryTag: 'Education', question: 'How did learning shape who you became?', categoryId: 'cat-education', moduleId: 'mod-edu-2' },
+    { categoryTag: 'Favorites', question: 'What makes these favorites special to you?', categoryId: 'cat-favorites', moduleId: 'mod-fav-2' },
+    { categoryTag: 'Core Values', question: 'Share a time your values were tested.', categoryId: 'cat-core-values', moduleId: 'mod-val-2' },
+  ],
   homePhases: [
     {
       id: 'foundation',
@@ -173,29 +176,22 @@ const state1: DemoConfig = {
       label: 'Phase 2',
       categories: [
         { id: 'cat-life-chapters',     title: 'Life Chapters',     ...CAT_IMAGES.lifeChapters,     status: 'locked', totalModules: 3 },
-        { id: 'cat-wisdom',            title: 'Wisdom & Advice',   ...CAT_IMAGES.wisdom,           status: 'locked', totalModules: 3 },
         { id: 'cat-greatest-memories', title: 'Greatest Memories', ...CAT_IMAGES.greatestMemories, status: 'locked', totalModules: 3 },
       ],
     },
     {
       id: 'your-legacy',
-      title: 'Your Legacy',
+      title: 'Leave Your Legacy',
       label: 'Phase 3',
       categories: [
-        { id: 'cat-letters',        title: 'Letters to Loved Ones', ...CAT_IMAGES.letters,       status: 'locked', totalModules: 3 },
-        { id: 'cat-voice-messages', title: 'Voice Messages',        ...CAT_IMAGES.voiceMessages, status: 'locked', totalModules: 3 },
-        { id: 'cat-memoir',         title: 'Memoir',                ...CAT_IMAGES.memoir,        status: 'locked', totalModules: 3 },
+        { id: 'cat-wisdom', title: 'Wisdom & Advice', ...CAT_IMAGES.wisdom, status: 'locked', totalModules: 3 },
       ],
     },
     {
       id: 'keep-growing',
       title: 'Keep Growing',
       label: 'Phase 4',
-      categories: [
-        { id: 'cat-open-journaling',      title: 'Open Journaling',          ...CAT_IMAGES.openJournaling,     status: 'locked', totalModules: 3 },
-        { id: 'cat-questions-loved-ones',  title: 'Questions from Loved Ones', ...CAT_IMAGES.questionsLovedOnes, status: 'locked', totalModules: 3 },
-        { id: 'cat-reflective-questions',  title: 'Reflective Questions',     ...CAT_IMAGES.reflectiveQuestions, status: 'locked', totalModules: 3 },
-      ],
+      categories: [],
     },
   ],
   categoryDetails: {
@@ -284,11 +280,10 @@ const state2: DemoConfig = {
   label: 'State 2',
   foundationStars: 5,
   streak: 5,
-  treeImage: TREE_IMAGE,
-  promptCard: {
-    categoryTag: 'From Core Values',
-    question: 'Share a time your values were tested — earn your final star.',
-  },
+  treeImage: TREE_STAGE_2,
+  promptCards: [
+    { categoryTag: 'Core Values', question: 'Share a time your values were tested — earn your final star.', categoryId: 'cat-core-values', moduleId: 'mod-val-2' },
+  ],
   homePhases: [
     {
       id: 'foundation',
@@ -309,29 +304,22 @@ const state2: DemoConfig = {
       label: 'Phase 2',
       categories: [
         { id: 'cat-life-chapters',     title: 'Life Chapters',     ...CAT_IMAGES.lifeChapters,     status: 'locked', totalModules: 3 },
-        { id: 'cat-wisdom',            title: 'Wisdom & Advice',   ...CAT_IMAGES.wisdom,           status: 'locked', totalModules: 3 },
         { id: 'cat-greatest-memories', title: 'Greatest Memories', ...CAT_IMAGES.greatestMemories, status: 'locked', totalModules: 3 },
       ],
     },
     {
       id: 'your-legacy',
-      title: 'Your Legacy',
+      title: 'Leave Your Legacy',
       label: 'Phase 3',
       categories: [
-        { id: 'cat-letters',        title: 'Letters to Loved Ones', ...CAT_IMAGES.letters,       status: 'locked', totalModules: 3 },
-        { id: 'cat-voice-messages', title: 'Voice Messages',        ...CAT_IMAGES.voiceMessages, status: 'locked', totalModules: 3 },
-        { id: 'cat-memoir',         title: 'Memoir',                ...CAT_IMAGES.memoir,        status: 'locked', totalModules: 3 },
+        { id: 'cat-wisdom', title: 'Wisdom & Advice', ...CAT_IMAGES.wisdom, status: 'locked', totalModules: 3 },
       ],
     },
     {
       id: 'keep-growing',
       title: 'Keep Growing',
       label: 'Phase 4',
-      categories: [
-        { id: 'cat-open-journaling',      title: 'Open Journaling',          ...CAT_IMAGES.openJournaling,     status: 'locked', totalModules: 3 },
-        { id: 'cat-questions-loved-ones',  title: 'Questions from Loved Ones', ...CAT_IMAGES.questionsLovedOnes, status: 'locked', totalModules: 3 },
-        { id: 'cat-reflective-questions',  title: 'Reflective Questions',     ...CAT_IMAGES.reflectiveQuestions, status: 'locked', totalModules: 3 },
-      ],
+      categories: [],
     },
   ],
   categoryDetails: {
@@ -462,11 +450,12 @@ const state3: DemoConfig = {
   label: 'State 3',
   foundationStars: 6,
   streak: 7,
-  treeImage: TREE_IMAGE,
-  promptCard: {
-    categoryTag: 'Phase 2',
-    question: 'Define Your Life Chapters — the moments that shaped who you are.',
-  },
+  treeImage: TREE_STAGE_3,
+  promptCards: [
+    { categoryTag: 'Life Chapters', question: 'Identify the major chapters of your life story.', categoryId: 'cat-life-chapters', moduleId: 'mod-lc-1' },
+    { categoryTag: 'Greatest Memories', question: 'Identify the memories that matter most.', categoryId: 'cat-greatest-memories', moduleId: 'mod-gm-1' },
+    { categoryTag: 'Wisdom & Advice', question: 'Rapid-fire wisdom prompts to capture your instincts.', categoryId: 'cat-wisdom', moduleId: 'mod-wis-1' },
+  ],
   homePhases: [
     {
       id: 'foundation',
@@ -487,29 +476,22 @@ const state3: DemoConfig = {
       label: 'Phase 2',
       categories: [
         { id: 'cat-life-chapters',     title: 'Life Chapters',     ...CAT_IMAGES.lifeChapters,     status: 'not_started', totalModules: 3 },
-        { id: 'cat-wisdom',            title: 'Wisdom & Advice',   ...CAT_IMAGES.wisdom,           status: 'not_started', totalModules: 3 },
         { id: 'cat-greatest-memories', title: 'Greatest Memories', ...CAT_IMAGES.greatestMemories, status: 'not_started', totalModules: 3 },
       ],
     },
     {
       id: 'your-legacy',
-      title: 'Your Legacy',
+      title: 'Leave Your Legacy',
       label: 'Phase 3',
       categories: [
-        { id: 'cat-letters',        title: 'Letters to Loved Ones', ...CAT_IMAGES.letters,       status: 'not_started', totalModules: 3 },
-        { id: 'cat-voice-messages', title: 'Voice Messages',        ...CAT_IMAGES.voiceMessages, status: 'not_started', totalModules: 3 },
-        { id: 'cat-memoir',         title: 'Memoir',                ...CAT_IMAGES.memoir,        status: 'not_started', totalModules: 3 },
+        { id: 'cat-wisdom', title: 'Wisdom & Advice', ...CAT_IMAGES.wisdom, status: 'not_started', totalModules: 3 },
       ],
     },
     {
       id: 'keep-growing',
       title: 'Keep Growing',
       label: 'Phase 4',
-      categories: [
-        { id: 'cat-open-journaling',      title: 'Open Journaling',          ...CAT_IMAGES.openJournaling,     status: 'not_started', totalModules: 3 },
-        { id: 'cat-questions-loved-ones',  title: 'Questions from Loved Ones', ...CAT_IMAGES.questionsLovedOnes, status: 'not_started', totalModules: 3 },
-        { id: 'cat-reflective-questions',  title: 'Reflective Questions',     ...CAT_IMAGES.reflectiveQuestions, status: 'not_started', totalModules: 3 },
-      ],
+      categories: [],
     },
   ],
   categoryDetails: {
@@ -699,11 +681,12 @@ const state4: DemoConfig = {
   label: 'State 4',
   foundationStars: 6,
   streak: 10,
-  treeImage: TREE_IMAGE,
-  promptCard: {
-    categoryTag: 'From Life Chapters',
-    question: "What's a belief you've changed your mind about, and what caused that shift?",
-  },
+  treeImage: TREE_STAGE_3,
+  promptCards: [
+    { categoryTag: 'Life Chapters', question: 'See your generated biography paragraphs.', categoryId: 'cat-life-chapters', moduleId: 'mod-lc-3' },
+    { categoryTag: 'Greatest Memories', question: 'Identify the memories that matter most.', categoryId: 'cat-greatest-memories', moduleId: 'mod-gm-1' },
+    { categoryTag: 'Wisdom & Advice', question: 'Your personal philosophy distilled.', categoryId: 'cat-wisdom', moduleId: 'mod-wis-3' },
+  ],
   homePhases: [
     {
       id: 'foundation',
@@ -724,29 +707,22 @@ const state4: DemoConfig = {
       label: 'Phase 2',
       categories: [
         { id: 'cat-life-chapters',     title: 'Life Chapters',     ...CAT_IMAGES.lifeChapters,     status: 'budding',     totalModules: 3 },
-        { id: 'cat-wisdom',            title: 'Wisdom & Advice',   ...CAT_IMAGES.wisdom,           status: 'growing',     totalModules: 3 },
         { id: 'cat-greatest-memories', title: 'Greatest Memories', ...CAT_IMAGES.greatestMemories, status: 'not_started', totalModules: 3 },
       ],
     },
     {
       id: 'your-legacy',
-      title: 'Your Legacy',
+      title: 'Leave Your Legacy',
       label: 'Phase 3',
       categories: [
-        { id: 'cat-letters',        title: 'Letters to Loved Ones', ...CAT_IMAGES.letters,       status: 'growing',     totalModules: 3 },
-        { id: 'cat-voice-messages', title: 'Voice Messages',        ...CAT_IMAGES.voiceMessages, status: 'not_started', totalModules: 3 },
-        { id: 'cat-memoir',         title: 'Memoir',                ...CAT_IMAGES.memoir,        status: 'not_started', totalModules: 3 },
+        { id: 'cat-wisdom', title: 'Wisdom & Advice', ...CAT_IMAGES.wisdom, status: 'growing', totalModules: 3 },
       ],
     },
     {
       id: 'keep-growing',
       title: 'Keep Growing',
       label: 'Phase 4',
-      categories: [
-        { id: 'cat-open-journaling',      title: 'Open Journaling',          ...CAT_IMAGES.openJournaling,     status: 'flourishing', totalModules: 3 },
-        { id: 'cat-questions-loved-ones',  title: 'Questions from Loved Ones', ...CAT_IMAGES.questionsLovedOnes, status: 'budding',     totalModules: 3 },
-        { id: 'cat-reflective-questions',  title: 'Reflective Questions',     ...CAT_IMAGES.reflectiveQuestions, status: 'growing',     totalModules: 3 },
-      ],
+      categories: [],
     },
   ],
   categoryDetails: {
@@ -968,11 +944,8 @@ const onboarding: DemoConfig = {
   label: 'Onboarding',
   foundationStars: 0,
   streak: 0,
-  treeImage: TREE_IMAGE,
-  promptCard: {
-    categoryTag: 'Suggested first step',
-    question: 'Start with the people closest to you — tell us about your family.',
-  },
+  treeImage: TREE_STAGE_1,
+  promptCards: state0.promptCards,
   homePhases: state0.homePhases,
   categoryDetails: state0.categoryDetails,
 }

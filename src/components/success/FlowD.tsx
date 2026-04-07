@@ -18,7 +18,7 @@ export function FlowD({ variant, onComplete }: FlowDProps) {
     return (
       <TreeGrowthScreen
         headline="Your first star sparked new growth!"
-        imagePaths={['/images/TreeStage1.png', '/images/TreeStage2.png']}
+        imagePaths={['/images/TreeStage1_V2.png', '/images/TreeStage2_V2.png']}
         onComplete={onComplete}
       />
     )
@@ -41,7 +41,7 @@ function FinalStarFlow({ onComplete }: { onComplete: () => void }) {
       {step === 'tree_growth' && (
         <TreeGrowthScreen
           headline="You've met the core foundation requirements. Your family now has roots to hold onto."
-          imagePaths={['/images/TreeStage2.png', '/images/TreeStage3.png']}
+          imagePaths={['/images/TreeStage2_V2.png', '/images/TreeStage3_V2.png']}
           onComplete={onComplete}
         />
       )}

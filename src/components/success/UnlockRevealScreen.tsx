@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Mic, Users, Sparkles } from 'lucide-react'
+import { Mic, Users, Sparkles } from 'lucide-react'
+import { RewardPrimaryCTA } from './RewardCTAs'
 
 interface Unlock {
   icon: React.ReactNode
@@ -51,7 +52,7 @@ export function UnlockRevealScreen({ onComplete }: UnlockRevealScreenProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
-      className="relative flex h-full flex-col items-center bg-[var(--lm-bg-primary)]"
+      className="flex h-full flex-col items-center bg-[var(--lm-bg-primary)]"
       style={{
         backgroundImage: 'url(/images/bg-texture.png)',
         backgroundSize: 'cover',
@@ -94,12 +95,12 @@ export function UnlockRevealScreen({ onComplete }: UnlockRevealScreenProps) {
           </motion.div>
 
           {/* Headline */}
-          <p className="font-display text-[26px] font-semibold leading-[1.2] text-foreground text-center">
+          <p className="font-display text-2xl font-semibold leading-tight text-foreground text-center">
             {unlock.headline}
           </p>
 
           {/* Supporting */}
-          <p className="text-[18px] font-medium leading-[1.4] tracking-[0.5px] text-[var(--lm-text-secondary)] text-center">
+          <p className="text-[15px] font-medium leading-snug text-muted-foreground text-center">
             {unlock.supporting}
           </p>
         </motion.div>
@@ -108,21 +109,9 @@ export function UnlockRevealScreen({ onComplete }: UnlockRevealScreenProps) {
       {/* Spacer */}
       <div className="flex-1" />
 
-      {/* Reserve space for the absolute button */}
-      <div className="h-[120px] shrink-0" />
-
       {/* Button */}
-      <div className="absolute inset-x-0 bottom-0 px-4 py-[30px]">
-        <button
-          type="button"
-          onClick={handleNext}
-          className="flex w-full flex-col items-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4"
-        >
-          <ArrowRight className="size-6 text-white" />
-          <span className="text-[18px] font-medium leading-[1.2] text-white">
-            {isLast ? 'Continue' : 'Next'}
-          </span>
-        </button>
+      <div className="w-full px-4 pb-[30px] pt-4 mt-auto">
+        <RewardPrimaryCTA label={isLast ? 'Continue' : 'Next'} onClick={handleNext} />
       </div>
     </motion.div>
   )

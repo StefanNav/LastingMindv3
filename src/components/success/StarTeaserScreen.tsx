@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { CategoryNodeCard } from '@/components/cards/CategoryNodeCard'
 import { ModuleStepCard } from '@/components/sheets/ModuleStepCard'
+import { RewardSecondaryCTA } from './RewardCTAs'
 import type { Category, CategoryModule } from '@/types'
 
 interface StarTeaserScreenProps {
@@ -37,8 +38,8 @@ export function StarTeaserScreen({
       }}
     >
       {/* Headline */}
-      <div className="px-4 pt-[80px]">
-        <p className="font-display text-[28px] font-semibold leading-[1.2] text-foreground text-center">
+      <div className="px-6 pt-[80px]">
+        <p className="font-display text-2xl font-semibold leading-tight text-foreground text-center">
           {headline}
         </p>
       </div>
@@ -72,16 +73,8 @@ export function StarTeaserScreen({
       </div>
 
       {/* Done for now button */}
-      <div className="px-4 pb-[30px] pt-4 mt-6">
-        <button
-          type="button"
-          onClick={onDone}
-          className="flex w-full items-center justify-center rounded-[10px] border border-lm-border bg-[#e7ebd9] p-[10px]"
-        >
-          <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
-            Done for now
-          </span>
-        </button>
+      <div className="px-4 pb-[30px] pt-4">
+        <RewardSecondaryCTA onClick={onDone} />
       </div>
     </motion.div>
   )

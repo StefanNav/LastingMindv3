@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
 import { CategoryNodeCard } from '@/components/cards/CategoryNodeCard'
+import { RewardPrimaryCTA } from './RewardCTAs'
 import type { Category } from '@/types'
 
 interface StarEarnedScreenProps {
@@ -26,7 +26,7 @@ export function StarEarnedScreen({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-      className="relative flex h-full flex-col bg-[var(--lm-bg-primary)]"
+      className="flex h-full flex-col bg-[var(--lm-bg-primary)]"
       style={{
         backgroundImage: 'url(/images/bg-texture.png)',
         backgroundSize: 'cover',
@@ -34,11 +34,11 @@ export function StarEarnedScreen({
       }}
     >
       {/* Headline */}
-      <div className="px-4 pt-[80px]">
-        <p className="font-display text-[28px] font-semibold leading-[1.2] text-foreground text-center">
+      <div className="px-6 pt-[80px]">
+        <p className="font-display text-2xl font-semibold leading-tight text-foreground text-center">
           {headline}
         </p>
-        <p className="mt-4 text-[18px] font-medium leading-[1.2] tracking-[0.5px] text-foreground text-center">
+        <p className="mt-3 text-[15px] font-medium leading-snug text-muted-foreground text-center">
           {subheadline}
         </p>
       </div>
@@ -62,28 +62,16 @@ export function StarEarnedScreen({
       {/* Spacer — matches top spacer */}
       <div className="flex-1" />
 
-      {/* Reserve space equal to the button area so the card centers between title and button */}
-      <div className="h-[120px] shrink-0" />
-
-      {/* Continue button — absolutely positioned so it doesn't shift the card */}
+      {/* Continue button */}
       <AnimatePresence>
         {animationDone && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-            className="absolute inset-x-0 bottom-0 px-4 pb-[30px]"
+            className="px-4 pb-[30px] pt-4 mt-auto"
           >
-            <button
-              type="button"
-              onClick={onContinue}
-              className="flex w-full flex-col items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4"
-            >
-              <ArrowRight className="size-6 text-white" />
-              <span className="text-[18px] font-medium leading-[1.2] text-white">
-                Continue
-              </span>
-            </button>
+            <RewardPrimaryCTA label="Continue" onClick={onContinue} />
           </motion.div>
         )}
       </AnimatePresence>

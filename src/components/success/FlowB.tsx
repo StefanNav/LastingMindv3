@@ -4,11 +4,10 @@ import { AnimatePresence } from 'framer-motion'
 import { RewardCard } from './RewardCard'
 import { EncouragementScreen } from './EncouragementScreen'
 import { StarTeaserScreen } from './StarTeaserScreen'
+import { useApp } from '@/app/AppProvider'
 import type { ModuleCompletionState, Category, CategoryModule } from '@/types'
 
 type FlowBStep = 'reward_card' | 'encouragement' | 'star_teaser'
-
-const TREE_IMAGE = '/images/Tree 1.png'
 
 const encouragementCopy: Record<string, string> = {
   'cat-family': "What you share today becomes part of what your loved ones may one day ask about.",
@@ -39,6 +38,7 @@ interface FlowBProps {
 export function FlowB({ completionState }: FlowBProps) {
   const [step, setStep] = useState<FlowBStep>('reward_card')
   const navigate = useNavigate()
+  const { treeImage } = useApp()
 
   const { categoryId, categoryLabel, rewardCardData, nextModule } = completionState
 
@@ -92,7 +92,7 @@ export function FlowB({ completionState }: FlowBProps) {
       {step === 'encouragement' && (
         <EncouragementScreen
           headline={encouragement}
-          treeImage={TREE_IMAGE}
+          treeImage={treeImage}
           onContinue={() => setStep('star_teaser')}
         />
       )}

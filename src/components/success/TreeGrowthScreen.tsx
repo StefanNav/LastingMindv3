@@ -59,8 +59,8 @@ export function TreeGrowthScreen({
     >
       {/* Headline — stays static while tree morphs */}
       {headline && (
-        <div className="px-4 pt-[80px]">
-          <p className="font-display text-[26px] font-semibold leading-[1.2] text-foreground text-center">
+        <div className="px-6 pt-[80px]">
+          <p className="font-display text-2xl font-semibold leading-tight text-foreground text-center">
             {headline}
           </p>
         </div>

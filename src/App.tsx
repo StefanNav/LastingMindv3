@@ -10,7 +10,7 @@ import { LovedOnesPage } from '@/pages/LovedOnesPage'
 import { SettingsPage } from '@/pages/SettingsPage'
 import { ModuleIntroPage } from '@/pages/ModuleIntroPage'
 import { Module2IntroPage } from '@/pages/Module2IntroPage'
-import { GuidedConversationPage } from '@/pages/GuidedConversationPage'
+import { GuidedConversationPageV2 } from '@/pages/GuidedConversationPageV2'
 import { ReflectionPromptPage } from '@/pages/ReflectionPromptPage'
 import { ReflectionPage } from '@/pages/ReflectionPage'
 import { ReflectionSummaryPage } from '@/pages/ReflectionSummaryPage'
@@ -22,7 +22,10 @@ import { CoreValuesSummaryPage } from '@/pages/CoreValuesSummaryPage'
 import { MemoryProfilePage } from '@/pages/MemoryProfilePage'
 import { DefineChaptersPage } from '@/pages/DefineChaptersPage'
 import { LifeChaptersHubPage } from '@/pages/LifeChaptersHubPage'
+import { Phase4PlaceholderPage } from '@/pages/Phase4PlaceholderPage'
+import { LegacyPlaceholderPage } from '@/pages/LegacyPlaceholderPage'
 import { conversationConfigs, foundationIntroData, module2IntroData } from '@/data/mock'
+import { guidedConversationConfigs } from '@/data/guidedConversationData'
 import { PageTransition } from '@/animations/PageTransition'
 import { useApp } from '@/app/AppProvider'
 import type { ModuleCompletionState, RewardCardData } from '@/types'
@@ -41,7 +44,8 @@ function ConversationRoute() {
   const { categoryId } = useParams<{ categoryId: string }>()
   const navigate = useNavigate()
   const { hasCompletedFirstModule, markFirstModuleComplete, markModule1Complete } = useApp()
-  const config = categoryId ? conversationConfigs[categoryId] : undefined
+  const config = categoryId ? guidedConversationConfigs[categoryId] : undefined
+  const oldConfig = categoryId ? conversationConfigs[categoryId] : undefined
   const introData = categoryId ? foundationIntroData[categoryId] : undefined
 
   if (!config || !categoryId) {
@@ -57,21 +61,22 @@ function ConversationRoute() {
   const mod2 = categoryId ? module2IntroData[categoryId] : undefined
 
   return (
-    <GuidedConversationPage
+    <GuidedConversationPageV2
       config={config}
       onComplete={() => {
         // Build reward card data from conversation summary items
+        const summaryItems = oldConfig?.summaryItems ?? []
         const rewardCardData: RewardCardData = {
           categoryImage: introData?.image ?? '',
           categoryLabel: introData?.categoryLabel ?? categoryId,
           moduleTitle: config.moduleTitle,
-          items: config.summaryItems.map((si) => ({
+          items: summaryItems.map((si) => ({
             id: si.id,
             initial: si.name.charAt(0),
             label: si.name.split(' ')[0],
             sublabel: si.label,
           })),
-          itemCountLabel: `${config.summaryItems.length} ${(introData?.categoryLabel ?? categoryId).toLowerCase()} members recorded`,
+          itemCountLabel: `${summaryItems.length} ${(introData?.categoryLabel ?? categoryId).toLowerCase()} members recorded`,
           date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
         }
 
@@ -131,6 +136,8 @@ function App() {
               <Route path="/profile" element={<MemoryProfilePage />} />
               <Route path="/life-chapters" element={<LifeChaptersHubPage />} />
               <Route path="/life-chapters/define" element={<DefineChaptersPage />} />
+              <Route path="/phase4/:categoryId" element={<Phase4PlaceholderPage />} />
+              <Route path="/legacy/:itemId" element={<LegacyPlaceholderPage />} />
             </Routes>
           </AnimatePresence>
         </MobileShell>

@@ -46,7 +46,7 @@ export function FinalStarAnimation({ onComplete }: FinalStarAnimationProps) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="mb-12 px-6 font-display text-[28px] font-semibold leading-[1.2] text-foreground text-center"
+        className="mb-12 px-6 font-display text-2xl font-semibold leading-tight text-foreground text-center"
       >
         All six stars.
       </motion.p>
@@ -97,7 +97,7 @@ export function FinalStarAnimation({ onComplete }: FinalStarAnimationProps) {
                 strokeWidth={1.5}
               />
             </motion.div>
-            <p className="text-[14px] font-semibold leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+            <p className="text-[13px] font-semibold leading-tight text-muted-foreground">
               {categoryLabels[i]}
             </p>
           </motion.div>

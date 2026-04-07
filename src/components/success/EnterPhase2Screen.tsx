@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { RewardPrimaryCTA } from './RewardCTAs'
 
 interface EnterPhase2ScreenProps {
   onStart: () => void
@@ -12,7 +13,7 @@ export function EnterPhase2Screen({ onStart }: EnterPhase2ScreenProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-      className="relative flex h-full flex-col items-center bg-[var(--lm-bg-primary)]"
+      className="flex h-full flex-col items-center bg-[var(--lm-bg-primary)]"
       style={{
         backgroundImage: 'url(/images/bg-texture.png)',
         backgroundSize: 'cover',
@@ -28,7 +29,7 @@ export function EnterPhase2Screen({ onStart }: EnterPhase2ScreenProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="font-display text-[28px] font-semibold leading-[1.2] text-foreground text-center"
+          className="font-display text-2xl font-semibold leading-tight text-foreground text-center"
         >
           Your story is ready to be told.
         </motion.p>
@@ -37,7 +38,7 @@ export function EnterPhase2Screen({ onStart }: EnterPhase2ScreenProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="text-[18px] font-medium leading-[1.4] tracking-[0.5px] text-[var(--lm-text-secondary)] text-center"
+          className="text-[15px] font-medium leading-snug text-muted-foreground text-center"
         >
           Phase 2 is unlocked. Define your life chapters, share your wisdom, and build your legacy.
         </motion.p>
@@ -47,20 +48,14 @@ export function EnterPhase2Screen({ onStart }: EnterPhase2ScreenProps) {
       <div className="flex-1" />
 
       {/* CTA button */}
-      <div className="w-full px-4 pb-[30px]">
-        <motion.button
-          type="button"
-          onClick={onStart}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.8 }}
-          className="flex w-full items-center justify-center rounded-[10px] bg-lm-green px-10 py-4"
-        >
-          <span className="text-[18px] font-medium leading-[1.2] text-white">
-            Start telling your story
-          </span>
-        </motion.button>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.8 }}
+        className="w-full px-4 pb-[30px] pt-4 mt-auto"
+      >
+        <RewardPrimaryCTA label="Start telling your story" onClick={onStart} />
+      </motion.div>
     </motion.div>
   )
 }
