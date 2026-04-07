@@ -5,16 +5,14 @@ import { useTreeMorph } from '@/hooks/useTreeMorph'
 const CW = 340
 const CH = 327
 
-// Sequential morph: small → medium → full tree
+// Morph: TreeStage2 → TreeStage3
 const TREE_IMAGES = [
-  '/images/onboarding/tree 1.2.png',
-  '/images/Tree 1.png',
-  '/images/onboarding/Tree 2.2.png',
+  '/images/TreeStage2.png',
+  '/images/treeFinal.png',
 ]
 
-// Delay before each morph starts (ms)
+// Delay before morph starts (ms)
 const INITIAL_DELAY = 800
-const INTER_MORPH_DELAY = 600
 
 export function TreeGrowthSlide() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -27,30 +25,15 @@ export function TreeGrowthSlide() {
     height: CH,
   })
 
-  // Chain morphs: stage 0 → 1, then 1 → 2
+  // Morph from stage 0 → 1
   useEffect(() => {
     if (!imagesLoaded) return
-    let cancelled = false
-
-    const t = setTimeout(() => {
-      if (cancelled) return
-      morphTo(1, () => {
-        if (cancelled) return
-        setTimeout(() => {
-          if (cancelled) return
-          morphTo(2)
-        }, INTER_MORPH_DELAY)
-      })
-    }, INITIAL_DELAY)
-
-    return () => {
-      cancelled = true
-      clearTimeout(t)
-    }
+    const t = setTimeout(() => morphTo(1), INITIAL_DELAY)
+    return () => clearTimeout(t)
   }, [imagesLoaded, morphTo])
 
   return (
-    <div className="flex h-full w-full items-end justify-center">
+    <div className="flex h-full w-full items-center justify-center">
       <canvas
         ref={canvasRef}
         width={CW}

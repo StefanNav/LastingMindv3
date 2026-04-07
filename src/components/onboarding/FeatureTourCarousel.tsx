@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ChevronLeft } from 'lucide-react'
 import { ProgressBar } from './ProgressBar'
 import { horizontalSlideVariants } from './animations'
 
@@ -43,6 +44,12 @@ export function FeatureTourCarousel({
     if (currentIndex <= 0) return
     setDirection(-1)
     setCurrentIndex((i) => i - 1)
+  }, [currentIndex])
+
+  const goToStart = useCallback(() => {
+    if (currentIndex <= 0) return
+    setDirection(-1)
+    setCurrentIndex(0)
   }, [currentIndex])
 
   // Reset elapsed tracking when slide changes
@@ -97,15 +104,27 @@ export function FeatureTourCarousel({
 
   return (
     <div className="flex h-full flex-col">
-      {/* Progress bar */}
-      <div className="pt-14">
-        <ProgressBar
-          currentStep={currentIndex}
-          totalSteps={slides.length}
-          animated
-          duration={duration}
-          paused={paused}
-        />
+      {/* Back button + Progress bar */}
+      <div className="flex items-center gap-2 pt-14 px-4">
+        <button
+          type="button"
+          onClick={goToStart}
+          className={`flex items-center justify-center size-8 rounded-full transition-opacity ${
+            currentIndex > 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+          aria-label="Back to start"
+        >
+          <ChevronLeft className="size-5 text-foreground" />
+        </button>
+        <div className="flex-1">
+          <ProgressBar
+            currentStep={currentIndex}
+            totalSteps={slides.length}
+            animated
+            duration={duration}
+            paused={paused}
+          />
+        </div>
       </div>
 
       {/* Slide content area */}

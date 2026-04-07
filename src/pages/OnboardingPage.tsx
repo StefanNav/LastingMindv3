@@ -9,6 +9,7 @@ import { CategoryGridSlide } from '@/components/onboarding/CategoryGridSlide'
 import { FamilyDetailSlide } from '@/components/onboarding/FamilyDetailSlide'
 import { ChatPreviewSlide } from '@/components/onboarding/ChatPreviewSlide'
 import { TreeGrowthSlide } from '@/components/onboarding/TreeGrowthSlide'
+import { GetStartedSlide } from '@/components/onboarding/GetStartedSlide'
 import { PreparingSlide } from '@/components/onboarding/PreparingSlide'
 import { SplashScreen } from '@/components/onboarding/SplashScreen'
 import { UserTypeScreen } from '@/components/onboarding/UserTypeScreen'
@@ -151,6 +152,7 @@ export function OnboardingPage() {
       render: () => (
         <FeatureTourCarousel
           onComplete={next}
+          duration={8000}
           slides={[
             {
               id: 'tour-tree',
@@ -185,7 +187,12 @@ export function OnboardingPage() {
         />
       ),
     },
-    // Phase 5: Loading (16)
+    // Phase 5: Let's Get Started CTA
+    {
+      id: 'get-started',
+      render: () => <GetStartedSlide onStart={next} onBack={back} />,
+    },
+    // Phase 6: Loading
     {
       id: 'preparing',
       render: () => <PreparingSlide onComplete={goHome} delay={3000} />,
