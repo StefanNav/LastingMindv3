@@ -4,7 +4,7 @@ import { MobileShell } from '@/components/shared/MobileShell'
 import { AppProvider } from '@/app/AppProvider'
 import { OnboardingPage } from '@/pages/OnboardingPage'
 import { HomePage } from '@/pages/HomePage'
-import { SessionPage } from '@/pages/SessionPage'
+import { ChatPage } from '@/pages/ChatPage'
 import { SuccessPage } from '@/pages/SuccessPage'
 import { LovedOnesPage } from '@/pages/LovedOnesPage'
 import { SettingsPage } from '@/pages/SettingsPage'
@@ -30,6 +30,11 @@ import type { ModuleCompletionState, RewardCardData } from '@/types'
 function KeyedOnboarding() {
   const { onboardingKey } = useApp()
   return <OnboardingPage key={onboardingKey} />
+}
+
+function KeyedChatPage() {
+  const { activeDemoId } = useApp()
+  return <ChatPage key={activeDemoId} />
 }
 
 function ConversationRoute() {
@@ -104,7 +109,7 @@ function App() {
               <Route path="/" element={<Navigate to="/onboarding" replace />} />
               <Route path="/onboarding" element={<KeyedOnboarding />} />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/session" element={<SessionPage />} />
+              <Route path="/chat" element={<KeyedChatPage />} />
               <Route path="/success" element={<SuccessPage />} />
               <Route path="/loved-ones" element={<LovedOnesPage />} />
               <Route path="/loved-ones/:creatorId/voice" element={null} />

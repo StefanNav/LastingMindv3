@@ -48,8 +48,6 @@ export function DemoDropdown() {
                     if (id === 'onboarding') {
                       window.dispatchEvent(new CustomEvent('onboarding-reset'))
                       navigate('/onboarding')
-                    } else {
-                      navigate('/home')
                     }
                     setDemoState(id)
                     setIsOpen(false)

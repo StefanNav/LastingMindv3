@@ -11,7 +11,7 @@ type FlowAStep = 'reward_card' | 'encouragement' | 'summary'
 const TREE_IMAGE = '/images/Tree 1.png'
 
 const encouragementCopy: Record<string, string> = {
-  'cat-family': "Knowing who's in your family is the foundation everything builds on",
+  'cat-family': "Family lays the foundation for everything that follows",
   'cat-friends': "The friends who shaped you are now part of your lasting story",
   'cat-career': "Your career journey is now part of the legacy you're building",
   'cat-education': "The places you learned have shaped who you became",

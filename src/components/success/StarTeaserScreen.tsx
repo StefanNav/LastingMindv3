@@ -72,13 +72,13 @@ export function StarTeaserScreen({
       </div>
 
       {/* Done for now button */}
-      <div className="border-t border-black/25 bg-[var(--lm-bg-primary)] px-4 py-[30px] mt-6">
+      <div className="px-4 pb-[30px] pt-4 mt-6">
         <button
           type="button"
           onClick={onDone}
-          className="flex w-full items-center justify-center rounded-[10px] bg-[#dce6ba] p-2.5"
+          className="flex w-full items-center justify-center rounded-[10px] border border-lm-border bg-[#e7ebd9] p-[10px]"
         >
-          <span className="text-[16px] font-semibold leading-[1.2] text-[var(--lm-text-body-alt)]">
+          <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
             Done for now
           </span>
         </button>

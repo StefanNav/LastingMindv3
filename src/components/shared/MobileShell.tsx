@@ -11,7 +11,7 @@ interface MobileShellProps {
 const navItems = [
   { icon: Home, label: 'Home', path: '/home' },
   { icon: Users, label: 'Loved Ones', path: '/loved-ones' },
-  { icon: MessageCircleMore, label: 'Session', path: '/session' },
+  { icon: MessageCircleMore, label: 'Chat', path: '/chat' },
   { icon: CircleUserRound, label: 'Profile', path: '/profile' },
 ]
 

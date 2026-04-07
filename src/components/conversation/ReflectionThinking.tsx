@@ -19,7 +19,7 @@ export function ReflectionThinking() {
       >
         <div className="flex items-center gap-[10px] p-[10px]">
           <span className="text-[18px] font-medium leading-[1.2] text-[var(--lm-text-primary)]">
-            AI is thinking
+            Thinking
           </span>
           <ThinkingDots />
         </div>

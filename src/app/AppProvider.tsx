@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useMemo, type ReactNode } from 'react'
-import type { AppState, DemoStateId, DemoConfig, DemoPromptCard, HomePhase, CategoryDetail, LifeChapter } from '@/types'
+import type { AppState, DemoStateId, DemoConfig, DemoPromptCard, HomePhase, CategoryDetail, LifeChapter, ChatMessage } from '@/types'
 import { mockCreator, mockPhases } from '@/data/mock'
 import { demoStates, demoStateOrder } from '@/data/demoStates'
 
@@ -27,6 +27,11 @@ interface AppContextValue {
   lifeChapters: LifeChapter[]
   saveLifeChapters: (chapters: LifeChapter[]) => void
   hasDefinedChapters: boolean
+  chatFirstTimeExperience: boolean
+  setChatFirstTimeComplete: () => void
+  chatMessages: ChatMessage[]
+  addChatMessage: (msg: ChatMessage) => void
+  clearChatMessages: () => void
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -55,9 +60,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [module2Runs, setModule2Runs] = useState<Record<string, number>>({})
   const [module1Completions, setModule1Completions] = useState<Record<string, boolean>>({})
   const [lifeChapters, setLifeChapters] = useState<LifeChapter[]>([])
+  const [chatFirstTimeExperience, setChatFirstTimeExperience] = useState(true)
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
 
   const saveLifeChapters = (chapters: LifeChapter[]) => setLifeChapters(chapters)
   const hasDefinedChapters = lifeChapters.length > 0
+
+  const setChatFirstTimeComplete = () => setChatFirstTimeExperience(false)
+  const addChatMessage = (msg: ChatMessage) => setChatMessages((prev) => [...prev, msg])
+  const clearChatMessages = () => setChatMessages([])
 
   const markFirstModuleComplete = () => setHasCompletedFirstModule(true)
   const incrementModule2Run = (categoryId: string) =>
@@ -72,6 +83,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (id === 'onboarding') {
       setOnboardingKey((k) => k + 1)
     }
+    // Reset chat state on demo switch so tutorial replays correctly
+    setChatFirstTimeExperience(true)
+    setChatMessages([])
   }
 
   const value = useMemo<AppContextValue>(() => ({
@@ -97,7 +111,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     lifeChapters,
     saveLifeChapters,
     hasDefinedChapters,
-  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters])
+    chatFirstTimeExperience,
+    setChatFirstTimeComplete,
+    chatMessages,
+    addChatMessage,
+    clearChatMessages,
+  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters, chatFirstTimeExperience, chatMessages])
 
   return (
     <AppContext.Provider value={value}>

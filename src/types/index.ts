@@ -354,3 +354,14 @@ export interface MemoryProfileData {
   phase1Complete: boolean
   biographyReady: boolean
 }
+
+// ── Chat types ───────────────────────────────────────────────────────────────
+
+export interface ChatMessage {
+  id: string
+  sender: 'user' | 'lastingmind'
+  content: string
+  timestamp: number
+  sourceEntry?: string
+  annotation?: string
+}

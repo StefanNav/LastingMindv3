@@ -6,8 +6,8 @@ interface RecordingWavesProps {
 
 const LAYERS = [
   {
-    baseHeight: 0.22,
-    amplitude: 70,
+    baseHeight: 0.32,
+    amplitude: 45,
     speed: 0.0006,
     frequency: 0.003,
     colorStop1: 'rgba(42,82,20,0.92)',
@@ -16,8 +16,8 @@ const LAYERS = [
     offset: 0,
   },
   {
-    baseHeight: 0.38,
-    amplitude: 60,
+    baseHeight: 0.45,
+    amplitude: 38,
     speed: 0.0009,
     frequency: 0.004,
     colorStop1: 'rgba(61,154,30,0.85)',
@@ -26,8 +26,8 @@ const LAYERS = [
     offset: 100,
   },
   {
-    baseHeight: 0.54,
-    amplitude: 50,
+    baseHeight: 0.58,
+    amplitude: 32,
     speed: 0.0014,
     frequency: 0.005,
     colorStop1: 'rgba(78,128,54,0.9)',
@@ -116,7 +116,7 @@ export function RecordingWaves({ isPaused = false }: RecordingWavesProps) {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[55%] overflow-hidden"
+      className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[38%] overflow-hidden"
     >
       <canvas
         ref={canvasRef}

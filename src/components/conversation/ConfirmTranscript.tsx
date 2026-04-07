@@ -33,7 +33,7 @@ export function ConfirmTranscript({ onSayMore, onSaveAndFinish }: ConfirmTranscr
       <button
         type="button"
         onClick={onSaveAndFinish}
-        className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] p-[10px]"
+        className="flex w-full items-center justify-center gap-[10px] rounded-[10px] border border-lm-border bg-[#e7ebd9] p-[10px]"
       >
         <span className="text-center text-[16px] font-medium leading-[1.2] text-[#283227]">
           Save & Finish
