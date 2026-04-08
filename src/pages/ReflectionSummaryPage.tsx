@@ -1,19 +1,18 @@
 import { useState } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { Pencil, Check, X } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
-import { ConversationHeader } from '@/components/conversation/ConversationHeader'
-import { reflectionConfigs, foundationIntroData } from '@/data/mock'
+import { reflectionConfigs, foundationIntroData, module2IntroData } from '@/data/mock'
 import { useApp } from '@/app/AppProvider'
-import type { ModuleCompletionState, RewardCardData, ReflectionMethod, ConversationInputMode } from '@/types'
-import { module2IntroData } from '@/data/mock'
+import type { ModuleCompletionState, RewardCardData } from '@/types'
 
 interface SummaryLocationState {
-  promptIndex: number
-  mockResponseText: string
-  reflectionMethod: ReflectionMethod
+  topicName: string
+  questionText: string | null
+  reflectionText: string
+  inputMode: 'voice' | 'text'
   selectedMember?: string
-  inputMode?: ConversationInputMode
 }
 
 export function ReflectionSummaryPage() {
@@ -28,7 +27,7 @@ export function ReflectionSummaryPage() {
   const categoryIntroData = categoryId ? foundationIntroData[categoryId] : undefined
 
   const [isEditing, setIsEditing] = useState(false)
-  const [editedText, setEditedText] = useState(locationState?.mockResponseText ?? '')
+  const [editedText, setEditedText] = useState(locationState?.reflectionText ?? '')
 
   if (!config || !categoryId || !locationState) {
     return (
@@ -40,14 +39,13 @@ export function ReflectionSummaryPage() {
     )
   }
 
-  const question = config.questions[locationState.promptIndex]
-  const isGuided = locationState.reflectionMethod === 'guided'
+  const topicName = locationState.topicName ?? config.topicName ?? config.subjectName
+  const ctaLabel = config.confirmationCTALabel ?? 'Save this reflection'
 
-  const handleSaveAndFinish = () => {
+  const handleSave = () => {
     const runs = module2Runs[categoryId] ?? 0
     const isStarEarned = runs >= 1
 
-    // Compute real total stars: base from demo + dynamic from session + the one being earned now
     const dynamicStars = Object.values(module2Runs).reduce(
       (sum, r) => sum + Math.floor(r / 2), 0,
     )
@@ -84,132 +82,112 @@ export function ReflectionSummaryPage() {
     navigate('/success', { state: completionState })
   }
 
-  const handleBack = () => {
-    navigate(-1)
-  }
-
   return (
     <PageTransition>
       <div className="relative flex h-full flex-col bg-[var(--lm-bg-primary)]">
-        {/* Header */}
-        <ConversationHeader
-          moduleTitle={`About ${config.subjectName}`}
-          rightLabel="Conversation Summary"
-          progressPercent={100}
-          onBack={handleBack}
-          showProgress={false}
-          variant="summary"
-        />
+        {/* Background */}
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <img
+            src="/images/onboarding/OnboardingBackground.png"
+            alt=""
+            className="h-full w-full object-cover opacity-40"
+          />
+        </div>
 
         {/* Scrollable content */}
-        <div className="flex-1 overflow-y-auto pt-[175px]">
-          {/* Heading */}
-          <div className="px-4 pb-[20px]">
-            <p className="font-display text-[26px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
-              {config.summaryHeading}
+        <div className="relative z-10 flex-1 overflow-y-auto px-5 pb-6 pt-14" style={{ scrollbarWidth: 'none' }}>
+          {/* Title block */}
+          <div className="flex flex-col gap-2 pb-6 pt-4">
+            <h1 className="font-display text-[26px] font-semibold leading-tight text-foreground">
+              Your Reflection
+            </h1>
+            <p className="text-[14px] leading-[1.5] text-muted-foreground">
+              Here's what you shared. Review and edit before saving.
             </p>
           </div>
 
-          <div className="flex flex-col gap-4 px-4">
-            {/* Subject info */}
-            <div className="flex items-center gap-3">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-lm-green bg-[var(--lm-bg-card)]">
-                <span className="font-display text-[20px] font-bold text-lm-green">
-                  {config.subjectName.charAt(0)}
-                </span>
-              </div>
-              <div className="flex flex-col gap-1">
-                <p className="font-display text-[18px] font-medium leading-[1.2] text-[var(--lm-text-primary)]">
-                  About {config.subjectName}
-                </p>
-                <p className="text-[14px] font-medium leading-[1.2] tracking-[0.5px] text-[#5d6056]">
-                  {config.subjectRelation}
-                </p>
-              </div>
-            </div>
+          {/* Content card */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.08, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+            className="rounded-[10px] bg-lm-bg-card/40 p-4 shadow-card backdrop-blur-sm"
+          >
+            {/* Topic label */}
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
+              About {topicName}
+            </p>
 
-            {/* Reflection question */}
-            {isGuided && (
-              <div className="rounded-[8px] border border-[#e7ebd9] bg-[#fffefa] px-4 py-2">
-                <p className="mb-2 text-[14px] font-semibold leading-[1.2] text-[#5d6056]">
-                  Reflection Question
-                </p>
-                <p className="text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
-                  {question.promptText}
-                </p>
-              </div>
+            {/* Selected question */}
+            {locationState.questionText && (
+              <p className="mb-3 font-display text-[15px] leading-[1.5] text-foreground/70">
+                {locationState.questionText}
+              </p>
             )}
 
-            {/* Your Words card */}
-            <div className="rounded-[8px] border border-[#e7ebd9] bg-[#fffefa] px-4 py-2">
-              <p className="mb-2 text-[14px] font-semibold leading-[1.2] text-[#5d6056]">
-                Your Words
-              </p>
-
-              {isEditing ? (
+            {/* Reflection prose + edit */}
+            {isEditing ? (
+              <div className="flex flex-col gap-3">
                 <textarea
                   value={editedText}
                   onChange={(e) => setEditedText(e.target.value)}
-                  className="w-full resize-none border-0 border-b border-[#3e2f26]/20 bg-transparent pb-4 text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)] outline-none"
                   rows={6}
                   autoFocus
+                  className="w-full resize-none rounded-lg border border-border bg-white px-3 py-2 text-[14px] leading-[1.6] text-foreground focus:outline-none focus:ring-1 focus:ring-lm-green"
                 />
-              ) : (
-                <p className="text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditedText(locationState.reflectionText)
+                      setIsEditing(false)
+                    }}
+                    className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-[13px] font-medium text-muted-foreground transition-colors hover:bg-muted"
+                  >
+                    <X className="size-3.5" />
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="flex items-center gap-1 rounded-lg bg-lm-green px-3 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-lm-green/90"
+                  >
+                    <Check className="size-3.5" />
+                    Done
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-start gap-2">
+                <p className="flex-1 text-[14px] leading-[1.6] text-foreground">
                   {editedText}
                 </p>
-              )}
-
-              {isEditing ? (
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="mt-3 flex items-center gap-1 rounded-[6px] bg-lm-green px-3 py-1.5"
-                >
-                  <span className="text-[14px] font-medium text-white">Done</span>
-                </button>
-              ) : (
                 <button
                   type="button"
                   onClick={() => setIsEditing(true)}
-                  className="mt-2 flex items-center gap-1"
+                  className="mt-0.5 shrink-0 rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 >
-                  <svg className="size-[18px] text-[#3e2f26]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 22h16" />
-                    <path d="M18 2l4 4L8 20H4v-4L18 2z" />
-                  </svg>
-                  <span className="text-[14px] font-medium leading-[20px] text-[#3e2f26]">
-                    Tap to edit
-                  </span>
+                  <Pencil className="size-3.5" />
                 </button>
-              )}
-            </div>
+              </div>
+            )}
+          </motion.div>
 
-            {/* Metadata row */}
-            <div className="flex items-center justify-between text-[14px] font-medium leading-[1.2] tracking-[0.5px] text-[#5d6056]">
-              <span>{locationState.inputMode === 'text' ? 'Text entry' : 'Voice entry'}</span>
-              <span>{new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-            </div>
+          {/* Metadata row */}
+          <div className="mt-4 flex items-center justify-between text-[13px] font-medium text-muted-foreground">
+            <span>{locationState.inputMode === 'text' ? 'Written' : 'Voice recording'}</span>
+            <span>{new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
           </div>
-
-          {/* Spacer for fixed bottom */}
-          <div className="h-[160px]" />
         </div>
 
-        {/* Bottom: Save & Finish */}
-        <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-center gap-[13px] border-t border-black/25 bg-[var(--lm-bg-primary)] px-4 pb-[50px] pt-4">
-          <p className="text-center text-[14px] font-semibold leading-[1.2] text-[#313131]">
-            You can always return to say more.
-          </p>
+        {/* Sticky CTA */}
+        <div className="relative z-10 border-t border-border/50 bg-[var(--lm-bg-primary)] px-5 pb-8 pt-4">
           <button
             type="button"
-            onClick={handleSaveAndFinish}
-            className="flex w-full flex-col items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4"
+            onClick={handleSave}
+            className="flex w-full items-center justify-center rounded-lg bg-lm-green px-6 py-3.5 text-[16px] font-semibold text-white transition-transform active:scale-[0.98]"
           >
-            <ArrowRight className="size-6 text-white" />
-            <span className="text-[16px] font-medium leading-[1.2] text-white">
-              Save & Finish
-            </span>
+            {ctaLabel}
           </button>
         </div>
       </div>

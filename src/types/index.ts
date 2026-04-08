@@ -264,8 +264,11 @@ export interface ReflectionConfig {
   subjectName: string
   subjectRelation: string
   questions: ReflectionQuestion[]
-  openReflectionMessage: string
+  openReflectionMessage?: string
   summaryHeading: string
+  topicName?: string
+  topicType?: 'person' | 'role' | 'school' | 'topic' | 'value' | 'interest'
+  confirmationCTALabel?: string
 }
 
 export type ReflectionStep =
@@ -278,6 +281,17 @@ export type ReflectionStep =
   | 'summary'
 
 export type ReflectionMethod = 'guided' | 'open'
+
+export type OpenReflectionStep =
+  | 'question_select'
+  | 'idle'
+  | 'recording'
+  | 'paused'
+  | 'transcript'
+  | 'writing'
+  | 'summary'
+
+export type OpenReflectionInputMode = 'voice' | 'text'
 
 export interface LovedOneCreator {
   id: string

@@ -7,6 +7,10 @@ import { reflectionConfigs } from '@/data/mock'
 
 const SWIPE_THRESHOLD = 50
 
+function interpolateTopic(text: string, topic: string): string {
+  return text.replace(/\{\{topic\}\}/g, topic)
+}
+
 export function ReflectionPromptPage() {
   const { categoryId } = useParams<{ categoryId: string }>()
   const navigate = useNavigate()
@@ -30,6 +34,7 @@ export function ReflectionPromptPage() {
     )
   }
 
+  const topicName = selectedMember || config.topicName || config.subjectName
   const questions = config.questions
   const activeQuestion = questions[activeIndex]
 
@@ -53,24 +58,24 @@ export function ReflectionPromptPage() {
     [activeIndex, questions.length, goToIndex],
   )
 
-  const handleAnswerQuestion = () => {
+  const handleStartReflecting = () => {
     navigate(`/reflect/${categoryId}`, {
       state: {
-        method: 'guided',
-        promptIndex: activeIndex,
+        selectedQuestionIndex: activeIndex,
         selectedMember,
         selectedRelationship,
+        topicName,
       },
     })
   }
 
-  const handleReflectOpenly = () => {
+  const handleReflectFreely = () => {
     navigate(`/reflect/${categoryId}`, {
       state: {
-        method: 'open',
-        promptIndex: activeIndex,
+        selectedQuestionIndex: null,
         selectedMember,
         selectedRelationship,
+        topicName,
       },
     })
   }
@@ -93,23 +98,41 @@ export function ReflectionPromptPage() {
   return (
     <PageTransition>
       <div className="relative flex h-full flex-col overflow-hidden bg-[var(--lm-bg-primary)]">
-        {/* Background image (hidden) */}
+        {/* Background */}
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <img
+            src="/images/onboarding/OnboardingBackground.png"
+            alt=""
+            className="h-full w-full object-cover opacity-40"
+          />
+        </div>
 
-        {/* Back button */}
-        <div className="relative z-10 px-4 pt-[62px]">
+        {/* Header */}
+        <div className="relative z-10 flex shrink-0 items-center justify-between px-4 pb-3 pt-[62px]">
           <button
             type="button"
             onClick={() => navigate(`/intro2/${categoryId}`)}
-            className="flex items-center gap-[6px] rounded-[4px] bg-lm-neutral-warm p-[6px]"
+            className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
           >
-            <ArrowLeft className="size-6 text-white" />
-            <span className="text-[14px] font-semibold leading-[1.2] text-white">Back</span>
+            <ArrowLeft className="size-5 text-white" />
           </button>
+          <p className="font-display text-[18px] font-semibold leading-[1.2] text-foreground">
+            {config.moduleTitle}
+          </p>
+          <div className="w-8" />
         </div>
 
-        {/* Prompt card area — centered */}
-        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4">
-          <div className="flex w-full flex-col gap-4">
+        {/* Scrollable content */}
+        <div className="relative z-10 flex flex-1 flex-col overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
+          {/* Topic context block */}
+          <div className="flex flex-col items-center gap-1 px-5 pb-5 pt-4">
+            <p className="font-display text-[24px] font-semibold leading-tight text-foreground">
+              {topicName}
+            </p>
+          </div>
+
+          {/* Swipeable question cards */}
+          <div className="flex w-full flex-col gap-4 px-5">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={activeIndex}
@@ -125,31 +148,17 @@ export function ReflectionPromptPage() {
                 onDragEnd={handleDragEnd}
                 className="w-full"
               >
-                {/* Card */}
-                <div className="rounded-[10px] border border-[var(--lm-border-subtle)] bg-[var(--lm-bg-card)] p-2 shadow-reflection">
-                  <div className="flex h-[280px] flex-col justify-between gap-4 rounded-[10px] border border-[var(--lm-border)] p-4">
+                <div className="rounded-[10px] bg-lm-bg-card/40 p-5 shadow-card backdrop-blur-sm">
+                  <div className="flex min-h-[200px] flex-col items-center justify-center gap-5">
                     {/* Category label */}
-                    <p className="text-center text-[10px] font-black uppercase leading-none tracking-[1px] text-[var(--lm-gold-muted)]">
-                      {activeQuestion.categoryLabel}
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-lm-gold">
+                      {interpolateTopic(activeQuestion.categoryLabel, topicName)}
                     </p>
 
                     {/* Question text */}
-                    <div className="flex flex-1 items-center overflow-hidden py-2">
-                      <p className="text-center font-display text-[18px] font-normal leading-[1.5] tracking-[0.5px] text-[var(--lm-text-primary)]">
-                        {activeQuestion.promptText}
-                      </p>
-                    </div>
-
-                    {/* Answer button */}
-                    <button
-                      type="button"
-                      onClick={handleAnswerQuestion}
-                      className="flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-[10px]"
-                    >
-                      <span className="text-[16px] font-medium leading-[1.2] text-white">
-                        Answer Question...
-                      </span>
-                    </button>
+                    <p className="text-center font-display text-[20px] font-normal leading-[1.5] text-foreground">
+                      {interpolateTopic(activeQuestion.promptText, topicName)}
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -171,18 +180,37 @@ export function ReflectionPromptPage() {
               ))}
             </div>
           </div>
+
+          {/* Reflect freely section */}
+          <div className="flex flex-col items-center gap-3 px-5 pb-6 pt-8">
+            <div className="flex w-full items-center gap-3">
+              <div className="h-px flex-1 bg-border" />
+              <span className="text-[13px] font-medium text-muted-foreground">Or</span>
+              <div className="h-px flex-1 bg-border" />
+            </div>
+            <p className="text-center text-[14px] leading-[1.5] text-foreground/80">
+              Reflect freely about {topicName} in your own words, no prompt, no structure, just whatever comes to mind.
+            </p>
+            <button
+              type="button"
+              onClick={handleReflectFreely}
+              className="flex items-center justify-center rounded-lg bg-[#e7ebd9] px-6 py-2.5"
+            >
+              <span className="text-[15px] font-medium leading-[1.2] text-[#283227]">
+                Reflect freely
+              </span>
+            </button>
+          </div>
         </div>
 
-        {/* Bottom: Reflect Openly */}
-        <div className="relative z-10 border-t border-black/25 bg-[var(--lm-bg-primary)] px-4 py-[30px]">
+        {/* Sticky primary CTA */}
+        <div className="relative z-10 border-t border-border/50 bg-[var(--lm-bg-primary)] px-5 pb-8 pt-4">
           <button
             type="button"
-            onClick={handleReflectOpenly}
-            className="flex w-full items-center justify-center rounded-[10px] bg-[#e7ebd9] p-[10px]"
+            onClick={handleStartReflecting}
+            className="flex w-full items-center justify-center rounded-lg bg-lm-green px-6 py-3.5 text-[16px] font-semibold text-white transition-transform active:scale-[0.98]"
           >
-            <span className="text-center text-[16px] font-medium leading-[1.2] text-[#283227]">
-              I Prefer to Reflect Openly
-            </span>
+            Start reflecting
           </button>
         </div>
       </div>

@@ -131,25 +131,24 @@ export function Module2IntroPage() {
             type="button"
             disabled={!hasSelection}
             onClick={() => {
-              if (categoryId === 'cat-family' && selectedOption) {
-                if (data.selectionType === 'web' && data.webMembers) {
-                  const member = data.webMembers.find(m => m.id === selectedOption)
-                  navigate(`/reflection/${categoryId}`, {
-                    state: {
-                      selectedMember: member ? `${member.firstName} ${member.lastName}` : '',
-                      selectedRelationship: member?.relationship ?? '',
-                    },
-                  })
-                } else {
-                  const selectedLabel = data.options.find(o => o.id === selectedOption)?.label ?? ''
-                  navigate(`/reflection/${categoryId}`, {
-                    state: { selectedMember: selectedLabel },
-                  })
-                }
-              } else if (categoryId === 'cat-core-values' && selectedOption) {
-                const selectedLabel = data.options.find(o => o.id === selectedOption)?.label ?? ''
+              if (!categoryId || !selectedOption) return
+              if (data.selectionType === 'web' && data.webMembers) {
+                const member = data.webMembers.find(m => m.id === selectedOption)
                 navigate(`/reflection/${categoryId}`, {
-                  state: { selectedMember: selectedLabel },
+                  state: {
+                    selectedMember: member ? `${member.firstName} ${member.lastName}` : '',
+                    selectedRelationship: member?.relationship ?? '',
+                  },
+                })
+              } else {
+                const option = data.options.find(o => o.id === selectedOption)
+                const label = option?.label ?? ''
+                const subtitle = (option as { subtitle?: string })?.subtitle
+                navigate(`/reflection/${categoryId}`, {
+                  state: {
+                    selectedMember: label,
+                    selectedSubtitle: subtitle ?? '',
+                  },
                 })
               }
             }}

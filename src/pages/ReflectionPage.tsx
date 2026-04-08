@@ -1,25 +1,29 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { PhoneOff } from 'lucide-react'
 import { PageTransition } from '@/animations/PageTransition'
-import { useReflectionFlow } from '@/hooks/useReflectionFlow'
+import { useOpenReflection } from '@/hooks/useOpenReflection'
 import { reflectionConfigs } from '@/data/mock'
-import { ConversationHeader } from '@/components/conversation/ConversationHeader'
-import { ReflectionQuestionBubble } from '@/components/conversation/ReflectionQuestionBubble'
-import { AiBubble } from '@/components/conversation/AiBubble'
-import { VoiceInput } from '@/components/conversation/VoiceInput'
-import { VoiceRecording } from '@/components/conversation/VoiceRecording'
 import { RecordingWaves } from '@/components/conversation/RecordingWaves'
-import { InlineTextInput } from '@/components/conversation/InlineTextInput'
-import { ReflectionThinking } from '@/components/conversation/ReflectionThinking'
-import { ConfirmTranscript } from '@/components/conversation/ConfirmTranscript'
-import { ExitConfirmationModal } from '@/components/conversation/ExitConfirmationModal'
-import type { ReflectionMethod, ReflectionConfig } from '@/types'
+import { ReflectionHeader } from '@/components/reflection/ReflectionHeader'
+import { ReflectionTopicContext } from '@/components/reflection/ReflectionTopicContext'
+import { VoiceIdleState } from '@/components/reflection/VoiceIdleState'
+import { VoicePausedState } from '@/components/reflection/VoicePausedState'
+import { TranscriptView } from '@/components/reflection/TranscriptView'
+import { JournalCanvas } from '@/components/reflection/JournalCanvas'
+import { PenLine } from 'lucide-react'
+import { ReflectionExitSheet } from '@/components/reflection/ReflectionExitSheet'
+
+function interpolateTopic(text: string, topic: string): string {
+  return text.replace(/\{\{topic\}\}/g, topic)
+}
 
 interface LocationState {
-  method: ReflectionMethod
-  promptIndex: number
+  selectedQuestionIndex: number | null
   selectedMember?: string
+  selectedRelationship?: string
+  topicName?: string
 }
 
 export function ReflectionPage() {
@@ -29,95 +33,60 @@ export function ReflectionPage() {
   const locationState = location.state as LocationState | null
 
   const config = categoryId ? reflectionConfigs[categoryId] : undefined
+  const { state, dispatch } = useOpenReflection()
+  const [showExitSheet, setShowExitSheet] = useState(false)
 
-  // Fallback config so the hook is always called (hooks can't be conditional)
-  const fallbackConfig: ReflectionConfig = {
-    categoryId: '',
-    moduleId: '',
-    moduleTitle: '',
-    subjectName: '',
-    subjectRelation: '',
-    questions: [{ id: '', categoryLabel: '', promptText: '', mockUserResponse: '' }],
-    openReflectionMessage: '',
-    summaryHeading: '',
-  }
-  const flow = useReflectionFlow(config ?? fallbackConfig)
-
-  const [isEditingTranscription, setIsEditingTranscription] = useState(false)
-  const [showExitModal, setShowExitModal] = useState(false)
-  const [isRecordingPaused, setIsRecordingPaused] = useState(false)
-  const [editedResponseText, setEditedResponseText] = useState('')
-  const responseTextareaRef = useRef<HTMLTextAreaElement>(null)
-
-  const autoResizeResponse = useCallback(() => {
-    const ta = responseTextareaRef.current
-    if (!ta) return
-    ta.style.height = 'auto'
-    ta.style.height = `${ta.scrollHeight}px`
-  }, [])
-
-  // Sync editedResponseText when entering confirm_transcript
-  useEffect(() => {
-    if (flow.step === 'confirm_transcript') {
-      setEditedResponseText(flow.mockResponseText)
-    }
-  }, [flow.step, flow.mockResponseText])
-
-  // Focus + auto-resize when editing starts
-  useEffect(() => {
-    if (isEditingTranscription && responseTextareaRef.current) {
-      responseTextareaRef.current.focus()
-      responseTextareaRef.current.setSelectionRange(editedResponseText.length, editedResponseText.length)
-      autoResizeResponse()
-    }
-  }, [isEditingTranscription, autoResizeResponse, editedResponseText.length])
+  const topicName = locationState?.topicName || config?.topicName || config?.subjectName || ''
+  const questions = config?.questions ?? []
+  const selectedQuestion = state.selectedQuestionIndex !== null
+    ? questions[state.selectedQuestionIndex]
+    : null
+  const questionText = selectedQuestion?.promptText
+    ? interpolateTopic(selectedQuestion.promptText, topicName)
+    : null
 
   // Initialize from navigation state
   useEffect(() => {
     if (!locationState) return
-    if (locationState.promptIndex !== undefined) {
-      flow.selectPrompt(locationState.promptIndex)
+    if (locationState.selectedQuestionIndex !== null && locationState.selectedQuestionIndex !== undefined) {
+      dispatch({ type: 'SELECT_QUESTION', index: locationState.selectedQuestionIndex })
+    } else {
+      dispatch({ type: 'SELECT_FREE' })
     }
-    if (locationState.method === 'guided') {
-      flow.answerQuestion()
-    } else if (locationState.method === 'open') {
-      flow.reflectOpenly()
-    }
-    // Only run on mount
+    dispatch({ type: 'START_REFLECTING' })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Auto-advance from transcription (transcribing loading screen)
+  // Auto-navigate to summary when step changes
   useEffect(() => {
-    if (flow.step !== 'transcription') return
-    const timer = setTimeout(() => {
-      flow.confirmTranscription()
-    }, 2000)
-    return () => clearTimeout(timer)
-  }, [flow.step, flow.confirmTranscription])
-
-  // Auto-advance from ai_thinking
-  useEffect(() => {
-    if (flow.step !== 'ai_thinking') return
-    const timer = setTimeout(() => {
-      flow.aiThinkingComplete()
-    }, 2000)
-    return () => clearTimeout(timer)
-  }, [flow.step, flow.aiThinkingComplete])
+    if (state.step === 'summary' && config && categoryId) {
+      navigate(`/reflection/${categoryId}/summary`, {
+        state: {
+          topicName,
+          questionText,
+          reflectionText: state.inputMode === 'voice' ? state.transcript : state.writtenText,
+          inputMode: state.inputMode,
+          selectedMember: locationState?.selectedMember,
+        },
+      })
+    }
+  }, [state.step, categoryId, config, navigate, topicName, questionText, state.transcript, state.writtenText, state.inputMode, locationState?.selectedMember])
 
   const handleBack = useCallback(() => {
-    if (flow.hasAnswered) {
-      setShowExitModal(true)
-    } else if (flow.step === 'reflect') {
-      navigate(`/reflection/${categoryId}`)
+    const hasContent = state.transcript.trim() || state.writtenText.trim()
+    if (hasContent) {
+      setShowExitSheet(true)
     } else {
-      flow.goBack()
+      navigate(`/reflection/${categoryId}`)
     }
-  }, [flow, navigate, categoryId])
+  }, [state.transcript, state.writtenText, navigate, categoryId])
 
-  const handleSaveAndFinish = useCallback(() => {
-    flow.saveAndFinish()
-  }, [flow])
+  const handleFinishRecording = useCallback(() => {
+    // Use mock transcript from config
+    const mockText = selectedQuestion?.mockUserResponse
+      ?? "I remember so many things about him. The way he'd always wake up before everyone else. The sound of the radio in the kitchen. Those Sunday drives where we'd just talk. He had a way of making everything feel like it mattered, even the small things."
+    dispatch({ type: 'FINISH_RECORDING', mockTranscript: mockText })
+  }, [dispatch, selectedQuestion])
 
   if (!config || !categoryId) {
     return (
@@ -129,198 +98,135 @@ export function ReflectionPage() {
     )
   }
 
-  // Summary step — rendered by ReflectionSummaryPage via navigation
-  if (flow.step === 'summary') {
-    navigate(`/reflection/${categoryId}/summary`, {
-      state: {
-        promptIndex: flow.activePromptIndex,
-        mockResponseText: flow.mockResponseText,
-        reflectionMethod: flow.reflectionMethod,
-        selectedMember: locationState?.selectedMember,
-        inputMode: flow.inputMode,
-      },
-    })
-    return null
-  }
-
-  const headerTitle = `About ${config.subjectName}`
-  const headerRightLabel = flow.step === 'confirm_transcript' ? 'Review' : ''
-  const isTextMode = flow.step === 'reflect' && flow.inputMode === 'text'
+  // Don't render if navigating to summary
+  if (state.step === 'summary') return null
 
   return (
     <PageTransition>
       <div className="relative flex h-full flex-col overflow-hidden bg-[var(--lm-bg-primary)]">
-        {/* Header — background image is confined here */}
-        <ConversationHeader
-          moduleTitle={headerTitle}
-          rightLabel={headerRightLabel}
-          progressPercent={0}
-          onBack={handleBack}
-          showProgress={false}
-          backgroundImage=""
-        />
+        {/* Background */}
+        <div className="pointer-events-none absolute inset-0 z-0">
+          <img
+            src="/images/onboarding/OnboardingBackground.png"
+            alt=""
+            className="h-full w-full object-cover opacity-40"
+          />
+        </div>
 
-        {/* Text input mode — question at top, inline text area fills remaining space */}
-        {isTextMode ? (
-          <div className="relative z-10 flex flex-1 flex-col pt-[155px]">
-            {flow.reflectionMethod === 'guided' && (
-              <ReflectionQuestionBubble questionText={flow.activeQuestion.promptText} />
+        {/* Header */}
+        <div className="relative z-10">
+          <ReflectionHeader
+            moduleTitle={config.moduleTitle}
+            onBack={handleBack}
+          />
+        </div>
+
+        {/* Top zone — topic context */}
+        <div className="relative z-10 px-5 pb-3 pt-4">
+          <ReflectionTopicContext
+            topicName={topicName}
+            questionText={questionText}
+          />
+        </div>
+
+        {/* Middle zone — state-dependent content */}
+        <div className="relative z-10 flex flex-1 flex-col overflow-hidden">
+          {/* Recording waves background */}
+          {state.step === 'recording' && (
+            <RecordingWaves isPaused={false} />
+          )}
+          {state.step === 'paused' && (
+            <RecordingWaves isPaused={true} />
+          )}
+
+          <AnimatePresence mode="wait">
+            {/* Voice idle */}
+            {state.step === 'idle' && state.inputMode === 'voice' && (
+              <VoiceIdleState
+                key="voice-idle"
+                onBeginRecording={() => dispatch({ type: 'BEGIN_RECORDING' })}
+              />
             )}
-            {flow.reflectionMethod === 'open' && (
-              <AiBubble messages={[config.openReflectionMessage]} />
+
+            {/* Voice recording */}
+            {state.step === 'recording' && (
+              <motion.div
+                key="voice-recording"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex flex-1 flex-col items-center justify-center gap-5 -mt-[114px]"
+              >
+                <p className="text-[15px] font-medium text-foreground/70">
+                  Listening…
+                </p>
+                <button
+                  type="button"
+                  onClick={() => dispatch({ type: 'END_RECORDING' })}
+                  className="flex size-20 items-center justify-center rounded-full bg-[#d40016] shadow-lg transition-transform active:scale-95"
+                >
+                  <PhoneOff className="size-8 text-white" />
+                </button>
+              </motion.div>
             )}
-            <InlineTextInput
-              onSubmit={(text: string) => flow.submitText(text)}
-              onToggleInputMode={flow.toggleInputMode}
-            />
+
+            {/* Voice paused */}
+            {state.step === 'paused' && (
+              <VoicePausedState
+                key="voice-paused"
+                onContinue={() => dispatch({ type: 'CONTINUE_RECORDING' })}
+                onDone={handleFinishRecording}
+              />
+            )}
+
+            {/* Transcript view */}
+            {state.step === 'transcript' && (
+              <TranscriptView
+                key="transcript"
+                transcript={state.transcript}
+                isEditing={state.isEditingTranscript}
+                onEdit={() => dispatch({ type: 'EDIT_TRANSCRIPT' })}
+                onSaveEdit={(text) => dispatch({ type: 'SAVE_TRANSCRIPT_EDIT', text })}
+                onCancelEdit={() => dispatch({ type: 'CANCEL_TRANSCRIPT_EDIT' })}
+                onRecordMore={() => dispatch({ type: 'RECORD_MORE' })}
+                onSubmit={() => dispatch({ type: 'SUBMIT' })}
+              />
+            )}
+
+            {/* Text mode — journal canvas */}
+            {state.step === 'writing' && (
+              <JournalCanvas
+                key="journal"
+                questionText={questionText}
+                writtenText={state.writtenText}
+                onTextChange={(text) => dispatch({ type: 'UPDATE_WRITTEN_TEXT', text })}
+                onFinishWriting={() => dispatch({ type: 'FINISH_WRITING' })}
+                onSubmit={() => dispatch({ type: 'SUBMIT' })}
+              />
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Bottom zone — prefer to type */}
+        {state.step === 'idle' && state.inputMode === 'voice' && (
+          <div className="relative z-10 border-t border-border/50 bg-[var(--lm-bg-primary)] px-5 pb-6 pt-3">
+            <button
+              type="button"
+              onClick={() => dispatch({ type: 'SWITCH_TO_TEXT' })}
+              className="flex w-full items-center justify-center gap-2 py-2 text-[14px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <PenLine className="size-4" />
+              Prefer to type? Switch to text
+            </button>
           </div>
-        ) : flow.step === 'transcription' ? (
-          /* Transcribing loading — question bubble at top + spinner */
-          <div className="relative z-10 flex flex-1 flex-col pt-[155px]">
-            {flow.reflectionMethod === 'guided' && (
-              <ReflectionQuestionBubble questionText={flow.activeQuestion.promptText} />
-            )}
-            <ReflectionThinking />
-          </div>
-        ) : flow.step === 'ai_thinking' ? (
-          /* AI thinking — full-screen spinner layout (no question) */
-          <div className="relative z-10 flex flex-1 flex-col">
-            <ReflectionThinking />
-          </div>
-        ) : (
-          <>
-            {/* Animated wave hills during recording */}
-            {flow.step === 'recording' && (
-              <RecordingWaves isPaused={isRecordingPaused} />
-            )}
-
-            {/* Middle content area */}
-            <div className={`relative z-10 flex flex-1 flex-col pb-4 ${(flow.step === 'reflect' || flow.step === 'recording' || flow.step === 'confirm_transcript') ? 'pt-[155px]' : 'justify-end'}`}>
-              <AnimatePresence mode="wait">
-                {/* Reflect step — guided: show question bubble */}
-                {flow.step === 'reflect' && flow.reflectionMethod === 'guided' && (
-                  <ReflectionQuestionBubble
-                    key="question-bubble"
-                    questionText={flow.activeQuestion.promptText}
-                  />
-                )}
-
-                {/* Reflect step — open: show encouragement message */}
-                {flow.step === 'reflect' && flow.reflectionMethod === 'open' && (
-                  <AiBubble
-                    key="open-message"
-                    messages={[config.openReflectionMessage]}
-                  />
-                )}
-
-                {/* Recording — question bubble stays at top */}
-                {flow.step === 'recording' && flow.reflectionMethod === 'guided' && (
-                  <ReflectionQuestionBubble
-                    key="recording-question"
-                    questionText={flow.activeQuestion.promptText}
-                  />
-                )}
-
-                {/* Confirm transcript — question + styled response card */}
-                {flow.step === 'confirm_transcript' && (
-                  <div key="confirm" className="flex flex-col gap-[40px]">
-                    {flow.reflectionMethod === 'guided' && (
-                      <ReflectionQuestionBubble
-                        questionText={flow.activeQuestion.promptText}
-                      />
-                    )}
-                    <div className="mx-4 flex flex-col gap-[10px] rounded-[10px] border border-[#e7ebd9] bg-[#fffcf4] px-4 py-2 shadow-[0px_3px_6px_0px_rgba(0,0,0,0.15)]">
-                      <p className="text-[14px] font-semibold leading-[1.2] text-[#7b7b7b]">
-                        Your Response
-                      </p>
-                      {isEditingTranscription ? (
-                        <textarea
-                          ref={responseTextareaRef}
-                          value={editedResponseText}
-                          onChange={(e) => {
-                            setEditedResponseText(e.target.value)
-                            autoResizeResponse()
-                          }}
-                          className="w-full resize-none border-0 border-b border-[#3e2f26]/20 bg-transparent pb-4 text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)] outline-none"
-                        />
-                      ) : (
-                        <p className="text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
-                          {editedResponseText || flow.mockResponseText}
-                        </p>
-                      )}
-                      {!isEditingTranscription && (
-                        <button
-                          type="button"
-                          onClick={() => setIsEditingTranscription(true)}
-                          className="flex items-center gap-1"
-                        >
-                          <svg className="size-[18px] text-[#3e2f26]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M4 22h16" />
-                            <path d="M18 2l4 4L8 20H4v-4L18 2z" />
-                          </svg>
-                          <span className="text-[14px] font-medium leading-[20px] text-[#3e2f26]">
-                            Tap to edit
-                          </span>
-                        </button>
-                      )}
-                      {isEditingTranscription && (
-                        <button
-                          type="button"
-                          onClick={() => setIsEditingTranscription(false)}
-                          className="mt-1 flex items-center gap-1 self-end rounded-[6px] bg-lm-green px-3 py-1.5"
-                        >
-                          <svg className="size-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          <span className="text-[14px] font-medium leading-[20px] text-white">
-                            Done
-                          </span>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Bottom action area */}
-            {!isEditingTranscription && (
-              <div className="relative z-10">
-                <AnimatePresence mode="wait">
-                  {flow.step === 'reflect' && flow.inputMode === 'voice' && (
-                    <VoiceInput
-                      key="voice-input"
-                      onStartRecording={flow.startRecording}
-                      onToggleInputMode={flow.toggleInputMode}
-                    />
-                  )}
-
-                  {flow.step === 'recording' && (
-                    <VoiceRecording
-                      key="recording"
-                      onStop={flow.stopRecording}
-                      isPaused={isRecordingPaused}
-                      onPauseChange={setIsRecordingPaused}
-                    />
-                  )}
-
-                  {flow.step === 'confirm_transcript' && (
-                    <ConfirmTranscript
-                      key="confirm-footer"
-                      onSayMore={flow.sayMore}
-                      onSaveAndFinish={handleSaveAndFinish}
-                    />
-                  )}
-                </AnimatePresence>
-              </div>
-            )}
-          </>
         )}
 
-        <ExitConfirmationModal
-          isOpen={showExitModal}
-          onStay={() => setShowExitModal(false)}
-          onLeave={() => navigate('/home')}
+        {/* Exit sheet */}
+        <ReflectionExitSheet
+          isOpen={showExitSheet}
+          onSaveAndExit={() => navigate('/home')}
+          onKeepGoing={() => setShowExitSheet(false)}
         />
       </div>
     </PageTransition>
