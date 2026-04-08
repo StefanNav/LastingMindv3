@@ -13,19 +13,22 @@ const SWIPE_THRESHOLD = 50
 
 const cardVariants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 300 : -300,
+    x: direction > 0 ? 260 : -260,
+    y: 18,
     opacity: 0,
-    rotate: direction > 0 ? 4 : -4,
+    scale: 0.95,
   }),
   center: {
     x: 0,
+    y: 0,
     opacity: 1,
-    rotate: 0,
+    scale: 1,
   },
   exit: (direction: number) => ({
-    x: direction > 0 ? -300 : 300,
+    x: direction > 0 ? -260 : 260,
+    y: 24,
     opacity: 0,
-    rotate: direction > 0 ? -4 : 4,
+    scale: 0.92,
   }),
 }
 
@@ -75,8 +78,6 @@ export function PromptCard({ cards, onCardTap }: PromptCardCarouselProps) {
 
   if (cards.length === 0) return null
 
-  const activeCard = cards[activeIndex]
-
   return (
     <div className="flex flex-col items-center gap-4 w-full">
       {/* Fixed-height wrapper — prevents layout shift during swipe */}
@@ -99,7 +100,7 @@ export function PromptCard({ cards, onCardTap }: PromptCardCarouselProps) {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 28 }}
             drag={cards.length > 1 ? 'x' : false}
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.7}
@@ -113,12 +114,12 @@ export function PromptCard({ cards, onCardTap }: PromptCardCarouselProps) {
             {/* Category tag */}
             <div className="flex w-full items-center gap-1">
               <p className="text-[10px] font-bold uppercase leading-none tracking-[1px] text-lm-gold">
-                {activeCard.categoryTag}
+                {cards[activeIndex]?.categoryTag}
               </p>
             </div>
             {/* Question — clamped to 2 lines */}
             <p className="w-full text-center text-[16px] font-medium leading-[1.3] text-foreground pointer-events-none line-clamp-2">
-              {activeCard.question}
+              {cards[activeIndex]?.question}
             </p>
             {/* Arrow affordance */}
             <div className="flex items-center justify-center gap-1.5 text-[13px] font-medium text-primary pointer-events-none">
@@ -129,29 +130,27 @@ export function PromptCard({ cards, onCardTap }: PromptCardCarouselProps) {
         </AnimatePresence>
       </div>
 
-      {/* Pagination dots */}
-      {cards.length > 1 && (
-        <div className="flex items-center justify-center gap-2.5">
-          {cards.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              aria-label={`Go to prompt ${i + 1}`}
-              onClick={(e) => {
-                e.stopPropagation()
-                setDirection(i > activeIndex ? 1 : -1)
-                setActiveIndex(i)
-              }}
-              className={cn(
-                'rounded-full transition-all duration-200',
-                i === activeIndex
-                  ? 'h-1.5 w-5 bg-lm-green'
-                  : 'size-1.5 bg-lm-neutral-warm/35',
-              )}
-            />
-          ))}
-        </div>
-      )}
+      {/* Pagination dots — always rendered to preserve layout height */}
+      <div className="flex h-1.5 items-center justify-center gap-2.5">
+        {cards.length > 1 && cards.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            aria-label={`Go to prompt ${i + 1}`}
+            onClick={(e) => {
+              e.stopPropagation()
+              setDirection(i > activeIndex ? 1 : -1)
+              setActiveIndex(i)
+            }}
+            className={cn(
+              'rounded-full transition-all duration-200',
+              i === activeIndex
+                ? 'h-1.5 w-5 bg-lm-green'
+                : 'size-1.5 bg-lm-neutral-warm/35',
+            )}
+          />
+        ))}
+      </div>
     </div>
   )
 }

@@ -118,21 +118,22 @@ export function HomePage() {
         </div>
 
         {/* ── Tree image ── */}
-        <div className={`relative z-[2] flex justify-center ${treeImage.includes('TreeStage1') ? 'mt-[134px]' : 'mt-[58px]'}`}>
-          <div className={`relative ${treeImage.includes('TreeStage1') ? 'h-[240px] w-[354px]' : 'h-[316px] w-[466px]'}`}>
-            <img
-              src={treeImage}
-              alt="Legacy tree"
-              className="relative z-[1] h-full w-full object-contain"
-            />
-            {/* ── Gradient band: behind tree, in front of background, covers the seam ── */}
-            <div
-              className="absolute bottom-[25px] -left-[200px] -right-[200px] h-[80px] z-[0] blur-[6px]"
-              style={{
-                background: 'linear-gradient(to bottom, transparent 0%, rgba(253,247,234,0.8) 40%, rgba(253,247,234,1) 100%)',
-              }}
-            />
-          </div>
+        <div className="relative z-[2] mt-[58px] h-[316px] w-full overflow-hidden">
+          {/* Gradient band — sits behind tree, covers the seam */}
+          <div
+            className="absolute bottom-[25px] left-1/2 -translate-x-1/2 h-[80px] w-[calc(100%+400px)] z-[1] blur-[6px]"
+            style={{
+              background: 'linear-gradient(to bottom, transparent 0%, rgba(253,247,234,0.8) 40%, rgba(253,247,234,1) 100%)',
+            }}
+          />
+          {/* Tree — absolutely positioned so it never affects layout below */}
+          <img
+            src={treeImage}
+            alt="Legacy tree"
+            className={`absolute bottom-0 left-1/2 -translate-x-1/2 z-[2] object-contain ${
+              treeImage.includes('TreeStage1') ? 'h-[240px] w-[354px]' : 'h-[316px] w-[466px]'
+            }`}
+          />
         </div>
 
         {/* ── Phase title with radial gradient ── */}

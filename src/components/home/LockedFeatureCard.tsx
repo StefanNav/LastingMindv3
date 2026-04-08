@@ -1,4 +1,4 @@
-import { LockKeyhole } from 'lucide-react'
+import { Lock } from 'lucide-react'
 
 interface LockedFeatureCardProps {
   image: string
@@ -19,8 +19,8 @@ export function LockedFeatureCard({ image, title, subtitle, onClick }: LockedFea
           alt=""
           className="size-9 object-contain"
         />
-        <div className="absolute -bottom-1 -right-1 flex size-5 items-center justify-center rounded-full bg-[#e7ebd9] shadow-sm">
-          <LockKeyhole className="size-3 text-lm-green-dark/60" />
+        <div className="absolute -bottom-1 -right-1 flex size-5 items-center justify-center rounded-full bg-lm-bg-card shadow-card">
+          <Lock className="size-3 text-lm-neutral-warm" />
         </div>
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-1">

@@ -1,4 +1,4 @@
-import { Star, LockKeyhole } from 'lucide-react'
+import { Star, Lock } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import type { Category, CategoryStatus } from '@/types'
@@ -77,8 +77,8 @@ export function CategoryNodeCard({ category, onClick, overrideFilledStars, tease
         </p>
 
         {isLocked ? (
-          <div className="flex items-center justify-center rounded-full bg-[#e7ebd9] size-[52px]">
-            <LockKeyhole className="size-[30px] text-lm-green-dark/60" />
+          <div className="flex items-center justify-center rounded-full bg-lm-bg-card shadow-card size-[52px]">
+            <Lock className="size-[26px] text-lm-neutral-warm" />
           </div>
         ) : (
           <div className="flex flex-col items-center gap-[2px]">

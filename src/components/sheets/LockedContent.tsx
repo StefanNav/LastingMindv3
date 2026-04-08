@@ -1,4 +1,4 @@
-import { LockKeyhole } from 'lucide-react'
+import { Lock } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useMemo } from 'react'
 import type { Category } from '@/types'
@@ -45,8 +45,8 @@ export function LockedContent({ category, onContinueFoundation }: LockedContentP
               {category.title}
             </p>
           </div>
-          <div className="flex size-[52px] items-center justify-center rounded-full bg-[#e7ebd9]">
-            <LockKeyhole className="size-[30px] text-lm-green-dark/60" />
+          <div className="flex size-[52px] items-center justify-center rounded-full bg-lm-bg-card shadow-card">
+            <Lock className="size-[26px] text-lm-neutral-warm" />
           </div>
         </div>
 

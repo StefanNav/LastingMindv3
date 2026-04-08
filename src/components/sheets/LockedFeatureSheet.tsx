@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
-import { X, LockKeyhole } from 'lucide-react'
+import { X, Lock } from 'lucide-react'
 
 export interface LockedFeature {
   id: string
@@ -147,8 +147,8 @@ export function LockedFeatureSheet({ isOpen, feature, onClose }: LockedFeatureSh
                         className="h-full w-full object-contain"
                       />
                     </div>
-                    <div className="flex size-[52px] items-center justify-center rounded-full bg-[#e7ebd9]">
-                      <LockKeyhole className="size-[30px] text-lm-green-dark/60" />
+                    <div className="flex size-[52px] items-center justify-center rounded-full bg-lm-bg-card shadow-card">
+                      <Lock className="size-[26px] text-lm-neutral-warm" />
                     </div>
                   </div>
 
