@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { PhoneOff } from 'lucide-react'
+import { Square } from 'lucide-react'
 import { PageTransition } from '@/animations/PageTransition'
 import { useOpenReflection } from '@/hooks/useOpenReflection'
 import { reflectionConfigs } from '@/data/mock'
@@ -88,6 +88,28 @@ export function ReflectionPage() {
     dispatch({ type: 'FINISH_RECORDING', mockTranscript: mockText })
   }, [dispatch, selectedQuestion])
 
+  // Recording timer
+  const [recordingSeconds, setRecordingSeconds] = useState(0)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  useEffect(() => {
+    if (state.step === 'recording') {
+      timerRef.current = setInterval(() => setRecordingSeconds((s) => s + 1), 1000)
+    } else if (state.step === 'paused') {
+      if (timerRef.current) clearInterval(timerRef.current)
+    } else {
+      if (timerRef.current) clearInterval(timerRef.current)
+      setRecordingSeconds(0)
+    }
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+  }, [state.step])
+
+  const formatTime = (secs: number) => {
+    const m = Math.floor(secs / 60)
+    const s = secs % 60
+    return `${m}:${s.toString().padStart(2, '0')}`
+  }
+
   if (!config || !categoryId) {
     return (
       <PageTransition>
@@ -132,11 +154,8 @@ export function ReflectionPage() {
         {/* Middle zone — state-dependent content */}
         <div className="relative z-10 flex flex-1 flex-col overflow-hidden">
           {/* Recording waves background */}
-          {state.step === 'recording' && (
-            <RecordingWaves isPaused={false} />
-          )}
-          {state.step === 'paused' && (
-            <RecordingWaves isPaused={true} />
+          {(state.step === 'recording' || state.step === 'paused') && (
+            <RecordingWaves isPaused={state.step === 'paused'} />
           )}
 
           <AnimatePresence mode="wait">
@@ -158,15 +177,23 @@ export function ReflectionPage() {
                 transition={{ duration: 0.3 }}
                 className="flex flex-1 flex-col items-center justify-center gap-5 -mt-[114px]"
               >
-                <p className="text-[15px] font-medium text-foreground/70">
-                  Listening…
-                </p>
+                <div className="flex flex-col items-center gap-1.5">
+                  <p className="text-[15px] font-medium text-foreground/70">
+                    Listening…
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <div className="size-2 animate-pulse rounded-full bg-[#d40016]" />
+                    <span className="text-[14px] font-medium tabular-nums text-foreground/60">
+                      {formatTime(recordingSeconds)}
+                    </span>
+                  </div>
+                </div>
                 <button
                   type="button"
                   onClick={() => dispatch({ type: 'END_RECORDING' })}
                   className="flex size-20 items-center justify-center rounded-full bg-[#d40016] shadow-lg transition-transform active:scale-95"
                 >
-                  <PhoneOff className="size-8 text-white" />
+                  <Square className="size-7 text-white" fill="white" />
                 </button>
               </motion.div>
             )}

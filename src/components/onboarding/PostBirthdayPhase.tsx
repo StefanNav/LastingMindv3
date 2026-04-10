@@ -59,7 +59,7 @@ export function PostBirthdayPhase({ firstName, onComplete }: PostBirthdayPhasePr
     if (stage === 2 && imagesLoaded) {
       morphTo(1, () => {
         // After morph completes, wait a beat then advance
-        setTimeout(() => onCompleteRef.current(), 800)
+        setTimeout(() => onCompleteRef.current(), 200)
       })
     }
   }, [stage, imagesLoaded, morphTo])
@@ -103,7 +103,7 @@ export function PostBirthdayPhase({ firstName, onComplete }: PostBirthdayPhasePr
                   variants={dissolveVariants}
                   className="font-display text-[26px] font-semibold leading-[1.2] tracking-tight text-foreground"
                 >
-                  Welcome to your Lasting Mind, {firstName}
+                  Welcome to your LastingMind, {firstName}
                 </motion.h1>
               </div>
             </motion.div>

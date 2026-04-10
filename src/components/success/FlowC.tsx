@@ -104,7 +104,7 @@ export function FlowC({ completionState }: FlowCProps) {
       {step === 'reward_card' && rewardCardData && (
         <RewardCard
           headline={`${categoryLabel} Story Added!`}
-          subheadline="You've added another meaningful piece to your Lasting Mind."
+          subheadline="You've added another meaningful piece to your LastingMind."
           categoryImage={rewardCardData.categoryImage}
           categoryLabel={rewardCardData.categoryLabel}
           moduleTitle={rewardCardData.moduleTitle}

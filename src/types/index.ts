@@ -195,7 +195,9 @@ export type ConversationStep =
 
 export type ConversationInputMode = 'voice' | 'text'
 
-export type DemoStateId = 'onboarding' | 'state-0' | 'state-1' | 'state-2' | 'state-3' | 'state-4'
+export type DemoStateId = 'onboarding' | 'state-0' | 'state-1' | 'state-2' | 'state-3' | 'state-4' | 'audience'
+
+export type UserState = 'creator' | 'audience' | 'both'
 
 export interface DemoPromptCard {
   categoryTag: string
@@ -435,6 +437,20 @@ export interface AddedLegacyItem {
   id: string
   status: LegacyItemStatus
   addedAt: string // ISO timestamp
+}
+
+// ── Audience member types ────────────────────────────────────────────────────
+
+export type AudienceMemberStatus = 'pending' | 'confirmed'
+
+export interface AudienceMember {
+  id: string
+  firstName: string
+  lastName: string
+  phone: string
+  relationship: string
+  status: AudienceMemberStatus
+  invitedAt: string // ISO timestamp
 }
 
 // ── Chat types ───────────────────────────────────────────────────────────────

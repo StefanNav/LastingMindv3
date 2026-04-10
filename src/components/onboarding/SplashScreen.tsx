@@ -26,11 +26,11 @@ export function SplashScreen({ onStart }: SplashScreenProps) {
         >
           <img
             src="/images/onboarding/LM Logo.png"
-            alt="Lasting Mind logo"
+            alt="LastingMind logo"
             className="h-[104px] w-[133px]"
           />
           <h1 className="mt-0 font-display text-[38px] font-semibold leading-[1.2] tracking-tight text-foreground">
-            Lasting Mind
+            LastingMind
           </h1>
           <p className="mt-1.5 font-sans text-[18px] font-medium leading-[1.2] text-foreground">
             A legacy your loved ones can return to

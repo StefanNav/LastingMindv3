@@ -37,9 +37,9 @@ const state0: DemoConfig = {
   promptCards: [
     { categoryTag: 'Suggested first step', question: 'Start with the people closest to you — tell us about your family.', categoryId: 'cat-family', moduleId: 'mod-fam-1' },
     { categoryTag: 'Friends', question: 'Share the people who have been there through it all.', categoryId: 'cat-friends', moduleId: 'mod-fri-1' },
+    { categoryTag: 'Favorites', question: 'Foods, places, songs, movies — the things you love most.', categoryId: 'cat-favorites', moduleId: 'mod-fav-1' },
     { categoryTag: 'Career', question: 'Walk us through the jobs and roles that defined you.', categoryId: 'cat-career', moduleId: 'mod-car-1' },
     { categoryTag: 'Education', question: 'Share memories from your time in school.', categoryId: 'cat-education', moduleId: 'mod-edu-1' },
-    { categoryTag: 'Favorites', question: 'Foods, places, songs, movies — the things you love most.', categoryId: 'cat-favorites', moduleId: 'mod-fav-1' },
     { categoryTag: 'Core Values', question: 'The principles that have guided your life.', categoryId: 'cat-core-values', moduleId: 'mod-val-1' },
   ],
   homePhases: [
@@ -50,9 +50,9 @@ const state0: DemoConfig = {
       categories: [
         { id: 'cat-family',      title: 'Family',      ...CAT_IMAGES.family,      status: 'not_started', totalModules: 2 },
         { id: 'cat-friends',     title: 'Friends',     ...CAT_IMAGES.friends,     status: 'not_started', totalModules: 2 },
+        { id: 'cat-favorites',  title: 'Favorites',  ...CAT_IMAGES.favorites,  status: 'not_started', totalModules: 2 },
         { id: 'cat-career',      title: 'Career',      ...CAT_IMAGES.career,      status: 'not_started', totalModules: 2 },
         { id: 'cat-education',   title: 'Education',   ...CAT_IMAGES.education,   status: 'not_started', totalModules: 2 },
-        { id: 'cat-favorites',  title: 'Favorites',  ...CAT_IMAGES.favorites,  status: 'not_started', totalModules: 2 },
         { id: 'cat-core-values', title: 'Core Values', ...CAT_IMAGES.coreValues,  status: 'not_started', totalModules: 2 },
       ],
     },
@@ -151,9 +151,9 @@ const state1: DemoConfig = {
   promptCards: [
     { categoryTag: 'Family', question: 'Share a story or a memory about someone in your family.', categoryId: 'cat-family', moduleId: 'mod-fam-2' },
     { categoryTag: 'Friends', question: 'Tell us about a friend who changed your life.', categoryId: 'cat-friends', moduleId: 'mod-fri-2' },
+    { categoryTag: 'Favorites', question: 'What makes these favorites special to you?', categoryId: 'cat-favorites', moduleId: 'mod-fav-2' },
     { categoryTag: 'Career', question: 'What did your career teach you about life?', categoryId: 'cat-career', moduleId: 'mod-car-2' },
     { categoryTag: 'Education', question: 'How did learning shape who you became?', categoryId: 'cat-education', moduleId: 'mod-edu-2' },
-    { categoryTag: 'Favorites', question: 'What makes these favorites special to you?', categoryId: 'cat-favorites', moduleId: 'mod-fav-2' },
     { categoryTag: 'Core Values', question: 'Share a time your values were tested.', categoryId: 'cat-core-values', moduleId: 'mod-val-2' },
   ],
   homePhases: [
@@ -164,9 +164,9 @@ const state1: DemoConfig = {
       categories: [
         { id: 'cat-family',      title: 'Family',      ...CAT_IMAGES.family,      status: 'started', totalModules: 2 },
         { id: 'cat-friends',     title: 'Friends',     ...CAT_IMAGES.friends,     status: 'started', totalModules: 2 },
+        { id: 'cat-favorites',  title: 'Favorites',  ...CAT_IMAGES.favorites,  status: 'started', totalModules: 2 },
         { id: 'cat-career',      title: 'Career',      ...CAT_IMAGES.career,      status: 'started', totalModules: 2 },
         { id: 'cat-education',   title: 'Education',   ...CAT_IMAGES.education,   status: 'started', totalModules: 2 },
-        { id: 'cat-favorites',  title: 'Favorites',  ...CAT_IMAGES.favorites,  status: 'started', totalModules: 2 },
         { id: 'cat-core-values', title: 'Core Values', ...CAT_IMAGES.coreValues,  status: 'started', totalModules: 2 },
       ],
     },
@@ -292,9 +292,9 @@ const state2: DemoConfig = {
       categories: [
         { id: 'cat-family',      title: 'Family',      ...CAT_IMAGES.family,      status: 'growing', totalModules: 2 },
         { id: 'cat-friends',     title: 'Friends',     ...CAT_IMAGES.friends,     status: 'growing', totalModules: 2 },
+        { id: 'cat-favorites',  title: 'Favorites',  ...CAT_IMAGES.favorites,  status: 'growing', totalModules: 2 },
         { id: 'cat-career',      title: 'Career',      ...CAT_IMAGES.career,      status: 'growing', totalModules: 2 },
         { id: 'cat-education',   title: 'Education',   ...CAT_IMAGES.education,   status: 'growing', totalModules: 2 },
-        { id: 'cat-favorites',  title: 'Favorites',  ...CAT_IMAGES.favorites,  status: 'growing', totalModules: 2 },
         { id: 'cat-core-values', title: 'Core Values', ...CAT_IMAGES.coreValues,  status: 'started', totalModules: 2 },
       ],
     },
@@ -464,9 +464,9 @@ const state3: DemoConfig = {
       categories: [
         { id: 'cat-family',      title: 'Family',      ...CAT_IMAGES.family,      status: 'flourishing', totalModules: 2 },
         { id: 'cat-friends',     title: 'Friends',     ...CAT_IMAGES.friends,     status: 'flourishing', totalModules: 2 },
+        { id: 'cat-favorites',  title: 'Favorites',  ...CAT_IMAGES.favorites,  status: 'flourishing', totalModules: 2 },
         { id: 'cat-career',      title: 'Career',      ...CAT_IMAGES.career,      status: 'flourishing', totalModules: 2 },
         { id: 'cat-education',   title: 'Education',   ...CAT_IMAGES.education,   status: 'flourishing', totalModules: 2 },
-        { id: 'cat-favorites',  title: 'Favorites',  ...CAT_IMAGES.favorites,  status: 'flourishing', totalModules: 2 },
         { id: 'cat-core-values', title: 'Core Values', ...CAT_IMAGES.coreValues,  status: 'flourishing', totalModules: 2 },
       ],
     },
@@ -695,9 +695,9 @@ const state4: DemoConfig = {
       categories: [
         { id: 'cat-family',      title: 'Family',      ...CAT_IMAGES.family,      status: 'flourishing', totalModules: 2 },
         { id: 'cat-friends',     title: 'Friends',     ...CAT_IMAGES.friends,     status: 'flourishing', totalModules: 2 },
+        { id: 'cat-favorites',  title: 'Favorites',  ...CAT_IMAGES.favorites,  status: 'flourishing', totalModules: 2 },
         { id: 'cat-career',      title: 'Career',      ...CAT_IMAGES.career,      status: 'flourishing', totalModules: 2 },
         { id: 'cat-education',   title: 'Education',   ...CAT_IMAGES.education,   status: 'flourishing', totalModules: 2 },
-        { id: 'cat-favorites',  title: 'Favorites',  ...CAT_IMAGES.favorites,  status: 'flourishing', totalModules: 2 },
         { id: 'cat-core-values', title: 'Core Values', ...CAT_IMAGES.coreValues,  status: 'flourishing', totalModules: 2 },
       ],
     },
@@ -950,6 +950,17 @@ const onboarding: DemoConfig = {
   categoryDetails: state0.categoryDetails,
 }
 
+const audience: DemoConfig = {
+  id: 'audience',
+  label: 'Audience',
+  foundationStars: 0,
+  streak: 0,
+  treeImage: TREE_STAGE_1,
+  promptCards: [],
+  homePhases: [],
+  categoryDetails: {},
+}
+
 // ─── Export all demo states ───────────────────────────────────────────────────
 
 export const demoStates: Record<DemoStateId, DemoConfig> = {
@@ -959,6 +970,7 @@ export const demoStates: Record<DemoStateId, DemoConfig> = {
   'state-2': state2,
   'state-3': state3,
   'state-4': state4,
+  'audience': audience,
 }
 
-export const demoStateOrder: DemoStateId[] = ['onboarding', 'state-0', 'state-1', 'state-2', 'state-3', 'state-4']
+export const demoStateOrder: DemoStateId[] = ['onboarding', 'state-0', 'state-1', 'state-2', 'state-3', 'state-4', 'audience']

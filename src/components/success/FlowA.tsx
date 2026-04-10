@@ -64,7 +64,7 @@ export function FlowA({ completionState }: FlowAProps) {
       {step === 'reward_card' && rewardCardData && (
         <RewardCard
           headline="Module Complete!"
-          subheadline="You've added this to your Lasting Mind"
+          subheadline="You've added this to your LastingMind"
           categoryImage={rewardCardData.categoryImage}
           categoryLabel={rewardCardData.categoryLabel}
           moduleTitle={rewardCardData.moduleTitle}

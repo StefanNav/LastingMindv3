@@ -78,7 +78,7 @@ export function FlowB({ completionState }: FlowBProps) {
       {step === 'reward_card' && rewardCardData && (
         <RewardCard
           headline={`First ${categoryLabel} Story Complete!`}
-          subheadline="You've added another meaningful piece to your Lasting Mind."
+          subheadline="You've added another meaningful piece to your LastingMind."
           categoryImage={rewardCardData.categoryImage}
           categoryLabel={rewardCardData.categoryLabel}
           moduleTitle={rewardCardData.moduleTitle}

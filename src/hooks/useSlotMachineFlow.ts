@@ -16,7 +16,6 @@ function createInitialState(): SlotMachineState {
   const order = shuffleArray(Array.from({ length: TOTAL_QUESTIONS }, (_, i) => i))
   return {
     step: 'idle',
-    inputMode: 'voice',
     currentCategoryIndex: 0,
     answeredCount: 0,
     answers: [],
@@ -30,7 +29,7 @@ type SlotAction =
   | { type: 'SPIN_COMPLETE' }
   | { type: 'SUBMIT_ANSWER'; payload: string }
   | { type: 'SUCCESS_DONE' }
-  | { type: 'TOGGLE_INPUT_MODE' }
+  | { type: 'SKIP' }
   | { type: 'EDIT_ANSWER'; payload: { categoryId: string; newAnswer: string } }
 
 function slotReducer(state: SlotMachineState, action: SlotAction): SlotMachineState {
@@ -75,11 +74,20 @@ function slotReducer(state: SlotMachineState, action: SlotAction): SlotMachineSt
       }
     }
 
-    case 'TOGGLE_INPUT_MODE':
+    case 'SKIP': {
+      const newCount = state.answeredCount + 1
+      const isComplete = newCount >= TOTAL_QUESTIONS
+      if (isComplete) {
+        return { ...state, step: 'complete', answeredCount: newCount }
+      }
       return {
         ...state,
-        inputMode: state.inputMode === 'voice' ? 'text' : 'voice',
+        step: 'idle',
+        answeredCount: newCount,
+        currentCategoryIndex: state.currentCategoryIndex + 1,
+        currentCategory: null,
       }
+    }
 
     case 'EDIT_ANSWER':
       return {
@@ -114,7 +122,7 @@ export function useSlotMachineFlow() {
     [],
   )
   const successDone = useCallback(() => dispatch({ type: 'SUCCESS_DONE' }), [])
-  const toggleInputMode = useCallback(() => dispatch({ type: 'TOGGLE_INPUT_MODE' }), [])
+  const skipQuestion = useCallback(() => dispatch({ type: 'SKIP' }), [])
   const editAnswer = useCallback(
     (categoryId: string, newAnswer: string) =>
       dispatch({ type: 'EDIT_ANSWER', payload: { categoryId, newAnswer } }),
@@ -131,7 +139,7 @@ export function useSlotMachineFlow() {
     spinComplete,
     submitAnswer,
     successDone,
-    toggleInputMode,
+    skipQuestion,
     editAnswer,
   }
 }

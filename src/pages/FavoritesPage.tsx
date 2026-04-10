@@ -105,9 +105,8 @@ export function FavoritesPage() {
             <QuestionCard
               key={`card-${flow.currentCategory.id}`}
               category={flow.currentCategory}
-              inputMode={flow.inputMode}
-              onToggleMode={flow.toggleInputMode}
               onSubmit={flow.submitAnswer}
+              onSkip={flow.skipQuestion}
             />
           )}
           {flow.step === 'success' && (

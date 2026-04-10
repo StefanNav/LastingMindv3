@@ -18,7 +18,7 @@ const navItems = [
 export function MobileShell({ children }: MobileShellProps) {
   const location = useLocation()
   const navigate = useNavigate()
-  const hideNav = location.pathname === '/onboarding' || location.pathname === '/success' || location.pathname.startsWith('/intro') || location.pathname.startsWith('/conversation') || location.pathname.startsWith('/reflection') || location.pathname.startsWith('/reflect') || location.pathname.startsWith('/favorites') || location.pathname.startsWith('/core-values') || location.pathname.startsWith('/life-chapters') || /^\/loved-ones\/[^/]+\//.test(location.pathname)
+  const hideNav = location.pathname === '/onboarding' || location.pathname === '/success' || location.pathname === '/audience-home' || location.pathname.startsWith('/intro') || location.pathname.startsWith('/conversation') || location.pathname.startsWith('/reflection') || location.pathname.startsWith('/reflect') || location.pathname.startsWith('/favorites') || location.pathname.startsWith('/core-values') || location.pathname.startsWith('/life-chapters') || /^\/loved-ones\/[^/]+\//.test(location.pathname)
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
@@ -28,15 +28,6 @@ export function MobileShell({ children }: MobileShellProps) {
           <span>9:41</span>
           <div className="flex items-center gap-1.5">
             <DemoDropdown />
-            {location.pathname === '/onboarding' && (
-              <button
-                type="button"
-                onClick={() => window.dispatchEvent(new CustomEvent('onboarding-back'))}
-                className="rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-semibold leading-none text-foreground/70 transition-colors hover:bg-foreground/15"
-              >
-                ← Back
-              </button>
-            )}
           </div>
           <div className="flex items-center gap-1">
             <div className="h-2.5 w-4 rounded-sm border border-foreground/50">

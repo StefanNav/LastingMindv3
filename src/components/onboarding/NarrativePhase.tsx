@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTreeMorph } from '@/hooks/useTreeMorph'
 import { containerVariants, dissolveVariants } from './animations'
@@ -77,7 +78,7 @@ const STAGES: StageContent[] = [
   {
     heading: 'Every legacy starts as a seed',
     subtitle:
-      'Lasting Mind helps you build something your loved ones can return to for years to come.',
+      'LastingMind helps you build something your loved ones can return to for years to come.',
     buttonLabel: "Let's Begin",
   },
   {
@@ -129,12 +130,14 @@ const CH = 327
 
 interface NarrativePhaseProps {
   onComplete: (firstName: string, lastName: string) => void
+  onBack?: () => void
   initialFirstName?: string
   initialLastName?: string
 }
 
 export function NarrativePhase({
   onComplete,
+  onBack,
   initialFirstName = '',
   initialLastName = '',
 }: NarrativePhaseProps) {
@@ -152,7 +155,7 @@ export function NarrativePhase({
 
   const paths = useMemo(() => IMAGE_PATHS, [])
 
-  const { morphTo, isMorphing, imagesLoaded } = useTreeMorph({
+  const { morphTo, imagesLoaded } = useTreeMorph({
     canvasRef,
     imagePaths: paths,
     width: CW,
@@ -173,22 +176,21 @@ export function NarrativePhase({
     }
   }, [isNameStage])
 
-  // Listen for back button in status bar (testing utility)
-  useEffect(() => {
-    const handler = () => {
-      if (isMorphing) return
-      const prev = stageRef.current
-      const next = Math.max(0, prev - 1)
-      if (next !== prev) {
-        morphTo(next, () => setStage(next))
-      }
-    }
-    window.addEventListener('onboarding-back', handler)
-    return () => window.removeEventListener('onboarding-back', handler)
-  }, [isMorphing, morphTo])
-
   const [sparkTrigger, setSparkTrigger] = useState(0)
   const textTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const handleBack = useCallback(() => {
+    // Cancel any pending text-stage timer from a recent Continue press
+    if (textTimerRef.current) clearTimeout(textTimerRef.current)
+    const prev = stageRef.current
+    if (prev > 0) {
+      const next = prev - 1
+      setStage(next)
+      morphTo(next)
+    } else if (onBack) {
+      onBack()
+    }
+  }, [morphTo, setStage, onBack])
 
   const handleContinue = useCallback(() => {
     if (isNameStage) {
@@ -208,6 +210,13 @@ export function NarrativePhase({
 
   return (
     <div className="flex h-full flex-col">
+      {(onBack || stage > 0) && (
+        <div className="absolute top-[62px] left-4 z-20">
+          <button type="button" onClick={handleBack} className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5" aria-label="Go back">
+            <ArrowLeft className="size-6 text-white" />
+          </button>
+        </div>
+      )}
       {/* ---- Text area (crossfade) ---- */}
       <div className="flex flex-1 flex-col justify-end px-4 pb-4 pt-14 text-center">
         <AnimatePresence mode="wait">

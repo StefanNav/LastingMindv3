@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ThinkingDots } from '@/components/ui/ThinkingDots'
 import { containerVariants, dissolveVariants } from './animations'
@@ -170,9 +171,10 @@ function ScrollColumn({
 interface PostNamePhaseProps {
   firstName: string
   onComplete: (month: number, day: number, year: number) => void
+  onBack?: () => void
 }
 
-export function PostNamePhase({ firstName, onComplete }: PostNamePhaseProps) {
+export function PostNamePhase({ firstName, onComplete, onBack }: PostNamePhaseProps) {
   const [stage, setStage] = useState(0) // 0 = loading, 1 = greeting, 2 = birthday
   const [monthIdx, setMonthIdx] = useState(2)
   const [dayIdx, setDayIdx] = useState(14)
@@ -202,6 +204,13 @@ export function PostNamePhase({ firstName, onComplete }: PostNamePhaseProps) {
 
   return (
     <div className="flex h-full flex-col">
+      {onBack && isBirthdayStage && (
+        <div className="absolute top-[62px] left-4 z-20">
+          <button type="button" onClick={onBack} className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5" aria-label="Go back">
+            <ArrowLeft className="size-6 text-white" />
+          </button>
+        </div>
+      )}
       {/* ---- Content area (crossfades between stages) ---- */}
       <div className="flex flex-1 flex-col">
         <AnimatePresence mode="wait">
@@ -239,7 +248,7 @@ export function PostNamePhase({ firstName, onComplete }: PostNamePhaseProps) {
 
             {stage === 2 && (
               <div className="flex h-full flex-col">
-                <div className="px-4 pt-14 text-center">
+                <div className="px-4 pt-32 text-center">
                   <motion.h1
                     variants={dissolveVariants}
                     className="font-display text-[26px] font-semibold leading-[1.2] tracking-tight text-foreground text-center"

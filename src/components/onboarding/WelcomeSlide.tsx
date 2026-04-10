@@ -27,7 +27,7 @@ export function WelcomeSlide({ firstName, onComplete, delay = 3000 }: WelcomeSli
             variants={dissolveVariants}
             className="font-display text-[28px] font-semibold leading-[1.15] tracking-tight text-foreground"
           >
-            Welcome to your Lasting Mind, {firstName}
+            Welcome to your LastingMind, {firstName}
           </motion.h1>
         </motion.div>
       </div>

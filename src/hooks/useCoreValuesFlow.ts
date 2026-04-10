@@ -5,7 +5,6 @@ import type { CoreValuesState, CoreValuesAnswer } from '@/types/coreValues'
 function createInitialState(): CoreValuesState {
   return {
     step: 'idle',
-    inputMode: 'voice',
     currentCardIndex: 0,
     answeredCount: 0,
     answers: [],
@@ -21,7 +20,7 @@ type CoreValuesAction =
   | { type: 'SUBMIT_ANSWER'; payload: string }
   | { type: 'SUCCESS_DONE' }
   | { type: 'DISMISS_MODAL' }
-  | { type: 'TOGGLE_INPUT_MODE' }
+  | { type: 'SKIP' }
   | { type: 'EDIT_ANSWER'; payload: { categoryId: string; newAnswer: string } }
 
 function coreValuesReducer(state: CoreValuesState, action: CoreValuesAction): CoreValuesState {
@@ -78,11 +77,20 @@ function coreValuesReducer(state: CoreValuesState, action: CoreValuesAction): Co
         currentCard: null,
       }
 
-    case 'TOGGLE_INPUT_MODE':
+    case 'SKIP': {
+      const newCount = state.answeredCount + 1
+      const isComplete = newCount >= TOTAL_CARDS
+      if (isComplete) {
+        return { ...state, step: 'complete', answeredCount: newCount }
+      }
       return {
         ...state,
-        inputMode: state.inputMode === 'voice' ? 'text' : 'voice',
+        step: 'idle',
+        answeredCount: newCount,
+        currentCardIndex: state.currentCardIndex + 1,
+        currentCard: null,
       }
+    }
 
     case 'EDIT_ANSWER':
       return {
@@ -114,7 +122,7 @@ export function useCoreValuesFlow() {
   )
   const successDone = useCallback(() => dispatch({ type: 'SUCCESS_DONE' }), [])
   const dismissModal = useCallback(() => dispatch({ type: 'DISMISS_MODAL' }), [])
-  const toggleInputMode = useCallback(() => dispatch({ type: 'TOGGLE_INPUT_MODE' }), [])
+  const skipQuestion = useCallback(() => dispatch({ type: 'SKIP' }), [])
   const editAnswer = useCallback(
     (categoryId: string, newAnswer: string) =>
       dispatch({ type: 'EDIT_ANSWER', payload: { categoryId, newAnswer } }),
@@ -132,7 +140,7 @@ export function useCoreValuesFlow() {
     submitAnswer,
     successDone,
     dismissModal,
-    toggleInputMode,
+    skipQuestion,
     editAnswer,
   }
 }

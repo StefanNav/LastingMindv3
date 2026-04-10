@@ -1,49 +1,42 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { CategoryNodeCard } from '@/components/cards/CategoryNodeCard'
+import type { Category } from '@/types'
+
+const familyCategory: Category = {
+  id: 'cat-family',
+  title: 'Family',
+  image: '/images/Family 1.png',
+  imageHeight: 156,
+  imageWidth: 147,
+  status: 'flourishing',
+  totalModules: 2,
+}
 
 export function FamilyDetailSlide() {
+  const [filledStars, setFilledStars] = useState(0)
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setFilledStars(1), 600)
+    const t2 = setTimeout(() => setFilledStars(2), 1200)
+    const t3 = setTimeout(() => setFilledStars(3), 1800)
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3) }
+  }, [])
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="flex flex-col items-center gap-4"
+      className="flex justify-center px-4"
     >
-      <div className="flex h-[100px] w-[94px] items-center justify-center">
-        <img
-          src="/images/Family 1.png"
-          alt="Family"
-          className="max-h-full max-w-full object-contain"
+      <div className="w-full">
+        <CategoryNodeCard
+          category={familyCategory}
+          overrideFilledStars={filledStars}
+          starSize={28}
+          interactive={false}
         />
-      </div>
-      <div className="flex flex-col items-center gap-2">
-        <span className="font-sans text-[16px] font-semibold text-foreground">
-          Family
-        </span>
-        <div className="flex items-center gap-3">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="flex h-[50px] w-[50px] items-center justify-center"
-            >
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 40 40"
-                fill="none"
-                className="text-lm-gold"
-              >
-                <path
-                  d="M20 2l5.09 10.31L36.18 14l-8.09 7.88L29.82 33 20 27.69 10.18 33l1.73-11.12L3.82 14l11.09-1.69L20 2z"
-                  fill="currentColor"
-                  opacity={i <= 2 ? 1 : 0.25}
-                />
-              </svg>
-            </div>
-          ))}
-        </div>
-        <span className="font-sans text-[13px] text-[var(--lm-text-secondary)]">
-          Growing
-        </span>
       </div>
     </motion.div>
   )

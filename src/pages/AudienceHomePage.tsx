@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Mic, MessageCircle, Sparkles, Send, MoreHorizontal, Star, TreePine } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Mic, MessageCircle, Sparkles, Send, MoreHorizontal, UserPlus, Star } from 'lucide-react'
 import { PageTransition } from '@/animations/PageTransition'
 import { mockLovedOnes } from '@/data/lovedOnesData'
-import { InviteBottomSheet } from '@/components/sheets/InviteBottomSheet'
 import { useApp } from '@/app/AppProvider'
-import type { LovedOneCreator, AudienceMember } from '@/types'
+import { Button } from '@/components/ui/button'
+import type { LovedOneCreator } from '@/types'
 
 function CreatorCard({ creator }: { creator: LovedOneCreator }) {
   const navigate = useNavigate()
@@ -23,7 +23,6 @@ function CreatorCard({ creator }: { creator: LovedOneCreator }) {
     <div className="flex flex-col gap-5 rounded-[10px] bg-lm-bg-card/40 p-5 shadow-card backdrop-blur-sm">
       {/* Identity block */}
       <div className="flex items-stretch gap-3">
-        {/* Avatar column — stretches to match text height */}
         <div className="flex shrink-0 flex-col items-center justify-between">
           {creator.avatarUrl ? (
             <img
@@ -38,7 +37,6 @@ function CreatorCard({ creator }: { creator: LovedOneCreator }) {
           )}
           <p className="mt-1 text-[10px] font-semibold text-muted-foreground">{creator.relationship}</p>
         </div>
-        {/* Name + stats + bio */}
         <div className="flex min-w-0 flex-1 flex-col gap-3">
           <div className="flex items-baseline justify-between gap-2">
             <p className="font-display text-lg font-normal leading-tight text-foreground">{creator.name}</p>
@@ -69,54 +67,67 @@ function CreatorCard({ creator }: { creator: LovedOneCreator }) {
   )
 }
 
-function AudienceMemberRow({ member }: { member: AudienceMember }) {
+function StartYourOwnCard() {
+  const navigate = useNavigate()
+
   return (
-    <div className="flex items-center justify-between rounded-[10px] bg-lm-bg-card/40 px-5 py-4 shadow-card backdrop-blur-sm">
-      <div>
-        <p className="font-display text-lg font-normal leading-tight text-foreground">
-          {member.firstName} {member.lastName}
+    <div className="flex flex-col items-center gap-4 rounded-[10px] bg-lm-bg-card/40 p-6 shadow-card backdrop-blur-sm text-center">
+      <div className="flex size-16 items-center justify-center rounded-full bg-lm-green/10">
+        <TreePine className="size-8 text-lm-green" />
+      </div>
+      <div className="flex flex-col gap-2">
+        <h3 className="font-display text-lg font-semibold text-foreground">
+          Preserve your own story
+        </h3>
+        <p className="text-sm leading-snug text-muted-foreground">
+          Your family might want to hear from you too. Start building your LastingMind.
         </p>
-        <p className="mt-0.5 text-sm text-muted-foreground">{member.relationship}</p>
       </div>
-      {member.status === 'pending' && (
-        <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
-          Pending
-        </span>
-      )}
+      <Button
+        onClick={() => navigate('/onboarding')}
+        className="h-[46px] w-full rounded-xl bg-lm-green text-[15px] font-semibold text-white transition-transform active:scale-[0.97] active:brightness-90"
+      >
+        Get started
+      </Button>
     </div>
   )
 }
 
-function EmptyState() {
-  return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-3 px-8 py-20 text-center">
-      <div className="flex size-16 items-center justify-center rounded-full bg-muted">
-        <Sparkles className="size-7 text-muted-foreground" />
-      </div>
-      <h3 className="text-lg font-semibold text-foreground">No loved ones yet</h3>
-      <p className="text-sm leading-relaxed text-muted-foreground">
-        When someone invites you to view their LastingMind, they'll appear here.
-      </p>
-    </div>
-  )
-}
-
-export function LovedOnesPage() {
-  const creators = mockLovedOnes
-  const { audienceMembers } = useApp()
-  const [inviteSheetOpen, setInviteSheetOpen] = useState(false)
-  const [toastName, setToastName] = useState<string | null>(null)
-
+function WelcomeToast({ creatorName, onDismiss }: { creatorName: string; onDismiss: () => void }) {
   useEffect(() => {
-    if (toastName) {
-      const timer = setTimeout(() => setToastName(null), 3000)
-      return () => clearTimeout(timer)
-    }
-  }, [toastName])
+    const timer = setTimeout(onDismiss, 3000)
+    return () => clearTimeout(timer)
+  }, [onDismiss])
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+      onClick={onDismiss}
+      className="absolute left-4 right-4 top-14 z-40 cursor-pointer rounded-xl bg-lm-green px-4 py-3 shadow-lg"
+    >
+      <p className="text-center text-[14px] font-medium text-white">
+        You're connected to {creatorName}'s LastingMind
+      </p>
+    </motion.div>
+  )
+}
+
+export function AudienceHomePage() {
+  const { audienceCreatorName, hasSeenAudienceWelcome, setHasSeenAudienceWelcome } = useApp()
+  const [showToast, setShowToast] = useState(!hasSeenAudienceWelcome)
+  const creators = mockLovedOnes
+
+  const dismissToast = () => {
+    setShowToast(false)
+    setHasSeenAudienceWelcome(true)
+  }
 
   return (
     <PageTransition>
-      {/* Background image — sticky within scroll container */}
+      {/* Background image */}
       <div className="pointer-events-none sticky top-0 z-0 h-0">
         <img
           src="/images/onboarding/OnboardingBackground.png"
@@ -124,14 +135,19 @@ export function LovedOnesPage() {
           className="h-[100vh] w-full object-cover"
         />
       </div>
+
+      {/* Welcome toast */}
+      <AnimatePresence>
+        {showToast && (
+          <WelcomeToast creatorName={audienceCreatorName} onDismiss={dismissToast} />
+        )}
+      </AnimatePresence>
+
       <div className="relative z-10 flex flex-col gap-5 p-6 pt-14">
         {/* Page header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-2">
             <h2 className="font-display text-2xl font-semibold text-foreground">Loved Ones</h2>
-            <p className="text-sm leading-snug text-muted-foreground">
-              Legacy Creators build their own stories. Audience Members can view yours.
-            </p>
           </div>
           <button
             type="button"
@@ -142,77 +158,34 @@ export function LovedOnesPage() {
           </button>
         </div>
 
-        {/* Section label */}
-        {creators.length > 0 && (
-          <div className="mt-2 flex items-center gap-3">
-            <div className="h-px flex-1 bg-lm-gold/30" />
-            <p className="shrink-0 text-[11px] font-bold uppercase tracking-widest text-lm-gold">
-              Legacy Creators
-            </p>
-            <div className="h-px flex-1 bg-lm-gold/30" />
-          </div>
-        )}
-
-        {/* Creator list or empty state */}
-        {creators.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <div className="flex flex-col gap-4">
-            {creators.map((creator) => (
-              <CreatorCard key={creator.id} creator={creator} />
-            ))}
-          </div>
-        )}
-
-        {/* Audience Members section */}
-        <div className="mt-3 flex items-center gap-3">
+        {/* Legacy Creators section */}
+        <div className="mt-2 flex items-center gap-3">
           <div className="h-px flex-1 bg-lm-gold/30" />
           <p className="shrink-0 text-[11px] font-bold uppercase tracking-widest text-lm-gold">
-            Audience Members
+            Legacy Creators
           </p>
           <div className="h-px flex-1 bg-lm-gold/30" />
         </div>
 
-        <div className="flex flex-col gap-3">
-          {audienceMembers.map((member) => (
-            <AudienceMemberRow key={member.id} member={member} />
+        <div className="flex flex-col gap-4">
+          {creators.map((creator) => (
+            <CreatorCard key={creator.id} creator={creator} />
           ))}
         </div>
 
-        <button
-          type="button"
-          onClick={() => setInviteSheetOpen(true)}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-[0.98]"
-        >
-          <UserPlus className="size-4" />
-          Invite an Audience Member
-        </button>
+        {/* Start Your Own section */}
+        <div className="mt-3 flex items-center gap-3">
+          <div className="h-px flex-1 bg-lm-gold/30" />
+          <p className="shrink-0 text-[11px] font-bold uppercase tracking-widest text-lm-gold">
+            Start Your Own
+          </p>
+          <div className="h-px flex-1 bg-lm-gold/30" />
+        </div>
+
+        <StartYourOwnCard />
 
         <div className="pb-4" />
       </div>
-
-      {/* Toast */}
-      <AnimatePresence>
-        {toastName && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.25 }}
-            className="fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-lm-green/90 px-5 py-3 shadow-lg"
-          >
-            <p className="whitespace-nowrap text-[13px] font-semibold text-white">
-              Invite sent to {toastName}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <InviteBottomSheet
-        isOpen={inviteSheetOpen}
-        onClose={() => setInviteSheetOpen(false)}
-        onSuccess={(firstName) => setToastName(firstName)}
-      />
     </PageTransition>
   )
 }

@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, useMemo, type ReactNode } from 'react'
-import type { AppState, DemoStateId, DemoConfig, DemoPromptCard, HomePhase, CategoryDetail, LifeChapter, ChatMessage, LegacyItemStatus } from '@/types'
+import { createContext, useContext, useState, useMemo, useEffect, type ReactNode } from 'react'
+import type { AppState, DemoStateId, DemoConfig, DemoPromptCard, HomePhase, CategoryDetail, LifeChapter, ChatMessage, LegacyItemStatus, UserState, AudienceMember } from '@/types'
 import { mockCreator, mockPhases } from '@/data/mock'
 import { demoStates, demoStateOrder } from '@/data/demoStates'
+import { defaultAudienceMembers } from '@/data/inviteData'
 
 interface AppContextValue {
   state: AppState
@@ -36,6 +37,17 @@ interface AppContextValue {
   addLegacyItem: (id: string) => void
   legacyItemStatuses: Record<string, LegacyItemStatus>
   updateLegacyItemStatus: (id: string, status: LegacyItemStatus) => void
+  // Audience state
+  hasInviteToken: boolean
+  setHasInviteToken: (v: boolean) => void
+  userState: UserState
+  setUserState: (s: UserState) => void
+  audienceCreatorName: string
+  setAudienceCreatorName: (name: string) => void
+  hasSeenAudienceWelcome: boolean
+  setHasSeenAudienceWelcome: (v: boolean) => void
+  audienceMembers: AudienceMember[]
+  addAudienceMember: (member: AudienceMember) => void
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -69,6 +81,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [addedLegacyItemIds, setAddedLegacyItemIds] = useState<string[]>([])
   const [legacyItemStatuses, setLegacyItemStatuses] = useState<Record<string, LegacyItemStatus>>({})
 
+  // Audience state
+  const [hasInviteToken, setHasInviteToken] = useState(false)
+  const [userState, setUserState] = useState<UserState>('creator')
+  const [audienceCreatorName, setAudienceCreatorName] = useState('Robert Mitchell')
+  const [hasSeenAudienceWelcome, setHasSeenAudienceWelcome] = useState(false)
+  const [audienceMembers, setAudienceMembers] = useState<AudienceMember[]>(defaultAudienceMembers)
+
+  // Simulate invite deep link via ?invite=true URL param
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('invite') === 'true') {
+      setHasInviteToken(true)
+      const name = params.get('creator') || 'Robert Mitchell'
+      setAudienceCreatorName(name)
+    }
+  }, [])
+
   const saveLifeChapters = (chapters: LifeChapter[]) => setLifeChapters(chapters)
   const hasDefinedChapters = lifeChapters.length > 0
 
@@ -83,6 +112,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const updateLegacyItemStatus = (id: string, status: LegacyItemStatus) =>
     setLegacyItemStatuses((prev) => ({ ...prev, [id]: status }))
 
+  const addAudienceMember = (member: AudienceMember) =>
+    setAudienceMembers((prev) => [...prev, member])
+
   const markFirstModuleComplete = () => setHasCompletedFirstModule(true)
   const incrementModule2Run = (categoryId: string) =>
     setModule2Runs((prev) => ({ ...prev, [categoryId]: (prev[categoryId] ?? 0) + 1 }))
@@ -95,6 +127,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setActiveDemoId(id)
     if (id === 'onboarding') {
       setOnboardingKey((k) => k + 1)
+    }
+    if (id === 'audience') {
+      setUserState('audience')
+      setHasInviteToken(true)
+      setHasSeenAudienceWelcome(false)
+    } else {
+      setUserState('creator')
     }
     // Reset chat state on demo switch so tutorial replays correctly
     setChatFirstTimeExperience(true)
@@ -135,7 +174,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     addLegacyItem,
     legacyItemStatuses,
     updateLegacyItemStatus,
-  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters, chatFirstTimeExperience, chatMessages, addedLegacyItemIds, legacyItemStatuses])
+    hasInviteToken,
+    setHasInviteToken,
+    userState,
+    setUserState,
+    audienceCreatorName,
+    setAudienceCreatorName,
+    hasSeenAudienceWelcome,
+    setHasSeenAudienceWelcome,
+    audienceMembers,
+    addAudienceMember,
+  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters, chatFirstTimeExperience, chatMessages, addedLegacyItemIds, legacyItemStatuses, hasInviteToken, userState, audienceCreatorName, hasSeenAudienceWelcome, audienceMembers])
 
   return (
     <AppContext.Provider value={value}>

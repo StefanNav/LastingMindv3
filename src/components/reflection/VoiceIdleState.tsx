@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Phone } from 'lucide-react'
+import { Mic } from 'lucide-react'
 
 interface VoiceIdleStateProps {
   onBeginRecording: () => void
@@ -19,7 +19,7 @@ export function VoiceIdleState({ onBeginRecording }: VoiceIdleStateProps) {
         onClick={onBeginRecording}
         className="flex size-20 items-center justify-center rounded-full bg-lm-green shadow-lg transition-transform active:scale-95"
       >
-        <Phone className="size-8 text-white" />
+        <Mic className="size-8 text-white" />
       </button>
       <p className="max-w-[220px] text-center text-[15px] font-medium leading-[1.4] text-muted-foreground">
         Press to respond, we'll capture everything you say

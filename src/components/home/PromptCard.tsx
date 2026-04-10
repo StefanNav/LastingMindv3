@@ -121,10 +121,10 @@ export function PromptCard({ cards, onCardTap }: PromptCardCarouselProps) {
             <p className="w-full text-center text-[16px] font-medium leading-[1.3] text-foreground pointer-events-none line-clamp-2">
               {cards[activeIndex]?.question}
             </p>
-            {/* Arrow affordance */}
-            <div className="flex items-center justify-center gap-1.5 text-[13px] font-medium text-primary pointer-events-none">
+            {/* Start Module button */}
+            <div className="flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground pointer-events-none">
               <span>Start Module</span>
-              <ArrowRight className="size-3.5 shrink-0" strokeWidth={2} />
+              <ArrowRight className="ml-1.5 size-3.5 shrink-0" strokeWidth={2} />
             </div>
           </motion.div>
         </AnimatePresence>

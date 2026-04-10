@@ -10,9 +10,15 @@ import { FamilyDetailSlide } from '@/components/onboarding/FamilyDetailSlide'
 import { ChatPreviewSlide } from '@/components/onboarding/ChatPreviewSlide'
 import { TreeGrowthSlide } from '@/components/onboarding/TreeGrowthSlide'
 import { GetStartedSlide } from '@/components/onboarding/GetStartedSlide'
+import { PrivacyPromiseSlide } from '@/components/onboarding/PrivacyPromiseSlide'
 import { PreparingSlide } from '@/components/onboarding/PreparingSlide'
 import { SplashScreen } from '@/components/onboarding/SplashScreen'
 import { UserTypeScreen } from '@/components/onboarding/UserTypeScreen'
+import { AudienceNameScreen } from '@/components/onboarding/audience/AudienceNameScreen'
+import { PhoneNumberScreen } from '@/components/onboarding/audience/PhoneNumberScreen'
+import { PhoneVerificationScreen } from '@/components/onboarding/audience/PhoneVerificationScreen'
+import { AudienceAppIntroScreen } from '@/components/onboarding/audience/AudienceAppIntroScreen'
+import { useApp } from '@/app/AppProvider'
 
 type Direction = 1 | -1
 
@@ -43,11 +49,13 @@ const slideTransition = {
 
 export function OnboardingPage() {
   const navigate = useNavigate()
+  const { hasInviteToken, setUserState, setHasSeenAudienceWelcome, audienceCreatorName } = useApp()
   const [step, setStep] = useState(0)
   const [direction, setDirection] = useState<Direction>(1)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [_userType, setUserType] = useState<'builder' | 'connector' | null>(null)
+  const [audiencePhone, setAudiencePhone] = useState('')
 
   const next = useCallback(() => {
     setDirection(1)
@@ -57,6 +65,17 @@ export function OnboardingPage() {
   const back = useCallback(() => {
     setDirection(-1)
     setStep((s) => Math.max(0, s - 1))
+  }, [])
+
+  // Flow-aware back: creator step 6 jumps to user-type (1), not audience step 5
+  const smartBack = useCallback(() => {
+    setDirection(-1)
+    setStep((s) => {
+      if (s <= 0) return 0
+      // Creator flow starts at step 6; going back from there returns to user-type (step 1)
+      if (s === 6) return 1
+      return s - 1
+    })
   }, [])
 
   const goHome = useCallback(() => {
@@ -75,20 +94,46 @@ export function OnboardingPage() {
     setStep((s) => s + 1)
   }, [])
 
+  const goAudienceHome = useCallback(() => {
+    setUserState('audience')
+    setHasSeenAudienceWelcome(false)
+    navigate('/audience-home')
+  }, [navigate, setUserState, setHasSeenAudienceWelcome])
+
   const handleUserType = useCallback((type: 'builder' | 'connector') => {
     setUserType(type)
-    if (type === 'builder') {
-      setDirection(1)
-      setStep((s) => s + 1)
+    setDirection(1)
+    if (type === 'connector') {
+      // Go to audience-name (step 2)
+      setStep(2)
+    } else {
+      // Skip audience steps, go to narrative-phase (step 6)
+      setStep(6)
     }
   }, [])
 
-  // Listen for back button in status bar (testing utility)
-  useEffect(() => {
-    const handler = () => back()
-    window.addEventListener('onboarding-back', handler)
-    return () => window.removeEventListener('onboarding-back', handler)
-  }, [back])
+  const handleAudienceNameSubmit = useCallback((first: string, last: string) => {
+    setFirstName(first)
+    setLastName(last)
+    setDirection(1)
+    setStep((s) => s + 1)
+  }, [])
+
+  const handleAudiencePhoneSubmit = useCallback((phone: string) => {
+    setAudiencePhone(phone)
+    setDirection(1)
+    setStep((s) => s + 1)
+  }, [])
+
+  const handleAudienceVerified = useCallback(() => {
+    setDirection(1)
+    setStep((s) => s + 1)
+  }, [])
+
+  const handleAudiencePhoneBack = useCallback(() => {
+    setDirection(-1)
+    setStep((s) => s - 1)
+  }, [])
 
   // Listen for reset event from DemoDropdown to restart at splash
   useEffect(() => {
@@ -114,14 +159,48 @@ export function OnboardingPage() {
     // Step 1: User type selection
     {
       id: 'user-type',
-      render: () => <UserTypeScreen onSelect={handleUserType} />,
+      render: () => <UserTypeScreen onSelect={handleUserType} hasInviteToken={hasInviteToken} onBack={smartBack} />,
     },
+    // ── Audience flow (steps 2-5) ──
+    {
+      id: 'audience-name',
+      render: () => (
+        <AudienceNameScreen
+          onNext={handleAudienceNameSubmit}
+          onBack={smartBack}
+          initialFirstName={firstName}
+          initialLastName={lastName}
+        />
+      ),
+    },
+    {
+      id: 'audience-phone',
+      render: () => <PhoneNumberScreen onNext={handleAudiencePhoneSubmit} onBack={smartBack} />,
+    },
+    {
+      id: 'audience-verify',
+      render: () => (
+        <PhoneVerificationScreen
+          phoneNumber={audiencePhone}
+          creatorName={audienceCreatorName}
+          onVerified={handleAudienceVerified}
+          onWrongNumber={handleAudiencePhoneBack}
+          onBack={smartBack}
+        />
+      ),
+    },
+    {
+      id: 'audience-intro',
+      render: () => <AudienceAppIntroScreen onComplete={goAudienceHome} onBack={smartBack} />,
+    },
+    // ── Legacy Creator flow (steps 6+) ──
     // Phase 1: Narrative Intro + Name Input — single persistent component
     {
       id: 'narrative-phase',
       render: () => (
         <NarrativePhase
           onComplete={handleNameSubmit}
+          onBack={smartBack}
           initialFirstName={firstName}
           initialLastName={lastName}
         />
@@ -134,6 +213,7 @@ export function OnboardingPage() {
         <PostNamePhase
           firstName={displayName}
           onComplete={handleBirthdaySubmit}
+          onBack={smartBack}
         />
       ),
     },
@@ -170,12 +250,12 @@ export function OnboardingPage() {
             },
             {
               id: 'tour-family',
-              heading: 'More depth leads to a richer Lasting Mind legacy',
+              heading: 'More depth leads to a richer LastingMind legacy',
               content: <FamilyDetailSlide />,
             },
             {
               id: 'tour-trees',
-              heading: 'As your Lasting Mind deepens, your tree grows',
+              heading: 'As your LastingMind deepens, your tree grows',
               content: <TreeGrowthSlide />,
             },
             {
@@ -187,24 +267,29 @@ export function OnboardingPage() {
         />
       ),
     },
-    // Phase 5: Let's Get Started CTA
+    // Phase 5: Privacy promise
+    {
+      id: 'privacy-promise',
+      render: () => <PrivacyPromiseSlide onContinue={next} onBack={smartBack} />,
+    },
+    // Phase 6: Let's Get Started CTA
     {
       id: 'get-started',
-      render: () => <GetStartedSlide onStart={next} onBack={back} />,
+      render: () => <GetStartedSlide onStart={next} onBack={smartBack} />,
     },
     // Phase 6: Loading
     {
       id: 'preparing',
       render: () => <PreparingSlide onComplete={goHome} delay={3000} />,
     },
-  ], [next, back, goHome, handleNameSubmit, handleBirthdaySubmit, handleUserType, firstName, lastName, displayName])
+  ], [next, back, smartBack, goHome, goAudienceHome, handleNameSubmit, handleBirthdaySubmit, handleUserType, handleAudienceNameSubmit, handleAudiencePhoneSubmit, handleAudienceVerified, handleAudiencePhoneBack, hasInviteToken, firstName, lastName, displayName, audiencePhone, audienceCreatorName])
 
   const currentStep = steps[Math.min(step, steps.length - 1)]
 
   return (
     <div className="h-full overflow-hidden relative">
       {/* Backdrop plant — visible during NarrativePhase exit so plant doesn't glitch */}
-      {step === 3 && (
+      {step === 7 && (
         <div
           className="absolute left-0 right-0 flex items-end justify-center pointer-events-none"
           style={{ bottom: 78, zIndex: 0 }}

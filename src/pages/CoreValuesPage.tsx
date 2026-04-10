@@ -91,9 +91,8 @@ export function CoreValuesPage() {
             <CoreValuesAnswerModal
               key={`modal-${flow.currentCard.id}`}
               category={flow.currentCard}
-              inputMode={flow.inputMode}
-              onToggleMode={flow.toggleInputMode}
               onSubmit={flow.submitAnswer}
+              onSkip={flow.skipQuestion}
               onDismiss={flow.dismissModal}
             />
           )}

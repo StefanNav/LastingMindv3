@@ -23,11 +23,8 @@ export type CardDeckStep =
   | 'success'
   | 'complete'
 
-export type CoreValuesInputMode = 'voice' | 'text'
-
 export interface CoreValuesState {
   step: CardDeckStep
-  inputMode: CoreValuesInputMode
   currentCardIndex: number
   answeredCount: number
   answers: CoreValuesAnswer[]

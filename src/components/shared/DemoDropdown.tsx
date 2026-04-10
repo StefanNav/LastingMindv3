@@ -48,6 +48,8 @@ export function DemoDropdown() {
                     if (id === 'onboarding') {
                       window.dispatchEvent(new CustomEvent('onboarding-reset'))
                       navigate('/onboarding')
+                    } else if (id === 'audience') {
+                      navigate('/audience-home')
                     } else {
                       navigate('/home')
                     }

@@ -22,11 +22,8 @@ export type SlotMachineStep =
   | 'success'
   | 'complete'
 
-export type FavoritesInputMode = 'voice' | 'text'
-
 export interface SlotMachineState {
   step: SlotMachineStep
-  inputMode: FavoritesInputMode
   currentCategoryIndex: number
   answeredCount: number
   answers: FavoritesAnswer[]

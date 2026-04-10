@@ -7,6 +7,7 @@ import { HomePage } from '@/pages/HomePage'
 import { ChatPage } from '@/pages/ChatPage'
 import { SuccessPage } from '@/pages/SuccessPage'
 import { LovedOnesPage } from '@/pages/LovedOnesPage'
+import { AudienceHomePage } from '@/pages/AudienceHomePage'
 import { SettingsPage } from '@/pages/SettingsPage'
 import { ModuleIntroPage } from '@/pages/ModuleIntroPage'
 import { Module2IntroPage } from '@/pages/Module2IntroPage'
@@ -117,6 +118,7 @@ function App() {
               <Route path="/chat" element={<KeyedChatPage />} />
               <Route path="/success" element={<SuccessPage />} />
               <Route path="/loved-ones" element={<LovedOnesPage />} />
+              <Route path="/audience-home" element={<AudienceHomePage />} />
               <Route path="/loved-ones/:creatorId/voice" element={null} />
               <Route path="/loved-ones/:creatorId/chat" element={null} />
               <Route path="/loved-ones/:creatorId/legacy" element={null} />
