@@ -36,28 +36,16 @@ export function CompleteContent({ category, detail }: CompleteContentProps) {
       <motion.div variants={itemVariants} className="flex flex-col items-center gap-4">
         <CategorySheetHeader category={category} />
 
-        {/* Progress indicator */}
-        {detail.entriesComplete != null && detail.entriesToNextStar != null && (
-          <div className="flex flex-col items-center gap-2 px-5">
-            <p className="text-center text-[14px] leading-[1.2] tracking-[0.12px] text-[var(--lm-text-secondary)]">
-              {detail.entriesComplete} entries complete, {detail.entriesToNextStar} more to next star
-            </p>
-            <div className="h-[3px] w-[290px] overflow-hidden rounded-full bg-[#e7ebd9]">
-              <div
-                className="h-full rounded-full bg-lm-green"
-                style={{
-                  width: `${(detail.entriesComplete / (detail.entriesComplete + detail.entriesToNextStar)) * 100}%`,
-                }}
-              />
-            </div>
-          </div>
-        )}
+        {/* Encouragement text */}
+        <p className="max-w-[300px] text-center text-[14px] leading-[1.4] tracking-[0.12px] text-[var(--lm-text-secondary)]">
+          Every story you share brings your Lasting Mind closer to who you truly are and gives your loved ones more to hold on to. Keep going.
+        </p>
       </motion.div>
 
       {/* Family Members */}
       {detail.familyMembers && detail.familyMembers.length > 0 && (
         <motion.div variants={itemVariants}>
-          <FamilyMembersGrid members={detail.familyMembers} />
+          <FamilyMembersGrid members={detail.familyMembers} categoryTitle={category.title} />
         </motion.div>
       )}
 

@@ -54,6 +54,8 @@ export function useChatEngine(): UseChatEngineReturn {
         content: response.content,
         timestamp: Date.now(),
         sourceEntry: response.sourceEntry,
+        excerpts: response.excerpts,
+        isGapResponse: response.isGap,
       }
       addChatMessage(lmMsg)
       setIsThinking(false)

@@ -1,15 +1,38 @@
-import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Leaf } from 'lucide-react'
+import { ExplainAnswerModal } from './ExplainAnswerModal'
+import { ProvideNewAnswerModal } from './ProvideNewAnswerModal'
+import { ResponseActionBar } from './ResponseActionBar'
 import type { ChatMessage } from '@/types'
 
 interface ChatBubbleProps {
   message: ChatMessage
   avatarUrl?: string | null
+  creatorName?: string
   showAnnotations?: boolean
+  onAddResponse?: () => void
 }
 
-export function ChatBubble({ message, avatarUrl, showAnnotations = true }: ChatBubbleProps) {
+function getInitials(name?: string) {
+  if (!name) return 'AM'
+  const parts = name.trim().split(/\s+/)
+  return (parts[0]?.[0] ?? '') + (parts[parts.length - 1]?.[0] ?? '')
+}
+
+export function ChatBubble({ message, avatarUrl, creatorName, showAnnotations = true, onAddResponse }: ChatBubbleProps) {
   const isUser = message.sender === 'user'
+  const initials = getInitials(creatorName)
+  const [explainOpen, setExplainOpen] = useState(false)
+  const [newAnswerOpen, setNewAnswerOpen] = useState(false)
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (toastMessage) {
+      const timer = setTimeout(() => setToastMessage(null), 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [toastMessage])
 
   return (
     <motion.div
@@ -29,7 +52,7 @@ export function ChatBubble({ message, avatarUrl, showAnnotations = true }: ChatB
             />
           ) : (
             <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 border border-lm-green/20">
-              <span className="text-xs font-bold text-primary">A</span>
+              <span className="text-xs font-bold text-primary">{initials}</span>
             </div>
           )}
           <div className="absolute -bottom-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-lm-green">
@@ -52,13 +75,41 @@ export function ChatBubble({ message, avatarUrl, showAnnotations = true }: ChatB
           </p>
         </div>
 
-        {/* Source tag */}
-        {message.sourceEntry && (
+        {/* Explain answer label */}
+        {!isUser && message.sourceEntry && (
           <button
             type="button"
+            onClick={() => setExplainOpen(true)}
             className="px-1 text-[12px] font-medium text-lm-gold transition-colors hover:text-lm-gold-muted"
           >
-            {message.sourceEntry}
+            Explain answer ›
+          </button>
+        )}
+
+        {/* Provide a new answer label */}
+        {!isUser && message.sourceEntry && (
+          <button
+            type="button"
+            onClick={() => setNewAnswerOpen(true)}
+            className="px-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground/70"
+          >
+            Provide a new answer ›
+          </button>
+        )}
+
+        {/* Response action bar */}
+        {!isUser && message.sourceEntry && (
+          <ResponseActionBar />
+        )}
+
+        {/* Add a response — gap responses only (Legacy Creator view) */}
+        {!isUser && message.isGapResponse && onAddResponse && (
+          <button
+            type="button"
+            onClick={onAddResponse}
+            className="px-1 text-[12px] font-medium text-lm-green transition-colors hover:text-lm-green-dark"
+          >
+            Add a response ›
           </button>
         )}
 
@@ -69,6 +120,40 @@ export function ChatBubble({ message, avatarUrl, showAnnotations = true }: ChatB
           </p>
         )}
       </div>
+
+      {/* Modals */}
+      {!isUser && message.excerpts && (
+        <ExplainAnswerModal
+          isOpen={explainOpen}
+          onClose={() => setExplainOpen(false)}
+          excerpts={message.excerpts}
+          onToast={setToastMessage}
+        />
+      )}
+      {!isUser && (
+        <ProvideNewAnswerModal
+          isOpen={newAnswerOpen}
+          onClose={() => setNewAnswerOpen(false)}
+          onToast={setToastMessage}
+        />
+      )}
+
+      {/* Toast */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.25 }}
+            className="fixed bottom-24 left-1/2 z-[60] -translate-x-1/2 rounded-lg bg-lm-green/90 px-5 py-3 shadow-lg"
+          >
+            <p className="whitespace-nowrap text-[13px] font-semibold text-white">
+              {toastMessage}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }

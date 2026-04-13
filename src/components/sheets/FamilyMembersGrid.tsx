@@ -3,16 +3,17 @@ import type { CategorySheetMember } from '@/types'
 
 interface FamilyMembersGridProps {
   members: CategorySheetMember[]
+  categoryTitle?: string
   onAddMember?: () => void
 }
 
-export function FamilyMembersGrid({ members, onAddMember }: FamilyMembersGridProps) {
+export function FamilyMembersGrid({ members, categoryTitle = 'Family', onAddMember }: FamilyMembersGridProps) {
   return (
     <div className="border-y border-border bg-lm-bg-card px-4 py-5">
       <div className="flex flex-col gap-6">
         <div className="flex items-start justify-between">
-          <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
-            Your Family
+          <p className="text-[14px] font-bold leading-[1.2] text-[var(--lm-text-secondary)]">
+            Your {categoryTitle}
           </p>
           <button
             type="button"
@@ -38,7 +39,7 @@ export function FamilyMembersGrid({ members, onAddMember }: FamilyMembersGridPro
                 <p className="text-center text-sm font-semibold leading-none text-foreground">
                   {member.name}
                 </p>
-                <p className="text-center text-[14px] font-semibold leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+                <p className="text-center text-[14px] font-normal leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
                   {member.entryCount > 0 ? `${member.entryCount} entr${member.entryCount === 1 ? 'y' : 'ies'}` : 'No entries'}
                 </p>
               </div>
@@ -46,8 +47,8 @@ export function FamilyMembersGrid({ members, onAddMember }: FamilyMembersGridPro
           ))}
         </div>
 
-        <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
-          Tap a family member to view or add entries about them
+        <p className="text-center text-[14px] font-normal leading-[1.2] text-[var(--lm-text-secondary)]">
+          Tap a {categoryTitle.toLowerCase()} member to view or add entries about them
         </p>
       </div>
     </div>

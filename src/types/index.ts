@@ -462,4 +462,6 @@ export interface ChatMessage {
   timestamp: number
   sourceEntry?: string
   annotation?: string
+  excerpts?: { source: string; text: string }[]
+  isGapResponse?: boolean
 }

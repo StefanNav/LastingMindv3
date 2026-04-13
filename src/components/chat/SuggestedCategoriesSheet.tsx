@@ -11,12 +11,12 @@ interface SuggestedCategoriesSheetProps {
 const DRAG_CLOSE_THRESHOLD = 100
 
 const categories = [
-  { icon: Users, label: 'Family', question: 'Tell me about someone in my family' },
-  { icon: UserRound, label: 'Friends', question: 'Who are my closest friends?' },
-  { icon: Briefcase, label: 'Career', question: 'What did I say about my career?' },
-  { icon: GraduationCap, label: 'Education', question: 'Tell me about my education' },
-  { icon: Heart, label: 'Favorites', question: 'What are my favorite things?' },
-  { icon: Shield, label: 'Core Values', question: 'What are my core values?' },
+  { icon: Users, label: 'Family', question: 'Tell me about your family' },
+  { icon: UserRound, label: 'Friends', question: 'Who are your closest friends?' },
+  { icon: Briefcase, label: 'Career', question: 'What shaped your career?' },
+  { icon: GraduationCap, label: 'Education', question: 'Tell me about your education' },
+  { icon: Heart, label: 'Favorites', question: 'What are your favorite things?' },
+  { icon: Shield, label: 'Core Values', question: 'What are your core values?' },
 ]
 
 export function SuggestedCategoriesSheet({ isOpen, onClose, onSelectQuestion }: SuggestedCategoriesSheetProps) {

@@ -6,14 +6,16 @@ interface ChatInputBarProps {
   onSend: (text: string) => void
   placeholder?: string
   disabled?: boolean
+  externalInputRef?: React.RefObject<HTMLInputElement | null>
 }
 
-export function ChatInputBar({ onSend, placeholder = 'Ask your LastingMind anything…', disabled = false }: ChatInputBarProps) {
+export function ChatInputBar({ onSend, placeholder = 'Ask your LastingMind anything…', disabled = false, externalInputRef }: ChatInputBarProps) {
   const [text, setText] = useState('')
   const [isRecording, setIsRecording] = useState(false)
   const [recordingSeconds, setRecordingSeconds] = useState(0)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const internalRef = useRef<HTMLInputElement>(null)
+  const inputRef = externalInputRef ?? internalRef
 
   const handleSubmit = () => {
     const trimmed = text.trim()

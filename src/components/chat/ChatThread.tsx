@@ -7,11 +7,19 @@ import type { ChatMessage } from '@/types'
 interface ChatThreadProps {
   messages: ChatMessage[]
   avatarUrl?: string | null
+  creatorName?: string
   isThinking?: boolean
   showAnnotations?: boolean
+  onAddResponse?: () => void
 }
 
-export function ChatThread({ messages, avatarUrl, isThinking = false, showAnnotations = true }: ChatThreadProps) {
+function getInitials(name?: string) {
+  if (!name) return 'AM'
+  const parts = name.trim().split(/\s+/)
+  return (parts[0]?.[0] ?? '') + (parts[parts.length - 1]?.[0] ?? '')
+}
+
+export function ChatThread({ messages, avatarUrl, creatorName, isThinking = false, showAnnotations = true, onAddResponse }: ChatThreadProps) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -55,7 +63,7 @@ export function ChatThread({ messages, avatarUrl, isThinking = false, showAnnota
               <div className="h-px flex-1 bg-border/50" />
             </div>
             {group.messages.map((msg) => (
-              <ChatBubble key={msg.id} message={msg} avatarUrl={avatarUrl} showAnnotations={showAnnotations} />
+              <ChatBubble key={msg.id} message={msg} avatarUrl={avatarUrl} creatorName={creatorName} showAnnotations={showAnnotations} onAddResponse={onAddResponse} />
             ))}
           </div>
         ))}
@@ -73,7 +81,7 @@ export function ChatThread({ messages, avatarUrl, isThinking = false, showAnnota
               />
             ) : (
               <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 border border-lm-green/20">
-                <span className="text-xs font-bold text-primary">A</span>
+                <span className="text-xs font-bold text-primary">{getInitials(creatorName)}</span>
               </div>
             )}
           </div>

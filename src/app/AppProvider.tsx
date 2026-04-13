@@ -28,8 +28,6 @@ interface AppContextValue {
   lifeChapters: LifeChapter[]
   saveLifeChapters: (chapters: LifeChapter[]) => void
   hasDefinedChapters: boolean
-  chatFirstTimeExperience: boolean
-  setChatFirstTimeComplete: () => void
   chatMessages: ChatMessage[]
   addChatMessage: (msg: ChatMessage) => void
   clearChatMessages: () => void
@@ -76,7 +74,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [module2Runs, setModule2Runs] = useState<Record<string, number>>({})
   const [module1Completions, setModule1Completions] = useState<Record<string, boolean>>({})
   const [lifeChapters, setLifeChapters] = useState<LifeChapter[]>([])
-  const [chatFirstTimeExperience, setChatFirstTimeExperience] = useState(true)
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
   const [addedLegacyItemIds, setAddedLegacyItemIds] = useState<string[]>([])
   const [legacyItemStatuses, setLegacyItemStatuses] = useState<Record<string, LegacyItemStatus>>({})
@@ -101,7 +98,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const saveLifeChapters = (chapters: LifeChapter[]) => setLifeChapters(chapters)
   const hasDefinedChapters = lifeChapters.length > 0
 
-  const setChatFirstTimeComplete = () => setChatFirstTimeExperience(false)
   const addChatMessage = (msg: ChatMessage) => setChatMessages((prev) => [...prev, msg])
   const clearChatMessages = () => setChatMessages([])
 
@@ -135,8 +131,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     } else {
       setUserState('creator')
     }
-    // Reset chat state on demo switch so tutorial replays correctly
-    setChatFirstTimeExperience(true)
+    // Reset chat state on demo switch
     setChatMessages([])
     setAddedLegacyItemIds([])
     setLegacyItemStatuses({})
@@ -165,8 +160,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     lifeChapters,
     saveLifeChapters,
     hasDefinedChapters,
-    chatFirstTimeExperience,
-    setChatFirstTimeComplete,
     chatMessages,
     addChatMessage,
     clearChatMessages,
@@ -184,7 +177,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setHasSeenAudienceWelcome,
     audienceMembers,
     addAudienceMember,
-  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters, chatFirstTimeExperience, chatMessages, addedLegacyItemIds, legacyItemStatuses, hasInviteToken, userState, audienceCreatorName, hasSeenAudienceWelcome, audienceMembers])
+  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters, chatMessages, addedLegacyItemIds, legacyItemStatuses, hasInviteToken, userState, audienceCreatorName, hasSeenAudienceWelcome, audienceMembers])
 
   return (
     <AppContext.Provider value={value}>

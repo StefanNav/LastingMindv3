@@ -60,7 +60,7 @@ export function StartedContent({ category, detail, onBeginModule }: StartedConte
       {/* Family Members */}
       {detail.familyMembers && detail.familyMembers.length > 0 && (
         <motion.div variants={itemVariants}>
-          <FamilyMembersGrid members={detail.familyMembers} />
+          <FamilyMembersGrid members={detail.familyMembers} categoryTitle={category.title} />
         </motion.div>
       )}
 
