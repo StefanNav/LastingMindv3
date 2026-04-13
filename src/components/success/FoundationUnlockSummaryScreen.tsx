@@ -11,10 +11,10 @@ interface UnlockItem {
 
 const unlockItems: UnlockItem[] = [
   {
-    image: '/images/Voice message 1.png',
+    image: '/images/onboarding/SplashPageTree.png',
     imageWidth: 32,
     imageHeight: 32,
-    title: 'Voice Messages',
+    title: 'Chat with your LastingMind',
     status: 'Unlocked',
   },
   {

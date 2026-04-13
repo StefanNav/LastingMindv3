@@ -89,7 +89,7 @@ Tree growth happens at two points during Phase 1 — not one:
 
 - Phase 2: Tell Your Story
 - Phase 3: Leave Your Legacy
-- Voice Clone setup
+- Chat with your LastingMind
 - Invite first audience member
 - Tree grows: Sapling → Young Tree (full-screen animation — see reward_system_flows.md)
 
@@ -104,8 +104,12 @@ Unlocked when all 6 Foundation stars are earned. No internal locking — all Pha
 | Life Chapters | 1. Define Your Chapters → 2. Spark → Thread → Story per chapter | Generated biography paragraph per chapter |
 | Greatest Memories | 1. Define Your Moments → 2. Tell Each Story | Highlight reel |
 
-### Phase 2 Milestone Unlocks (all 2 categories complete)
+### Phase 2 Milestone Unlocks
 
+**Voice Clone unlock (star threshold TBD):**
+- Voice Clone setup — unlocked after earning a certain number of stars in Phase 2 (exact threshold to be defined). Displayed via a gold-divider unlock screen matching the Phase 1 unlock reveal pattern.
+
+**All 2 categories complete:**
 - Generated full biography
 - Shareable wisdom cards
 - Chat with Self (guided tutorial)
@@ -227,7 +231,7 @@ _Trigger: Appended after Flow C for first star (stars = 1) and final Foundation 
 - Final Star Animation (all 6 stars together, pause beat)
 - Full-Screen Tree Growth Animation (TreeStage2 → TreeStage3)
 - Phase 1 Celebration Screen (family-impact framing, stats)
-- Unlocks Revealed sequentially: Voice Clone → Invite Audience → Phase 2 + Phase 3
+- Unlocks Revealed sequentially: Chat with your LastingMind → Invite Audience → Phase 2 + Phase 3
 - Enter Phase 2 CTA
 
 ### Tree Stage Image Assets

@@ -23,10 +23,9 @@ export function LegacyPlaceholderPage() {
         <button
           type="button"
           onClick={() => navigate('/home')}
-          className="flex items-center gap-1.5 text-sm font-medium text-primary"
+          className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
         >
-          <ArrowLeft className="size-4" />
-          Back
+          <ArrowLeft className="size-5 text-white" />
         </button>
 
         {/* Content */}

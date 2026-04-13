@@ -28,10 +28,7 @@ export function ModuleIntroPage() {
             onClick={() => navigate('/home', { state: { openCategory: categoryId } })}
             className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
           >
-            <ArrowLeft className="size-6 text-white" />
-            <span className="text-[14px] font-semibold leading-[1.2] text-white">
-              Back
-            </span>
+            <ArrowLeft className="size-5 text-white" />
           </button>
         </div>
 

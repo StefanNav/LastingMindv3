@@ -40,12 +40,9 @@ export function ConversationHeader({
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-[6px] rounded-[4px] bg-lm-neutral-warm p-[6px]"
+          className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
         >
-          <ArrowLeft className="size-6 text-white" />
-          <span className="text-center text-[14px] font-semibold leading-[1.2] text-white">
-            Back
-          </span>
+          <ArrowLeft className="size-5 text-white" />
         </button>
         <span className={`text-center text-[14px] leading-[1.2] text-[var(--lm-text-secondary)] ${isSummary ? 'font-normal' : 'font-semibold'}`}>
           {rightLabel}

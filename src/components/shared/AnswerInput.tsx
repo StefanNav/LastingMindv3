@@ -5,7 +5,7 @@ import { Mic, Pause, CircleStop, Send, ChevronRight } from 'lucide-react'
 interface AnswerInputProps {
   mockAnswer: string
   onSubmit: (answer: string) => void
-  onSkip: () => void
+  onSkip?: () => void
 }
 
 function useLiveTranscription(mockAnswer: string, isRecording: boolean, isPaused: boolean) {
@@ -278,13 +278,15 @@ export function AnswerInput({ mockAnswer, onSubmit, onSkip }: AnswerInputProps) 
       </AnimatePresence>
 
       {/* Skip link */}
-      <button
-        type="button"
-        onClick={onSkip}
-        className="mx-auto text-[13px] text-[var(--lm-text-secondary)] transition-colors hover:text-[var(--lm-text-primary)]"
-      >
-        Skip
-      </button>
+      {onSkip && (
+        <button
+          type="button"
+          onClick={onSkip}
+          className="mx-auto text-[13px] text-[var(--lm-text-secondary)] transition-colors hover:text-[var(--lm-text-primary)]"
+        >
+          Skip
+        </button>
+      )}
     </div>
   )
 }

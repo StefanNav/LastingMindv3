@@ -79,7 +79,7 @@ function AudienceMemberRow({ member }: { member: AudienceMember }) {
         <p className="mt-0.5 text-sm text-muted-foreground">{member.relationship}</p>
       </div>
       {member.status === 'pending' && (
-        <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
+        <span className="shrink-0 rounded-full border border-lm-gold/30 bg-lm-gold/10 px-2.5 py-1 text-[12px] font-semibold text-lm-gold">
           Pending
         </span>
       )}

@@ -247,7 +247,7 @@ export function HomePage() {
           </motion.div>
         </AnimatePresence>
 
-        {/* ── Locked feature cards (Phase 1 only) ── */}
+        {/* ── Locked feature cards (Phase 1) ── */}
         {activePhase.id === 'foundation' && (
           <div className="relative z-[6] flex flex-col gap-4 px-4 pb-8 mt-4">
             {/* Section divider */}
@@ -255,6 +255,45 @@ export function HomePage() {
               <div className="h-px flex-1 bg-lm-gold/30" />
               <p className="shrink-0 text-[11px] font-bold uppercase tracking-widest text-lm-gold">
                 Earn 6 Stars to Unlock
+              </p>
+              <div className="h-px flex-1 bg-lm-gold/30" />
+            </div>
+
+            <LockedFeatureCard
+              image="/images/onboarding/SplashPageTree.png"
+              title="Chat with your LastingMind"
+              subtitle="Ask it anything — it already knows your stories, your values, and your voice."
+              onClick={() => setSelectedFeature({
+                id: 'chat-lastingmind',
+                image: '/images/onboarding/SplashPageTree.png',
+                title: 'Chat with your LastingMind',
+                description: 'Once unlocked, you can have a real conversation with your LastingMind — ask it questions, explore your stories, and see how well it knows you.',
+                unlockMessage: 'Earn at least 1 star in every Phase 1 category to unlock Chat. Complete both modules in a category to earn your first star.',
+              })}
+            />
+            <LockedFeatureCard
+              image="/images/Audience.png"
+              title="Your family can now meet your LastingMind"
+              subtitle="Invite them to start asking questions."
+              onClick={() => setSelectedFeature({
+                id: 'invite-audience',
+                image: '/images/Audience.png',
+                title: 'Your family can now meet your LastingMind',
+                description: 'Once unlocked, you can invite loved ones to interact with your LastingMind — they\'ll be able to ask questions, explore your stories, and connect with the legacy you\'re building.',
+                unlockMessage: 'Earn at least 1 star in every Phase 1 category to unlock Audience Invites. Complete both modules in a category to earn your first star.',
+              })}
+            />
+          </div>
+        )}
+
+        {/* ── Locked feature cards (Phase 2 — Life Story) ── */}
+        {activePhase.id === 'life-story' && (
+          <div className="relative z-[6] flex flex-col gap-4 px-4 pb-8 mt-4">
+            {/* Section divider */}
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-lm-gold/30" />
+              <p className="shrink-0 text-[11px] font-bold uppercase tracking-widest text-lm-gold">
+                Unlock with Stars
               </p>
               <div className="h-px flex-1 bg-lm-gold/30" />
             </div>
@@ -268,19 +307,7 @@ export function HomePage() {
                 image: '/images/RecordVoice.png',
                 title: 'Give your LastingMind your voice',
                 description: 'Record a voice sample and your LastingMind will use it to narrate your stories, memories, and letters in your own voice — so your family hears you, not a machine.',
-                unlockMessage: 'Earn at least 1 star in every Phase 1 category to unlock Voice Clone. Complete both modules in a category to earn your first star.',
-              })}
-            />
-            <LockedFeatureCard
-              image="/images/Audience.png"
-              title="Your family can now meet your LastingMind"
-              subtitle="Invite them to start asking questions."
-              onClick={() => setSelectedFeature({
-                id: 'invite-audience',
-                image: '/images/Audience.png',
-                title: 'Your family can now meet your LastingMind',
-                description: 'Once unlocked, you can invite loved ones to interact with your LastingMind — they\'ll be able to ask questions, explore your stories, and connect with the legacy you\'re building.',
-                unlockMessage: 'Earn at least 1 star in every Phase 1 category to unlock Audience Invites. Complete both modules in a category to earn your first star.',
+                unlockMessage: 'Earn stars in Phase 2 to unlock Voice Clone. Keep completing your Life Story modules to get there.',
               })}
             />
           </div>

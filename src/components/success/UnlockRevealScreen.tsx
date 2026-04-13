@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Mic, Users, Sparkles } from 'lucide-react'
+import { MessageCircle, Users, Sparkles } from 'lucide-react'
 import { RewardPrimaryCTA } from './RewardCTAs'
 
 interface Unlock {
@@ -11,9 +11,9 @@ interface Unlock {
 
 const unlocks: Unlock[] = [
   {
-    icon: <Mic className="size-10 text-lm-green" />,
-    headline: 'Give your LastingMind your voice.',
-    supporting: 'Your family will hear your stories the way only you can tell them.',
+    icon: <MessageCircle className="size-10 text-lm-green" />,
+    headline: 'Chat with your LastingMind.',
+    supporting: 'Ask it anything — it already knows your stories, your values, and your voice.',
   },
   {
     icon: <Users className="size-10 text-lm-green" />,

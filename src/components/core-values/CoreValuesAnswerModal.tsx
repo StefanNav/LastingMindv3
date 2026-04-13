@@ -6,14 +6,12 @@ import { AnswerInput } from '@/components/shared/AnswerInput'
 interface CoreValuesAnswerModalProps {
   category: CoreValuesCategory
   onSubmit: (answer: string) => void
-  onSkip: () => void
   onDismiss: () => void
 }
 
 export function CoreValuesAnswerModal({
   category,
   onSubmit,
-  onSkip,
   onDismiss,
 }: CoreValuesAnswerModalProps) {
   return (
@@ -60,7 +58,6 @@ export function CoreValuesAnswerModal({
         <AnswerInput
           mockAnswer={category.mockAnswer}
           onSubmit={onSubmit}
-          onSkip={onSkip}
         />
       </motion.div>
     </motion.div>

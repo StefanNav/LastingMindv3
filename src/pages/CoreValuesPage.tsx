@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
 import { ConversationHeader } from '@/components/conversation/ConversationHeader'
+import { ExitConfirmationModal } from '@/components/conversation/ExitConfirmationModal'
 import { CardDeck } from '@/components/core-values/CardDeck'
 import { CoreValuesAnswerModal } from '@/components/core-values/CoreValuesAnswerModal'
 import { InlineSuccessMoment } from '@/components/favorites/InlineSuccessMoment'
@@ -25,6 +26,15 @@ export function CoreValuesPage() {
       : `${flow.answeredCount} / ${flow.totalCards} cards`
 
   const [showModal, setShowModal] = useState(false)
+  const [showExitModal, setShowExitModal] = useState(false)
+
+  const handleBack = useCallback(() => {
+    if (flow.answeredCount > 0) {
+      setShowExitModal(true)
+    } else {
+      navigate('/home')
+    }
+  }, [flow.answeredCount, navigate])
 
   // Reset modal when step leaves 'revealed'
   useEffect(() => {
@@ -41,7 +51,7 @@ export function CoreValuesPage() {
           moduleTitle="Core Values"
           rightLabel={headerRightLabel}
           progressPercent={flow.progressPercent}
-          onBack={() => navigate('/home')}
+          onBack={handleBack}
         />
 
         {/* Content area — card deck centered */}
@@ -80,6 +90,13 @@ export function CoreValuesPage() {
                     Answer this question
                   </span>
                 </button>
+                <button
+                  type="button"
+                  onClick={flow.skipQuestion}
+                  className="text-[13px] text-[var(--lm-text-secondary)] transition-colors hover:text-[var(--lm-text-primary)]"
+                >
+                  Skip
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
@@ -92,7 +109,6 @@ export function CoreValuesPage() {
               key={`modal-${flow.currentCard.id}`}
               category={flow.currentCard}
               onSubmit={flow.submitAnswer}
-              onSkip={flow.skipQuestion}
               onDismiss={flow.dismissModal}
             />
           )}
@@ -105,6 +121,12 @@ export function CoreValuesPage() {
             />
           )}
         </AnimatePresence>
+
+        <ExitConfirmationModal
+          isOpen={showExitModal}
+          onStay={() => setShowExitModal(false)}
+          onLeave={() => navigate('/home')}
+        />
       </div>
     </PageTransition>
   )

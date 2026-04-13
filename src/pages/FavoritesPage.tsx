@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
 import { ConversationHeader } from '@/components/conversation/ConversationHeader'
+import { ExitConfirmationModal } from '@/components/conversation/ExitConfirmationModal'
 import { SlotMachineBody } from '@/components/favorites/SlotMachineBody'
 import { SlotReel } from '@/components/favorites/SlotReel'
 import { SlotHandle } from '@/components/favorites/SlotHandle'
@@ -17,6 +18,15 @@ export function FavoritesPage() {
   const flow = useSlotMachineFlow()
   const [sparkTrigger, setSparkTrigger] = useState(0)
   const handleRef = useRef<SlotHandleRef>(null)
+  const [showExitModal, setShowExitModal] = useState(false)
+
+  const handleBack = useCallback(() => {
+    if (flow.answeredCount > 0) {
+      setShowExitModal(true)
+    } else {
+      navigate('/home')
+    }
+  }, [flow.answeredCount, navigate])
 
   // Navigate to summary when all questions complete
   useEffect(() => {
@@ -46,7 +56,7 @@ export function FavoritesPage() {
           moduleTitle="Favorites"
           rightLabel={headerRightLabel}
           progressPercent={flow.progressPercent}
-          onBack={() => navigate('/home')}
+          onBack={handleBack}
         />
 
         {/* Content area — machine + handle centered, button pinned to bottom */}
@@ -118,6 +128,12 @@ export function FavoritesPage() {
             />
           )}
         </AnimatePresence>
+
+        <ExitConfirmationModal
+          isOpen={showExitModal}
+          onStay={() => setShowExitModal(false)}
+          onLeave={() => navigate('/home')}
+        />
       </div>
     </PageTransition>
   )

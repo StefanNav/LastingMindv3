@@ -153,7 +153,7 @@ Tree growth stages are represented by static image assets. Reference the correct
 2. **Tree Growth Screen** — full-screen transition from `TreeStage2` to `TreeStage3`. No nav chrome. Duration: 3–5 seconds. This is the most important animation in the app.
 3. **Phase 1 Celebration Screen** — framed entirely around family impact. Example: `"Your family now knows who shaped your life, what you value, and where you've been."` Stats shown: stars earned, total entries.
 4. **Unlocks Revealed** — three unlocks shown sequentially, one at a time:
-   1. Voice Clone — `"Give your LastingMind your voice"` 
+   1. Chat with your LastingMind — `"Ask it anything — it already knows your stories, your values, and your voice"` 
    2. Invite Audience — `"Your family is ready to meet your LastingMind"` 
    3. Phase 2 + Phase 3 — `"Now let's tell your story"` 
 5. **Enter Phase 2 CTA** — single button that closes the loop and moves the user forward
@@ -185,6 +185,21 @@ Tree growth stages are represented by static image assets. Reference the correct
 | Map Screen | C |
 | Tree Growth Animation | D |
 | Progress / Summary Screen | D |
+
+---
+
+## Phase 2 — Voice Clone Unlock
+
+**Trigger:** A certain number of stars earned in Phase 2 (threshold TBD).
+
+**Purpose:** Reward continued progress in Phase 2 by unlocking Voice Clone — the ability to give the user's LastingMind their own voice. This is the primary unlock for Phase 2 and mirrors the unlock reveal pattern from Phase 1 completion.
+
+**Screen sequence:**
+
+1. **Gold Divider + Unlock Title** — centered gold divider with `"New Unlock"` label, matching the Phase 1 Foundation divider style.
+2. **Voice Clone Reveal** — icon (Mic), headline: `"Give your LastingMind your voice."`, supporting: `"Record a voice sample and your LastingMind will narrate your stories, memories, and letters in your own voice — so your family hears you, not a machine."` Continue CTA.
+
+> This screen is implemented as `Phase2VoiceCloneUnlockScreen` and uses a configurable star threshold constant (`PHASE2_VOICE_CLONE_STAR_THRESHOLD`).
 
 ---
 

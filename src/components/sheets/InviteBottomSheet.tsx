@@ -30,6 +30,36 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
   const [phoneError, setPhoneError] = useState<string | null>(null)
   const [contactSearch, setContactSearch] = useState('')
 
+  // Pulse-glow: highlights the first empty field when nothing is focused
+  type PulseField = 'firstName' | 'lastName' | 'phone' | 'relationship' | 'customRel' | 'none'
+  const [pulseTarget, setPulseTarget] = useState<PulseField>('none')
+
+  const getFirstEmptyField = useCallback((
+    fn = firstName, ln = lastName, ph = phone, rel = relationship, cRel = customRelationship,
+  ): PulseField => {
+    if (!fn.trim()) return 'firstName'
+    if (!ln.trim()) return 'lastName'
+    if (ph.replace(/\D/g, '').length < 10) return 'phone'
+    if (!rel) return 'relationship'
+    if (rel === 'Other' && !cRel.trim()) return 'customRel'
+    return 'none'
+  }, [firstName, lastName, phone, relationship, customRelationship])
+
+  const handleFieldFocus = useCallback(() => {
+    setPulseTarget('none')
+  }, [])
+
+  const handleFieldBlur = useCallback(() => {
+    // Delay to allow focus to transfer to another field before pulsing
+    setTimeout(() => {
+      const active = document.activeElement
+      const isFormField = active?.closest('[data-invite-form]')
+      if (!isFormField) {
+        setPulseTarget(getFirstEmptyField())
+      }
+    }, 80)
+  }, [getFirstEmptyField])
+
   // Reset state when sheet opens/closes
   useEffect(() => {
     if (!isOpen) {
@@ -45,10 +75,12 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
         setSendError(null)
         setPhoneError(null)
         setContactSearch('')
+        setPulseTarget('none')
       }, 300)
       return () => clearTimeout(timer)
     }
   }, [isOpen])
+
 
   // Lock scroll when open
   useEffect(() => {
@@ -121,19 +153,25 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
   // Contact selection
   const handleContactSelect = useCallback((name: string, contactPhone: string) => {
     const parts = name.split(' ')
-    setFirstName(parts[0] || '')
-    setLastName(parts.slice(1).join(' ') || '')
+    const fn = parts[0] || ''
+    const ln = parts.slice(1).join(' ') || ''
+    setFirstName(fn)
+    setLastName(ln)
     setPhone(contactPhone)
     setPhoneError(null)
     setView('form')
-  }, [])
+    // Recalculate pulse for remaining empty fields after contact fill
+    setTimeout(() => setPulseTarget(getFirstEmptyField(fn, ln, contactPhone, relationship, customRelationship)), 100)
+  }, [getFirstEmptyField, relationship, customRelationship])
 
   // Relationship selection
   const handleRelationshipSelect = useCallback((rel: string) => {
     setRelationship(rel)
+    const cRel = rel !== 'Other' ? '' : customRelationship
     if (rel !== 'Other') setCustomRelationship('')
     setView('form')
-  }, [])
+    setTimeout(() => setPulseTarget(getFirstEmptyField(firstName, lastName, phone, rel, cRel)), 100)
+  }, [getFirstEmptyField, firstName, lastName, phone, customRelationship])
 
   // Filtered contacts
   const filteredContacts = useMemo(() => {
@@ -185,17 +223,27 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
     [onClose],
   )
 
-  const slideVariants = {
-    enter: { opacity: 0, x: 60 },
-    center: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -60 },
-  }
-
-  const slideBackVariants = {
-    enter: { opacity: 0, x: -60 },
-    center: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: 60 },
-  }
+  // Stacked overlay panel — slides up from bottom over the form
+  const overlayVariants = useMemo(() => ({
+    hidden: {
+      y: '100%',
+      opacity: shouldReduceMotion ? 0 : 1,
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: shouldReduceMotion
+        ? { duration: 0 }
+        : { type: 'spring' as const, stiffness: 320, damping: 28 },
+    },
+    exit: {
+      y: '100%',
+      opacity: shouldReduceMotion ? 0 : 1,
+      transition: shouldReduceMotion
+        ? { duration: 0 }
+        : { duration: 0.22, ease: 'easeIn' as const },
+    },
+  }), [shouldReduceMotion])
 
   // ── Render ──
   return (
@@ -240,45 +288,38 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
               </button>
             </div>
 
-            {/* View-switching content */}
-            <AnimatePresence mode="wait">
-              {view === 'form' && (
-                <motion.div
-                  key="form"
-                  variants={slideBackVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.2 }}
-                  className="flex flex-1 flex-col overflow-y-auto overscroll-contain"
-                >
-                  {renderFormView()}
-                </motion.div>
-              )}
+            {/* Form is always rendered underneath */}
+            <div className="flex flex-1 flex-col overflow-y-auto overscroll-contain">
+              {renderFormView()}
+            </div>
 
+            {/* Stacked overlay panels — slide up over the form */}
+            <AnimatePresence>
               {view === 'contacts' && (
                 <motion.div
-                  key="contacts"
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
+                  key="contacts-overlay"
+                  variants={overlayVariants}
+                  initial="hidden"
+                  animate="visible"
                   exit="exit"
-                  transition={{ duration: 0.2 }}
-                  className="flex flex-1 flex-col overflow-hidden"
+                  className="absolute inset-0 z-10 flex flex-col overflow-hidden rounded-t-[20px] bg-[var(--lm-bg-primary)]"
+                  style={{ willChange: 'transform' }}
                 >
                   {renderContactsView()}
                 </motion.div>
               )}
+            </AnimatePresence>
 
+            <AnimatePresence>
               {view === 'relationships' && (
                 <motion.div
-                  key="relationships"
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
+                  key="relationships-overlay"
+                  variants={overlayVariants}
+                  initial="hidden"
+                  animate="visible"
                   exit="exit"
-                  transition={{ duration: 0.2 }}
-                  className="flex flex-1 flex-col overflow-hidden"
+                  className="absolute inset-0 z-10 flex flex-col overflow-hidden rounded-t-[20px] bg-[var(--lm-bg-primary)]"
+                  style={{ willChange: 'transform' }}
                 >
                   {renderRelationshipsView()}
                 </motion.div>
@@ -331,7 +372,7 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
         </button>
 
         {/* Form fields */}
-        <div className="mt-5 flex flex-col gap-3">
+        <div className="mt-5 flex flex-col gap-3" data-invite-form>
           {/* First name */}
           <input
             id="invite-first-name"
@@ -339,7 +380,9 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
             placeholder="First name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            className="h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30"
+            onFocus={handleFieldFocus}
+            onBlur={handleFieldBlur}
+            className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'firstName' ? ' animate-pulse-glow' : ''}`}
           />
 
           {/* Last name */}
@@ -348,7 +391,9 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
             placeholder="Last name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            className="h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30"
+            onFocus={handleFieldFocus}
+            onBlur={handleFieldBlur}
+            className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'lastName' ? ' animate-pulse-glow' : ''}`}
           />
 
           {/* Phone number with country code */}
@@ -362,8 +407,12 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
                 placeholder="(555) 000-0000"
                 value={phone}
                 onChange={handlePhoneChange}
-                onBlur={() => { if (isPhoneValid) checkDuplicate(phone) }}
-                className="h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30"
+                onFocus={handleFieldFocus}
+                onBlur={() => {
+                  if (isPhoneValid) checkDuplicate(phone)
+                  handleFieldBlur()
+                }}
+                className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'phone' ? ' animate-pulse-glow' : ''}`}
               />
             </div>
             {phoneError && (
@@ -377,7 +426,7 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
             onClick={() => setView('relationships')}
             className={`flex h-[42px] w-full items-center justify-between rounded-lg border border-lm-border bg-background px-3 text-left font-sans text-[15px] outline-none transition-colors ${
               relationship ? 'text-foreground' : 'text-[var(--lm-text-secondary)]'
-            }`}
+            }${pulseTarget === 'relationship' ? ' animate-pulse-glow' : ''}`}
           >
             <span>{effectiveRelationship || 'Their relationship to you'}</span>
             <ChevronRight className="size-4 text-muted-foreground" />
@@ -390,8 +439,10 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
               placeholder="Enter relationship (e.g. Godmother)"
               value={customRelationship}
               onChange={(e) => setCustomRelationship(e.target.value)}
+              onFocus={handleFieldFocus}
+              onBlur={handleFieldBlur}
               autoFocus
-              className="h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30"
+              className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'customRel' ? ' animate-pulse-glow' : ''}`}
             />
           )}
         </div>
@@ -427,7 +478,12 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
   // ── Contacts View (iOS-style, allowed to deviate from design system) ──
   function renderContactsView() {
     return (
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-h-0 flex-1 flex-col pt-4">
+        {/* Drag handle */}
+        <div className="flex shrink-0 items-center justify-center pb-2">
+          <div className="h-[3px] w-10 rounded-full bg-foreground/30" />
+        </div>
+
         {/* Header bar */}
         <div className="flex items-center gap-3 px-4 pb-3">
           <button
@@ -491,7 +547,12 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
   // ── Relationships View ──
   function renderRelationshipsView() {
     return (
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-h-0 flex-1 flex-col pt-4">
+        {/* Drag handle */}
+        <div className="flex shrink-0 items-center justify-center pb-2">
+          <div className="h-[3px] w-10 rounded-full bg-foreground/30" />
+        </div>
+
         {/* Header bar */}
         <div className="flex items-center gap-3 px-4 pb-3">
           <button

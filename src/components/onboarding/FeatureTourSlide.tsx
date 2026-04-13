@@ -65,7 +65,6 @@ export function FeatureTourSlide({
               className="flex h-[56px] flex-1 items-center justify-center gap-2 rounded-xl border border-lm-border bg-background font-sans text-[15px] font-semibold text-foreground transition-transform active:scale-[0.97] active:brightness-90"
             >
               <ArrowLeft className="size-5" />
-              Back
             </button>
             <button
               type="button"
