@@ -32,9 +32,10 @@ function statusToStars(status: ProfileCategoryStatus): number {
   return 0
 }
 
-function statusLabel(status: ProfileCategoryStatus): string {
-  if (status === 'complete') return 'Complete'
-  if (status === 'in_progress') return 'Started'
+function starsLabel(stars: number): string {
+  if (stars >= 3) return 'Flourishing'
+  if (stars === 2) return 'Budding'
+  if (stars === 1) return 'Growing'
   return 'Not Started'
 }
 
@@ -68,20 +69,20 @@ export function StatsRow({ profile }: StatsRowProps) {
     const foundation: StarCategory[] = profile.foundationCategories.map((c) => ({
       name: c.name,
       starsEarned: statusToStars(c.status),
-      status: statusLabel(c.status),
+      status: starsLabel(statusToStars(c.status)),
     }))
 
     const lifeStory: StarCategory[] = PHASE2_CATEGORIES.map((name) => {
       if (!profile.phase1Complete) return { name, starsEarned: 0, status: 'Locked' }
       if (name === 'Life Chapters' && profile.lifeChapters.length > 0)
-        return { name, starsEarned: 1, status: 'Started' }
+        return { name, starsEarned: 1, status: 'Growing' }
       return { name, starsEarned: 0, status: 'Not Started' }
     })
 
     const legacy: StarCategory[] = profile.legacyModules.map((m) => ({
       name: m.name,
       starsEarned: profile.phase1Complete ? statusToStars(m.status) : 0,
-      status: profile.phase1Complete ? statusLabel(m.status) : 'Locked',
+      status: profile.phase1Complete ? starsLabel(statusToStars(m.status)) : 'Locked',
     }))
 
     return [
@@ -222,8 +223,9 @@ export function StatsRow({ profile }: StatsRowProps) {
                       <StarDisplay earned={cat.starsEarned} total={STARS_PER_CATEGORY} />
                       <p className={cn(
                         'text-[11px] font-medium',
-                        cat.status === 'Complete' ? 'text-lm-green'
-                          : cat.status === 'Started' ? 'text-lm-gold'
+                        cat.status === 'Flourishing' ? 'text-lm-green'
+                          : cat.status === 'Budding' ? 'text-lm-gold'
+                          : cat.status === 'Growing' ? 'text-lm-gold'
                           : 'text-muted-foreground',
                       )}>
                         {cat.status}
@@ -238,16 +240,20 @@ export function StatsRow({ profile }: StatsRowProps) {
                 <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Legend</p>
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center gap-2">
-                    <span className="flex gap-0.5">{Array.from({ length: 3 }).map((_, i) => <Star key={i} className="size-3.5" fill="var(--lm-gold-star)" stroke="var(--lm-gold-star)" strokeWidth={1.5} />)}</span>
-                    <span className="text-[11px] text-muted-foreground">Complete — full depth</span>
+                    <span className="flex gap-0.5">{Array.from({ length: 3 }).map((_, i) => <Star key={i} className="size-3.5" fill="none" stroke="var(--lm-text-tertiary)" strokeWidth={1.5} />)}</span>
+                    <span className="text-[11px] text-muted-foreground">Not yet started</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="flex gap-0.5"><Star className="size-3.5" fill="var(--lm-gold-star)" stroke="var(--lm-gold-star)" strokeWidth={1.5} /><Star className="size-3.5" fill="none" stroke="var(--lm-text-tertiary)" strokeWidth={1.5} /><Star className="size-3.5" fill="none" stroke="var(--lm-text-tertiary)" strokeWidth={1.5} /></span>
-                    <span className="text-[11px] text-muted-foreground">Started — keep going</span>
+                    <span className="text-[11px] text-muted-foreground">Growing — keep going</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="flex gap-0.5">{Array.from({ length: 3 }).map((_, i) => <Star key={i} className="size-3.5" fill="none" stroke="var(--lm-text-tertiary)" strokeWidth={1.5} />)}</span>
-                    <span className="text-[11px] text-muted-foreground">Not yet started</span>
+                    <span className="flex gap-0.5"><Star className="size-3.5" fill="var(--lm-gold-star)" stroke="var(--lm-gold-star)" strokeWidth={1.5} /><Star className="size-3.5" fill="var(--lm-gold-star)" stroke="var(--lm-gold-star)" strokeWidth={1.5} /><Star className="size-3.5" fill="none" stroke="var(--lm-text-tertiary)" strokeWidth={1.5} /></span>
+                    <span className="text-[11px] text-muted-foreground">Budding — almost there</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="flex gap-0.5">{Array.from({ length: 3 }).map((_, i) => <Star key={i} className="size-3.5" fill="var(--lm-gold-star)" stroke="var(--lm-gold-star)" strokeWidth={1.5} />)}</span>
+                    <span className="text-[11px] text-muted-foreground">Flourishing — full depth</span>
                   </div>
                 </div>
               </div>

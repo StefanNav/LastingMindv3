@@ -52,7 +52,7 @@ export function MemoryProfilePage() {
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className="shrink-0 rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted"
+            className="shrink-0 rounded-full bg-lm-neutral-warm p-1.5 text-white"
             aria-label="More options"
           >
             <MoreHorizontal className="size-5" />
