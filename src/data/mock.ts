@@ -50,10 +50,7 @@ export const mockHomePhases: HomePhase[] = [
     id: 'life-story',
     title: 'Life Story',
     label: 'Phase 2',
-    categories: [
-      { id: 'cat-life-chapters', title: 'Life Chapters', image: '/images/Life chapters 1.png', imageHeight: 156, imageWidth: 252, status: 'flourishing', totalModules: 3 },
-      { id: 'cat-greatest-memories', title: 'Greatest Memories', image: '/images/Greatest Memories 1.png', imageHeight: 156, imageWidth: 270, status: 'growing', totalModules: 3 },
-    ],
+    categories: [],
   },
   {
     id: 'your-legacy',
@@ -61,12 +58,13 @@ export const mockHomePhases: HomePhase[] = [
     label: 'Phase 3',
     categories: [
       { id: 'cat-wisdom', title: 'Wisdom & Advice', image: '/images/Wisdom 1.png', imageHeight: 156, imageWidth: 219, status: 'budding', totalModules: 3 },
+      { id: 'cat-greatest-memories', title: 'Greatest Memories', image: '/images/Greatest Memories 1.png', imageHeight: 156, imageWidth: 270, status: 'not_started', totalModules: 3 },
     ],
   },
   {
     id: 'keep-growing',
     title: 'Keep Growing',
-    label: 'Phase 4',
+    label: 'My Study',
     categories: [],
   },
 ]

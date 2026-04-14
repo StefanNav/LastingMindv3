@@ -46,7 +46,7 @@ export function SummaryList({
         {/* Heading */}
         <div className="flex items-center justify-center px-4 py-[10px]">
           <p
-            className="flex-1 text-center font-display text-[26px] font-normal leading-[1.5] text-[#2f3228]"
+            className="flex-1 text-center font-display text-2xl font-semibold leading-tight text-foreground"
           >
             {heading}
           </p>
@@ -54,7 +54,7 @@ export function SummaryList({
 
         {/* List section */}
         <div className="flex flex-col gap-4 px-4 pt-4">
-          <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-body-alt)]">
+          <p className="text-sm font-semibold leading-tight text-muted-foreground">
             {listLabel}
           </p>
 
@@ -66,13 +66,13 @@ export function SummaryList({
                 initial="hidden"
                 animate="visible"
                 variants={listItemVariants}
-                className="flex items-end gap-[10px] rounded-[4px] border border-black/25 bg-white px-3 py-[10px]"
+                className="flex items-end gap-2.5 rounded-[10px] bg-lm-bg-card/40 px-3 py-2.5 shadow-card backdrop-blur-sm"
               >
                 <div className="flex flex-1 items-center gap-10">
-                  <span className="shrink-0 text-[18px] font-medium leading-[1.2] text-[#2f3228]">
+                  <span className="shrink-0 text-lg font-medium leading-tight text-foreground">
                     {item.name}
                   </span>
-                  <span className="flex-1 text-right text-[14px] font-medium leading-[1.2] text-[var(--lm-text-secondary)]">
+                  <span className="flex-1 text-right text-sm font-medium leading-tight text-muted-foreground">
                     {item.label}
                   </span>
                 </div>
@@ -82,14 +82,14 @@ export function SummaryList({
                     onClick={() => setEditingItem(item)}
                     className="flex size-[18px] items-center justify-center"
                   >
-                    <Pencil className="size-[14px] text-[var(--lm-text-secondary)]" />
+                    <Pencil className="size-3.5 text-muted-foreground" />
                   </button>
                   <button
                     type="button"
                     onClick={() => setDeletingItem(item)}
                     className="flex size-[18px] items-center justify-center"
                   >
-                    <X className="size-[14px] text-[var(--lm-text-secondary)]" />
+                    <X className="size-3.5 text-muted-foreground" />
                   </button>
                 </div>
               </motion.div>
@@ -99,10 +99,10 @@ export function SummaryList({
             <button
               type="button"
               onClick={() => setIsAdding(true)}
-              className="flex items-center justify-center gap-[10px] rounded-[6px] border border-dashed border-[#5d6056] bg-[#fffcf4] px-4 py-[10px]"
+              className="flex items-center justify-center gap-2 rounded-[10px] border-2 border-dashed border-border py-2.5 px-4 text-sm font-medium text-primary transition-colors hover:border-primary/40 hover:bg-primary/5 active:scale-[0.98]"
             >
-              <Plus className="size-4 text-[#5d6056]" />
-              <span className="text-[14px] font-medium leading-[1.2] text-[#5d6056]">
+              <Plus className="size-4" />
+              <span className="text-sm font-medium">
                 {addLabel}
               </span>
             </button>
@@ -111,19 +111,17 @@ export function SummaryList({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 flex-col items-center gap-[13px] border-t border-black/25 bg-[var(--lm-bg-primary)] px-4 pb-[50px] pt-4">
-        <p className="text-center text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-body-alt)]">
+      <div className="flex shrink-0 flex-col items-center gap-3 border-t border-border/50 bg-[var(--lm-bg-primary)] px-4 pb-8 pt-4">
+        <p className="text-center text-sm font-semibold leading-tight text-muted-foreground">
           You can always return to say more.{' '}
         </p>
         <button
           type="button"
           onClick={onSaveAndFinish}
-          className="flex w-full flex-col items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-[0.98]"
         >
-          <ArrowRight className="size-6 text-white" />
-          <span className="text-[18px] font-medium leading-[1.2] text-white">
-            Save &amp; Finish
-          </span>
+          <ArrowRight className="size-5" />
+          Save &amp; Finish
         </button>
       </div>
 

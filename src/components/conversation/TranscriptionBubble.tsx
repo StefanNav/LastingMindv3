@@ -78,7 +78,7 @@ export function TranscriptionBubble({ text, label, liveTranscribe, showDotsIndic
     >
       <div className="flex flex-col gap-[10px] rounded-[8px] bg-[var(--lm-bg-reflection)] px-4 py-2 shadow-reflection">
         {label && (
-          <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+          <p className="text-sm font-semibold leading-tight text-muted-foreground">
             {label}
           </p>
         )}
@@ -97,10 +97,10 @@ export function TranscriptionBubble({ text, label, liveTranscribe, showDotsIndic
               setEditedText(e.target.value)
               autoResize()
             }}
-            className="w-full resize-none border-0 border-b border-[#3e2f26]/20 bg-transparent pb-4 text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)] outline-none"
+            className="w-full resize-none border-0 border-b border-foreground/20 bg-transparent pb-4 text-base font-normal leading-relaxed text-foreground outline-none"
           />
         ) : (
-          <p className="w-full text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
+          <p className="w-full text-base font-normal leading-relaxed text-foreground">
             {displayText}
           </p>
         )}
@@ -111,11 +111,11 @@ export function TranscriptionBubble({ text, label, liveTranscribe, showDotsIndic
             onClick={handleStartEdit}
             className="flex w-full items-center gap-1"
           >
-            <svg className="size-[18px] text-[#3e2f26]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="size-[18px] text-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 22h16" />
               <path d="M18 2l4 4L8 20H4v-4L18 2z" />
             </svg>
-            <span className="text-[14px] font-medium leading-[20px] text-[#3e2f26]">
+            <span className="text-sm font-medium text-foreground">
               Tap to edit
             </span>
           </button>
@@ -125,12 +125,10 @@ export function TranscriptionBubble({ text, label, liveTranscribe, showDotsIndic
           <button
             type="button"
             onClick={handleDone}
-            className="mt-3 flex items-center gap-1 self-end rounded-[6px] bg-lm-green px-3 py-1.5"
+            className="mt-3 flex items-center gap-1 self-end rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 active:scale-[0.98]"
           >
-            <Check className="size-4 text-white" />
-            <span className="text-[14px] font-medium leading-[20px] text-white">
-              Done
-            </span>
+            <Check className="size-4" />
+            Done
           </button>
         )}
       </div>

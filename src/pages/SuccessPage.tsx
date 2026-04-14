@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
+import { PrimaryCTA } from '@/components/shared/PrimaryCTA'
 import { Check } from 'lucide-react'
 import { SavingScreen } from '@/components/success/SavingScreen'
 import { SavedScreen } from '@/components/success/SavedScreen'
@@ -43,18 +44,14 @@ export function SuccessPage() {
         <div className="flex h-full flex-col items-center justify-center gap-6 p-6 text-center">
           <Check className="size-16 text-lm-green" />
           <div className="flex flex-col gap-2">
-            <h2 className="font-display text-[26px] font-normal text-foreground">Module Complete!</h2>
-            <p className="text-[14px] text-[var(--lm-text-secondary)]">
+            <h2 className="font-display text-2xl font-semibold text-foreground">Module Complete!</h2>
+            <p className="text-sm text-muted-foreground">
               Your progress has been saved.
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => navigate('/home')}
-            className="mt-4 flex items-center justify-center rounded-[4px] bg-lm-green px-10 py-4"
-          >
-            <span className="text-[16px] font-medium leading-[1.2] text-white">Return Home</span>
-          </button>
+          <PrimaryCTA onClick={() => navigate('/home')} className="mt-4 max-w-[260px]">
+            Return Home
+          </PrimaryCTA>
         </div>
       </PageTransition>
     )

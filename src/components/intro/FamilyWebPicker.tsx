@@ -84,15 +84,15 @@ export function FamilyWebPicker({ webMembers, selectedId, onSelect }: FamilyWebP
                   className={cn(
                     'flex size-10 items-center justify-center rounded-full transition-colors duration-200',
                     isSelected
-                      ? 'border-2 border-lm-green bg-[#e7ebd9] shadow-[0_0_10px_rgba(50,117,30,0.25)]'
-                      : 'border border-[var(--lm-text-secondary)]/40 bg-[#fffcf5]',
+                      ? 'border-2 border-lm-green bg-primary/10 shadow-[0_0_10px_rgba(50,117,30,0.25)]'
+                      : 'border border-muted-foreground/40 bg-background',
                     !isSelected && member.id === pulseTargetId && 'animate-pulse-glow',
                   )}
                 >
                   <p
                     className={cn(
                       'font-display text-[20px] font-bold leading-none',
-                      isSelected ? 'text-lm-green' : 'text-[var(--lm-text-secondary)]',
+                      isSelected ? 'text-lm-green' : 'text-muted-foreground',
                     )}
                   >
                     {initials}
@@ -106,7 +106,7 @@ export function FamilyWebPicker({ webMembers, selectedId, onSelect }: FamilyWebP
                       'absolute -right-1 -top-1 flex size-[18px] items-center justify-center rounded-full text-[10px] font-bold leading-none',
                       isSelected
                         ? 'bg-lm-green text-white'
-                        : 'bg-[var(--lm-neutral-warm)] text-white',
+                        : 'bg-muted-foreground text-white',
                     )}
                   >
                     {count}
@@ -124,7 +124,7 @@ export function FamilyWebPicker({ webMembers, selectedId, onSelect }: FamilyWebP
                 >
                   {member.firstName} {member.lastName[0]}.
                 </p>
-                <p className="text-center text-[12px] font-medium leading-[1.2] text-[var(--lm-text-secondary)]">
+                <p className="text-center text-xs font-medium leading-tight text-muted-foreground">
                   {member.relationship}
                 </p>
               </div>

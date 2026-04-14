@@ -114,7 +114,7 @@ export function ReflectionPage() {
     return (
       <PageTransition>
         <div className="flex h-full items-center justify-center">
-          <p className="text-[16px] text-[var(--lm-text-secondary)]">Reflection not found.</p>
+          <p className="text-base text-muted-foreground">Reflection not found.</p>
         </div>
       </PageTransition>
     )

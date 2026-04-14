@@ -16,7 +16,7 @@ export function ModuleStepCard({ module, stepLabel, ctaLabel, onBegin }: ModuleS
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+      <p className="text-[14px] font-semibold leading-[1.2] text-muted-foreground">
         {stepLabel}
       </p>
 
@@ -24,19 +24,19 @@ export function ModuleStepCard({ module, stepLabel, ctaLabel, onBegin }: ModuleS
         className={cn(
           'flex flex-col gap-4 rounded-[10px] p-3',
           isActive && 'bg-lm-bg-card shadow-[0px_3px_6px_0px_rgba(0,0,0,0.16)] backdrop-blur-sm',
-          isCompleted && 'border border-[#e7ebd9] bg-white opacity-70',
-          isLocked && 'border border-[#e7ebd9] bg-white opacity-50',
+          isCompleted && 'border border-border bg-white opacity-70',
+          isLocked && 'border border-border bg-white opacity-50',
         )}
       >
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-2.5">
           <div className="flex items-center gap-1">
             {isCompleted ? (
-              <div className="flex size-[13px] items-center justify-center rounded-full border-[0.5px] border-lm-green bg-[#e7ebd9]">
+              <div className="flex size-[13px] items-center justify-center rounded-full border-[0.5px] border-lm-green bg-primary/10">
                 <Check className="size-[10px] text-lm-green" strokeWidth={2.5} />
               </div>
             ) : isLocked ? (
-              <div className="flex size-4 items-center justify-center rounded-full border-[0.75px] border-[var(--lm-text-secondary)]">
-                <LockKeyhole className="size-[10px] text-[var(--lm-text-secondary)]" />
+              <div className="flex size-4 items-center justify-center rounded-full border-[0.75px] border-muted-foreground">
+                <LockKeyhole className="size-[10px] text-muted-foreground" />
               </div>
             ) : (
               <div className="size-3 rounded-full border border-lm-green" />
@@ -47,15 +47,15 @@ export function ModuleStepCard({ module, stepLabel, ctaLabel, onBegin }: ModuleS
                 Module Complete
               </p>
             ) : (
-              <p className="flex-1 text-[16px] font-semibold leading-[1.2] text-foreground">
+              <p className="flex-1 text-[16px] font-semibold leading-[1.35] text-foreground">
                 {module.title}
               </p>
             )}
 
             {!isCompleted && (
               <div className="flex items-center gap-1">
-                <Clock className="size-4 text-[var(--lm-text-secondary)]" />
-                <p className="text-[14px] leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+                <Clock className="size-4 text-muted-foreground" />
+                <p className="text-[14px] leading-[1.2] tracking-[0.5px] text-muted-foreground">
                   {module.duration}
                 </p>
               </div>
@@ -67,7 +67,7 @@ export function ModuleStepCard({ module, stepLabel, ctaLabel, onBegin }: ModuleS
               {module.title}
             </p>
           ) : (
-            <p className="text-[14px] font-medium leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+            <p className="text-[14px] font-medium leading-[1.4] tracking-[0.5px] text-muted-foreground">
               {module.description}
             </p>
           )}

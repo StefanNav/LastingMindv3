@@ -53,16 +53,16 @@ export function RewardCard({
       <div className="flex-1" />
 
       {/* Card */}
-      <div className="px-6">
-        <div
-          className="reward-card-border-sparkle flex flex-col gap-[30px] items-center rounded-[20px] border border-[#e5a83f] px-4 py-5 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
-          style={{
-            backgroundImage:
-              'linear-gradient(127deg, #fff8ea 27%, rgba(255,241,216,0.886) 47%, #fff8ea 75%)',
-          }}
-        >
+      <div className="px-6" style={{ perspective: '1200px' }}>
+        <div className="reward-card reward-card-float flex flex-col gap-[30px] items-center px-4 pb-5 pt-6">
+          {/* Overlay layers */}
+          <div className="reward-card-noise" />
+          <div className="reward-card-glass" />
+          <div className="reward-card-shimmer" />
+          <div className="reward-card-shimmer-sharp" />
+
           {/* Category image + label + module title */}
-          <div className="flex w-full flex-col items-center">
+          <div className="relative z-10 flex w-full flex-col items-center">
             <div className="flex flex-col items-center">
               <div className="h-[100px] w-[94px] overflow-hidden">
                 <img
@@ -71,7 +71,7 @@ export function RewardCard({
                   className="h-full w-full object-contain"
                 />
               </div>
-              <p className="text-[15px] font-semibold leading-tight text-lm-green-dark">
+              <p className="gold-emboss-warm text-[15px] font-semibold leading-tight">
                 {categoryLabel}
               </p>
             </div>
@@ -83,10 +83,10 @@ export function RewardCard({
           </div>
 
           {/* Generic item grid */}
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-4 w-full">
+          <div className="relative z-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-4 w-full">
             {items.map((item) => (
               <div key={item.id} className="flex flex-col items-center gap-2">
-                <div className="flex size-10 items-center justify-center overflow-hidden rounded-full border border-lm-green bg-[#fffcf5]">
+                <div className="flex size-10 items-center justify-center overflow-hidden rounded-full border border-lm-green bg-background">
                   <p className="font-display text-[20px] font-bold leading-none text-lm-green">
                     {item.initial}
                   </p>
@@ -96,7 +96,7 @@ export function RewardCard({
                     {item.label}
                   </p>
                   {item.sublabel && (
-                    <p className="text-[13px] font-semibold leading-tight text-muted-foreground">
+                    <p className="text-[12px] font-medium leading-tight text-muted-foreground/60">
                       {item.sublabel}
                     </p>
                   )}
@@ -106,9 +106,9 @@ export function RewardCard({
           </div>
 
           {/* Footer */}
-          <div className="flex w-full items-center gap-1.5 border-t border-border py-4 text-[13px] font-semibold leading-tight text-muted-foreground">
-            <p className="flex-1">{itemCountLabel}</p>
-            <p className="text-center">{date}</p>
+          <div className="relative z-10 flex w-full items-center border-t border-[#d4a94a]/30 pt-4">
+            <p className="gold-emboss-warm flex-1 text-[11px] font-medium uppercase tracking-wider opacity-70">{itemCountLabel}</p>
+            <p className="gold-emboss-warm text-[12px] font-normal opacity-60">{date}</p>
           </div>
         </div>
       </div>

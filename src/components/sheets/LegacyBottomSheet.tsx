@@ -139,7 +139,7 @@ export function LegacyBottomSheet({ isOpen, onClose, addedItemIds, onAddItem }: 
               <p className="font-display text-[22px] font-normal leading-[1.2] text-foreground">
                 What would you like to leave behind?
               </p>
-              <p className="text-sm leading-snug text-[var(--lm-text-secondary)]">
+              <p className="text-sm leading-snug text-muted-foreground">
                 Choose what to add. Each one will appear in your Legacy section for you to complete.
               </p>
             </div>
@@ -176,7 +176,7 @@ export function LegacyBottomSheet({ isOpen, onClose, addedItemIds, onAddItem }: 
                         <p className="text-[14px] font-semibold leading-tight text-foreground">
                           {item.name}
                         </p>
-                        <p className="text-[12px] leading-snug text-[var(--lm-text-secondary)]">
+                        <p className="text-[12px] leading-snug text-muted-foreground">
                           {item.description}
                         </p>
                       </div>

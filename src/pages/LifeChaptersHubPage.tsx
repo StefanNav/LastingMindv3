@@ -64,7 +64,7 @@ export function LifeChaptersHubPage() {
             <button
               type="button"
               onClick={() => navigate('/life-chapters/define')}
-              className="rounded-[4px] bg-lm-green px-6 py-2 text-sm font-medium text-white transition-transform active:scale-[0.97]"
+              className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-transform hover:bg-primary/90 active:scale-[0.97]"
             >
               Define your chapters
             </button>

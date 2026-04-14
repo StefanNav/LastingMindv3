@@ -79,7 +79,7 @@ export function CardDeck({
               style={{ zIndex: stackDepth - i }}
             >
               <div
-                className="flex h-[360px] w-[260px] flex-col overflow-hidden rounded-2xl border border-[var(--lm-border)] bg-[var(--lm-bg-card)]"
+                className="flex h-[360px] w-[260px] flex-col overflow-hidden rounded-2xl border border-border bg-[var(--lm-bg-card)]"
                 style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
               >
                 <div className="flex h-[72px] shrink-0 items-center justify-center bg-lm-green">
@@ -122,7 +122,7 @@ export function CardDeck({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.3 }}
-            className="text-center text-[13px] text-[var(--lm-text-secondary)]"
+            className="text-center text-[13px] text-muted-foreground"
           >
             Tap the card to reveal your question
           </motion.p>

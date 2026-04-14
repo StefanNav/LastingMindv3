@@ -107,6 +107,11 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
   }
   body {
     @apply bg-background text-foreground;
@@ -145,22 +150,113 @@
   animation: pulse-glow 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-/* Gold pulse-glow for reward card */
-@keyframes gold-pulse-glow {
-  0% {
-    box-shadow: 0 0 0 0 rgba(229, 168, 63, 0.55);
-    border-color: rgba(229, 168, 63, 0.6);
-  }
-  50% {
-    box-shadow: 0 0 0 8px rgba(229, 168, 63, 0);
-    border-color: rgba(229, 168, 63, 0.8);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(229, 168, 63, 0);
-    border-color: rgba(229, 168, 63, 0.6);
-  }
+/* ── Reward card gold treatment ── */
+
+/* Bouncy float with slight tilt */
+@keyframes reward-float {
+  0%, 100% { transform: translateY(0px) rotateX(2deg) rotateY(-3deg); }
+  33%      { transform: translateY(-8px) rotateX(3deg) rotateY(-1deg); }
+  66%      { transform: translateY(-4px) rotateX(1deg) rotateY(-4deg); }
 }
 
-.reward-card-border-sparkle {
-  animation: gold-pulse-glow 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+.reward-card-float {
+  animation: reward-float 6s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+/* Shimmer light streak animation */
+@keyframes reward-shimmer-shine {
+  0%   { transform: translateX(-150%) skewX(-25deg); }
+  100% { transform: translateX(250%) skewX(-25deg); }
+}
+
+/* Card base */
+.reward-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1.5px solid #d4a94a;
+  background: linear-gradient(
+    135deg,
+    #fff8ea 0%,
+    #fff1d6 25%,
+    #ffe8be 50%,
+    #fff1d6 75%,
+    #fff8ea 100%
+  );
+  box-shadow:
+    0 8px 32px rgba(196, 131, 18, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* SVG noise texture overlay */
+.reward-card-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+/* Diagonal glass highlight overlay */
+.reward-card-glass {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.08) 30%,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(180, 140, 60, 0.06) 100%
+  );
+}
+
+/* Broad shimmer sweep */
+.reward-card-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  filter: blur(4px);
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    transparent
+  );
+  animation: reward-shimmer-shine 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Sharp companion shimmer streak */
+.reward-card-shimmer-sharp {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 15%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.7),
+    transparent
+  );
+  animation: reward-shimmer-shine 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 0.15s;
+}
+
+/* Embossed text for warm gold surface */
+.gold-emboss-warm {
+  color: #5c4a2a;
+  text-shadow:
+    0px 1px 1px rgba(255, 255, 255, 0.5),
+    0px -1px 0px rgba(0, 0, 0, 0.08);
 }

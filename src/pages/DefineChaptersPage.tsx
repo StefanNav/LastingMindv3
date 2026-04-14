@@ -1,8 +1,9 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence, Reorder } from 'framer-motion'
-import { ArrowLeft, Plus } from 'lucide-react'
+import { Plus, Check, X } from 'lucide-react'
 import { PageTransition } from '@/animations/PageTransition'
+import { BackButton } from '@/components/shared/BackButton'
 import { useApp } from '@/app/AppProvider'
 import { buildInitialChapters, createBlankChapter, SUGGESTED_CHAPTERS } from '@/data/lifeChaptersData'
 import { ChapterCard } from '@/components/life-chapters/ChapterCard'
@@ -10,7 +11,7 @@ import type { LifeChapter } from '@/types'
 
 export function DefineChaptersPage() {
   const navigate = useNavigate()
-  const { saveLifeChapters, lifeChapters: savedChapters } = useApp()
+  const { saveLifeChapters, lifeChapters: savedChapters, hasSeenChaptersWelcome, setHasSeenChaptersWelcome } = useApp()
 
   const [chapters, setChapters] = useState<LifeChapter[]>(() =>
     savedChapters.length > 0 ? savedChapters : buildInitialChapters()
@@ -18,6 +19,15 @@ export function DefineChaptersPage() {
   const [undoChapter, setUndoChapter] = useState<{ chapter: LifeChapter; index: number } | null>(null)
   const [undoTimer, setUndoTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
   const [newChapterId, setNewChapterId] = useState<string | null>(null)
+  const [showConfirmToast, setShowConfirmToast] = useState(false)
+  const [showWelcome, setShowWelcome] = useState(false)
+
+  // Scroll to top on mount
+  useEffect(() => {
+    const main = document.querySelector('main')
+    if (main) main.scrollTop = 0
+    window.scrollTo(0, 0)
+  }, [])
 
   // Descriptions for the suggested chapters (shown as hints)
   const descriptionMap = new Map(
@@ -80,11 +90,24 @@ export function DefineChaptersPage() {
 
   const handleConfirm = useCallback(() => {
     saveLifeChapters(chapters)
-    navigate('/life-chapters')
-  }, [chapters, saveLifeChapters, navigate])
+    if (!hasSeenChaptersWelcome) {
+      setShowWelcome(true)
+    } else {
+      setShowConfirmToast(true)
+      setTimeout(() => {
+        navigate('/home', { state: { activePhase: 'life-story' } })
+      }, 1200)
+    }
+  }, [chapters, saveLifeChapters, navigate, hasSeenChaptersWelcome])
+
+  const handleDismissWelcome = useCallback(() => {
+    setHasSeenChaptersWelcome(true)
+    setShowWelcome(false)
+    navigate('/home', { state: { activePhase: 'life-story' } })
+  }, [setHasSeenChaptersWelcome, navigate])
 
   const handleBack = useCallback(() => {
-    navigate('/home')
+    navigate('/home', { state: { activePhase: 'life-story' } })
   }, [navigate])
 
   return (
@@ -101,14 +124,7 @@ export function DefineChaptersPage() {
       <div className="relative z-10 flex min-h-full flex-col pb-24">
         {/* Header */}
         <div className="flex items-center gap-3 px-4 pt-14 pb-2">
-          <button
-            type="button"
-            onClick={handleBack}
-            className="shrink-0 rounded-full p-1 text-foreground transition-colors hover:bg-muted"
-            aria-label="Back to home"
-          >
-            <ArrowLeft className="size-5" />
-          </button>
+          <BackButton onClick={handleBack} ariaLabel="Back to home" />
           <h2 className="flex-1 text-center font-display text-xl font-semibold text-foreground pr-7">
             Your Life Chapters
           </h2>
@@ -191,6 +207,79 @@ export function DefineChaptersPage() {
       </div>
 
       {/* Undo toast */}
+      {/* Welcome modal — first time only */}
+      <AnimatePresence>
+        {showWelcome && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-6"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 24 }}
+              transition={{ type: 'spring', damping: 24, stiffness: 260 }}
+              className="relative flex w-full max-w-sm flex-col items-center gap-5 rounded-2xl bg-[var(--lm-bg-primary)] px-6 py-8 shadow-xl"
+            >
+              {/* Close button */}
+              <button
+                type="button"
+                onClick={handleDismissWelcome}
+                className="absolute right-3 top-3 rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted"
+                aria-label="Close"
+              >
+                <X className="size-5" />
+              </button>
+
+              {/* Image */}
+              <img
+                src="/images/Life chapters 1.png"
+                alt="Life Chapters"
+                className="h-28 w-auto object-contain"
+              />
+
+              {/* Title */}
+              <h3 className="font-display text-xl font-semibold text-foreground text-center">
+                Your chapters are ready
+              </h3>
+
+              {/* Description */}
+              <p className="text-center text-sm leading-relaxed text-muted-foreground">
+                Each chapter you defined is now a story card on your Life Story page. Tap any chapter to start a guided conversation about that part of your life — share memories, moments, and the details that made it meaningful. Complete both steps in a chapter to earn stars and grow your tree.
+              </p>
+
+              {/* CTA */}
+              <button
+                type="button"
+                onClick={handleDismissWelcome}
+                className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 active:scale-[0.98]"
+              >
+                Let's go
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showConfirmToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.25 }}
+            className="fixed bottom-24 left-1/2 z-30 -translate-x-1/2 rounded-full bg-foreground px-5 py-2.5 shadow-lg"
+          >
+            <div className="flex items-center gap-2">
+              <Check className="size-4 text-lm-green" />
+              <p className="text-sm text-background">Chapters saved</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {undoChapter && (
           <motion.div

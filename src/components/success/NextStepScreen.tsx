@@ -76,7 +76,7 @@ export function NextStepScreen({
             <div className="flex flex-col gap-2.5">
               {completedModules.map((mod) => (
                 <div key={mod.title} className="flex items-center gap-1">
-                  <div className="flex size-4 shrink-0 items-center justify-center rounded-full border-[0.5px] border-lm-green bg-[#e7ebd9]">
+                  <div className="flex size-4 shrink-0 items-center justify-center rounded-full border-[0.5px] border-lm-green bg-primary/10">
                     <Check className="size-3 text-lm-green" strokeWidth={2.5} />
                   </div>
                   <p className="flex-1 text-[15px] font-semibold leading-tight text-foreground">
@@ -109,7 +109,7 @@ export function NextStepScreen({
                   {suggestedModule.title}
                 </p>
                 <div className="flex items-center gap-1">
-                  <Clock className="size-4 text-[var(--lm-text-secondary)]" />
+                  <Clock className="size-4 text-muted-foreground" />
                   <p className="text-[13px] leading-tight text-muted-foreground">
                     {suggestedModule.duration}
                   </p>
@@ -122,11 +122,9 @@ export function NextStepScreen({
             <button
               type="button"
               onClick={() => onStartModule(suggestedModule.categoryId, suggestedModule.moduleId)}
-              className="flex w-full items-center justify-center rounded-lg bg-lm-green px-4 py-3 transition-transform active:scale-[0.97]"
+              className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-[0.98]"
             >
-              <span className="text-sm font-semibold text-white">
-                Start This Module
-              </span>
+              Start This Module
             </button>
           </div>
         </div>

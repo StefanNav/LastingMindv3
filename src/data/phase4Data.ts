@@ -9,6 +9,7 @@ export const phase4Categories: Phase4Category[] = [
     subtitle: 'Write or record whatever\'s on your mind',
     icon: 'BookOpen',
     iconColor: 'bg-emerald-100 text-emerald-700',
+    image: '/images/phase4/open-journalling.png',
   },
   {
     id: 'p4-open-reflection',
@@ -16,6 +17,7 @@ export const phase4Categories: Phase4Category[] = [
     subtitle: 'Look back on a moment, a period, or a feeling',
     icon: 'Eye',
     iconColor: 'bg-sky-100 text-sky-700',
+    image: '/images/phase4/open-reflection.png',
   },
   {
     id: 'p4-capture-conversation',
@@ -23,6 +25,7 @@ export const phase4Categories: Phase4Category[] = [
     subtitle: 'Record a real conversation with someone you love',
     icon: 'Users',
     iconColor: 'bg-violet-100 text-violet-700',
+    image: '/images/phase4/capture-conversation.png',
   },
   {
     id: 'p4-fill-gaps',
@@ -30,6 +33,7 @@ export const phase4Categories: Phase4Category[] = [
     subtitle: 'Answer questions your LastingMind doesn\'t know yet',
     icon: 'PuzzlePiece',
     iconColor: 'bg-amber-100 text-amber-700',
+    image: '/images/phase4/fill-gaps.png',
   },
   {
     id: 'p4-question-of-day',
@@ -37,6 +41,7 @@ export const phase4Categories: Phase4Category[] = [
     subtitle: 'A fresh prompt every day to keep your story growing',
     icon: 'Sparkles',
     iconColor: 'bg-rose-100 text-rose-700',
+    image: '/images/phase4/question-of-day.png',
   },
   {
     id: 'p4-questions-loved-ones',
@@ -44,6 +49,7 @@ export const phase4Categories: Phase4Category[] = [
     subtitle: 'Answer what your family actually wants to know',
     icon: 'Heart',
     iconColor: 'bg-pink-100 text-pink-700',
+    image: '/images/phase4/questions-loved-ones.png',
   },
 ]
 

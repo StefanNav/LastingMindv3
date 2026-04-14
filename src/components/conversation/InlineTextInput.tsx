@@ -46,7 +46,7 @@ export function InlineTextInput({ onSubmit, onToggleInputMode }: InlineTextInput
     >
       {/* Inline text response area */}
       <div className="flex flex-1 flex-col gap-3 px-[26px] pt-4">
-        <p className="text-[14px] font-semibold leading-[1.2] tracking-wide text-[#7b7b7b]">
+        <p className="text-sm font-semibold leading-tight tracking-wide text-muted-foreground">
           YOUR RESPONSE
         </p>
         <textarea
@@ -58,34 +58,34 @@ export function InlineTextInput({ onSubmit, onToggleInputMode }: InlineTextInput
           }}
           onKeyDown={handleKeyDown}
           placeholder="Start typing your response..."
-          className="w-full resize-none border-0 bg-transparent text-[18px] font-normal leading-[1.5] text-[#2f3228] outline-none placeholder:text-[#2f3228]/40"
+          className="w-full resize-none border-0 bg-transparent text-lg font-normal leading-relaxed text-foreground outline-none placeholder:text-foreground/40"
           rows={4}
         />
       </div>
 
       {/* Compact toolbar */}
-      <div className="flex items-center justify-between border-t border-black/16 px-[10px] py-[10px]">
+      <div className="flex items-center justify-between border-t border-border/50 px-2.5 py-2.5">
         <button
           type="button"
           onClick={onToggleInputMode}
-          className="flex items-center gap-[2px] rounded-[4px] bg-[#e7ebd9] px-[10px] py-[6px]"
+          className="flex items-center gap-1 rounded-lg border border-border bg-transparent px-2.5 py-1.5 transition-colors hover:bg-muted/50 active:scale-[0.98]"
         >
-          <span className="text-[14px] font-normal leading-[1.2] text-[#283227]">
+          <span className="text-sm font-normal text-foreground">
             Speak
           </span>
-          <Mic className="size-4 text-[#283227]" />
+          <Mic className="size-4 text-foreground" />
         </button>
 
         <button
           type="button"
           onClick={handleSubmit}
           disabled={!text.trim()}
-          className="flex items-center gap-[2px] rounded-[4px] bg-lm-green px-[10px] py-[6px] disabled:opacity-40"
+          className="flex items-center gap-1 rounded-lg bg-primary px-2.5 py-1.5 transition-colors hover:bg-primary/90 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
         >
-          <span className="text-[14px] font-normal leading-[1.2] text-white">
+          <span className="text-sm font-normal text-primary-foreground">
             Submit
           </span>
-          <ArrowUp className="size-4 text-white" />
+          <ArrowUp className="size-4 text-primary-foreground" />
         </button>
       </div>
     </motion.div>

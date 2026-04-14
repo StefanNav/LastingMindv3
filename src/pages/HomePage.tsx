@@ -9,51 +9,57 @@ import { CategoryNodeCard } from '@/components/cards/CategoryNodeCard'
 import { HorizontalActivityCard } from '@/components/cards/HorizontalActivityCard'
 import { LeaveSomethingBehindCard } from '@/components/cards/LeaveSomethingBehindCard'
 import { CategoryBottomSheet } from '@/components/sheets/CategoryBottomSheet'
+import { ChapterBottomSheet } from '@/components/sheets/ChapterBottomSheet'
 import { LockedFeatureCard } from '@/components/home/LockedFeatureCard'
 import { LockedFeatureSheet } from '@/components/sheets/LockedFeatureSheet'
 import type { LockedFeature } from '@/components/sheets/LockedFeatureSheet'
 import { LegacyBottomSheet } from '@/components/sheets/LegacyBottomSheet'
-import { LifeChaptersSheet } from '@/components/sheets/LifeChaptersSheet'
+import { DefineChaptersCard } from '@/components/cards/DefineChaptersCard'
 import { module2IntroData } from '@/data/mock'
 import { phase4Categories, availableLegacyItems } from '@/data/phase4Data'
 import { useApp } from '@/app/AppProvider'
-import type { Category, DemoPromptCard } from '@/types'
+import type { Category, DemoPromptCard, LifeChapter } from '@/types'
 
 export function HomePage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { homePhases, categoryDetails, promptCards, treeImage, activeDemoId, addedLegacyItemIds, addLegacyItem, legacyItemStatuses } = useApp()
+  const { homePhases, categoryDetails, promptCards, treeImage, activeDemoId, addedLegacyItemIds, addLegacyItem, legacyItemStatuses, foundationStars, hasDefinedChapters, lifeChapters } = useApp()
   const [activePhaseIndex, setActivePhaseIndex] = useState(0)
   const activePhase = homePhases[activePhaseIndex]
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const isSheetOpen = selectedCategory !== null
   const [selectedFeature, setSelectedFeature] = useState<LockedFeature | null>(null)
-  const [lifeChaptersSheetCategory, setLifeChaptersSheetCategory] = useState<Category | null>(null)
+  const [selectedChapter, setSelectedChapter] = useState<LifeChapter | null>(null)
   const [legacySheetOpen, setLegacySheetOpen] = useState(false)
+
+  // Check if any chapter session has been started (for voice clone unlock)
+  const lifeStoryUnderway = lifeChapters.some((ch) => ch.step1Status !== 'not_started')
 
   useEffect(() => {
     setActivePhaseIndex(0)
     setSelectedCategory(null)
     setSelectedFeature(null)
-    setLifeChaptersSheetCategory(null)
+    setSelectedChapter(null)
     setLegacySheetOpen(false)
   }, [activeDemoId])
 
   useEffect(() => {
-    const state = location.state as { openCategory?: string } | null
+    const state = location.state as { openCategory?: string; activePhase?: string } | null
+    if (state?.activePhase) {
+      const idx = homePhases.findIndex((p) => p.id === state.activePhase)
+      if (idx >= 0) setActivePhaseIndex(idx)
+    }
     if (state?.openCategory) {
       const allCategories = homePhases.flatMap((p) => p.categories)
       const match = allCategories.find((c) => c.id === state.openCategory)
       if (match) setSelectedCategory(match)
+    }
+    if (state?.openCategory || state?.activePhase) {
       navigate(location.pathname, { replace: true, state: {} })
     }
   }, [location.state, navigate, location.pathname])
 
   const handleCategoryClick = useCallback((category: Category) => {
-    if (category.id === 'cat-life-chapters' && category.status !== 'locked') {
-      setLifeChaptersSheetCategory(category)
-      return
-    }
     setSelectedCategory(category)
   }, [])
 
@@ -100,7 +106,7 @@ export function HomePage() {
         </div>
 
         {/* ── Header ── */}
-        <div className="relative z-10">
+        <div className="relative z-[60]">
           <HomeHeader />
         </div>
 
@@ -161,6 +167,7 @@ export function HomePage() {
         <div className="relative z-[6] -mt-8">
           <PhaseToggle
             label={activePhase.label}
+            labelColor={activePhase.id === 'keep-growing' ? 'text-lm-green' : undefined}
             onPrevious={() => setActivePhaseIndex((i) => i - 1)}
             onNext={() => setActivePhaseIndex((i) => i + 1)}
             hasPrevious={activePhaseIndex > 0}
@@ -188,14 +195,15 @@ export function HomePage() {
                     subtitle={cat.subtitle}
                     icon={cat.icon}
                     iconColor={cat.iconColor}
+                    image={cat.image}
                     onClick={() => navigate(`/phase4/${cat.id}`)}
                   />
                 ))}
               </div>
             ) : activePhase.id === 'your-legacy' ? (
-              /* ── Phase 3: Leave Your Legacy — Wisdom + Leave Something Behind + added items ── */
+              /* ── Phase 3: Leave Your Legacy — Wisdom + Greatest Memories + Leave Something Behind + added items ── */
               <div className="flex flex-col gap-4">
-                {/* Wisdom & Advice — standard category card */}
+                {/* Category cards (Wisdom & Advice + Greatest Memories) */}
                 {activePhase.categories.map((category) => (
                   <CategoryNodeCard
                     key={category.id}
@@ -234,8 +242,56 @@ export function HomePage() {
                   )
                 })}
               </div>
+            ) : activePhase.id === 'life-story' ? (
+              /* ── Phase 2: Life Story — chapter-based layout ── */
+              <div className="flex flex-col gap-4">
+                {!hasDefinedChapters ? (
+                  <>
+                    {/* Placeholder card */}
+                    <div className="flex items-center justify-center rounded-[10px] border-2 border-dashed border-lm-border/50 px-5 py-3.5">
+                      <p className="whitespace-nowrap text-center text-[13px] text-muted-foreground">
+                        Your chapter categories will show here after you define them.
+                      </p>
+                    </div>
+
+                    {/* Define Your Life Chapters card — only interactive when Phase 1 complete */}
+                    <DefineChaptersCard
+                      mode="define"
+                      onClick={foundationStars >= 6 ? () => navigate('/life-chapters/define') : undefined}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {/* Chapter cards */}
+                    {lifeChapters.map((chapter) => {
+                      const chapterAsCategory: Category = {
+                        id: chapter.id,
+                        title: chapter.title,
+                        image: '/images/Life chapters 1.png',
+                        imageHeight: 156,
+                        imageWidth: 252,
+                        status: chapter.starsEarned >= 3 ? 'flourishing' : chapter.starsEarned >= 2 ? 'budding' : chapter.starsEarned >= 1 ? 'growing' : chapter.step1Status !== 'not_started' ? 'started' : 'not_started',
+                        totalModules: 2,
+                      }
+                      return (
+                        <CategoryNodeCard
+                          key={chapter.id}
+                          category={chapterAsCategory}
+                          onClick={() => setSelectedChapter(chapter)}
+                        />
+                      )
+                    })}
+
+                    {/* Edit chapters card (de-emphasised) */}
+                    <DefineChaptersCard
+                      mode="edit"
+                      onClick={() => navigate('/life-chapters/define')}
+                    />
+                  </>
+                )}
+              </div>
             ) : (
-              /* ── Phases 1 & 2: standard category grid ── */
+              /* ── Phase 1: standard category grid ── */
               activePhase.categories.map((category) => (
                 <CategoryNodeCard
                   key={category.id}
@@ -254,7 +310,7 @@ export function HomePage() {
             <div className="flex items-center gap-3">
               <div className="h-px flex-1 bg-lm-gold/30" />
               <p className="shrink-0 text-[11px] font-bold uppercase tracking-widest text-lm-gold">
-                Earn 6 Stars to Unlock
+                {foundationStars >= 6 ? "You've Unlocked" : 'Earn 6 Stars to Unlock'}
               </p>
               <div className="h-px flex-1 bg-lm-gold/30" />
             </div>
@@ -262,38 +318,46 @@ export function HomePage() {
             <LockedFeatureCard
               image="/images/onboarding/SplashPageTree.png"
               title="Chat with your LastingMind"
-              subtitle="Ask it anything — it already knows your stories, your values, and your voice."
+              subtitle="Your LastingMind is the legacy you are creating."
+              unlocked={foundationStars >= 6}
               onClick={() => setSelectedFeature({
                 id: 'chat-lastingmind',
                 image: '/images/onboarding/SplashPageTree.png',
                 title: 'Chat with your LastingMind',
                 description: 'Once unlocked, you can have a real conversation with your LastingMind — ask it questions, explore your stories, and see how well it knows you.',
                 unlockMessage: 'Earn at least 1 star in every Phase 1 category to unlock Chat. Complete both modules in a category to earn your first star.',
+                unlocked: foundationStars >= 6,
+                unlockedDescription: 'Your LastingMind learns from every story you share. Start a conversation with it to see how well it knows you — ask about your memories, values, or anything on your mind.',
+                ctaLabel: 'Start a Conversation',
               })}
             />
             <LockedFeatureCard
               image="/images/Audience.png"
-              title="Your family can now meet your LastingMind"
+              title="Invite loved ones to meet your LastingMind"
               subtitle="Invite them to start asking questions."
+              unlocked={foundationStars >= 6}
               onClick={() => setSelectedFeature({
                 id: 'invite-audience',
                 image: '/images/Audience.png',
-                title: 'Your family can now meet your LastingMind',
+                title: 'Invite loved ones to meet your LastingMind',
                 description: 'Once unlocked, you can invite loved ones to interact with your LastingMind — they\'ll be able to ask questions, explore your stories, and connect with the legacy you\'re building.',
                 unlockMessage: 'Earn at least 1 star in every Phase 1 category to unlock Audience Invites. Complete both modules in a category to earn your first star.',
+                unlocked: foundationStars >= 6,
+                unlockedDescription: 'Invite your family and friends to interact with your LastingMind. They can ask it questions, explore your stories, and feel closer to who you are — even when you\'re not in the room.',
+                ctaLabel: 'Invite Someone',
               })}
             />
           </div>
         )}
 
-        {/* ── Locked feature cards (Phase 2 — Life Story) ── */}
+        {/* ── After Life Story — Voice Clone card ── */}
         {activePhase.id === 'life-story' && (
           <div className="relative z-[6] flex flex-col gap-4 px-4 pb-8 mt-4">
             {/* Section divider */}
             <div className="flex items-center gap-3">
               <div className="h-px flex-1 bg-lm-gold/30" />
               <p className="shrink-0 text-[11px] font-bold uppercase tracking-widest text-lm-gold">
-                Unlock with Stars
+                After Life Story
               </p>
               <div className="h-px flex-1 bg-lm-gold/30" />
             </div>
@@ -301,13 +365,17 @@ export function HomePage() {
             <LockedFeatureCard
               image="/images/RecordVoice.png"
               title="Give your LastingMind your voice"
-              subtitle="Your family will hear your stories the way only you can tell them."
+              subtitle="When your life story is underway, record once so narration sounds like you."
+              unlocked={lifeStoryUnderway}
               onClick={() => setSelectedFeature({
                 id: 'voice-clone',
                 image: '/images/RecordVoice.png',
                 title: 'Give your LastingMind your voice',
                 description: 'Record a voice sample and your LastingMind will use it to narrate your stories, memories, and letters in your own voice — so your family hears you, not a machine.',
-                unlockMessage: 'Earn stars in Phase 2 to unlock Voice Clone. Keep completing your Life Story modules to get there.',
+                unlockMessage: 'Begin at least one chapter conversation to unlock Voice Clone.',
+                unlocked: lifeStoryUnderway,
+                unlockedDescription: 'Your life story is underway. Record a voice sample so your stories are narrated in your own voice.',
+                ctaLabel: 'Record Voice Sample',
               })}
             />
           </div>
@@ -319,6 +387,11 @@ export function HomePage() {
         isOpen={selectedFeature !== null}
         feature={selectedFeature}
         onClose={() => setSelectedFeature(null)}
+        onAction={(featureId) => {
+          setSelectedFeature(null)
+          if (featureId === 'chat-lastingmind') navigate('/chat')
+          if (featureId === 'invite-audience') navigate('/loved-ones')
+        }}
       />
 
       <CategoryBottomSheet
@@ -330,10 +403,14 @@ export function HomePage() {
         onContinueFoundation={handleContinueFoundation}
       />
 
-      <LifeChaptersSheet
-        isOpen={lifeChaptersSheetCategory !== null}
-        category={lifeChaptersSheetCategory}
-        onClose={() => setLifeChaptersSheetCategory(null)}
+      <ChapterBottomSheet
+        isOpen={selectedChapter !== null}
+        chapter={selectedChapter}
+        onClose={() => setSelectedChapter(null)}
+        onBeginStep={(chapterId, stepType) => {
+          setSelectedChapter(null)
+          navigate(`/chapter/${chapterId}/${stepType}`)
+        }}
       />
 
       <LegacyBottomSheet

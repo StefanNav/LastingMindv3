@@ -13,32 +13,28 @@ export function ConfirmTranscript({ onSayMore, onSaveAndFinish }: ConfirmTranscr
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-      className="flex flex-col items-center gap-[13px] border-t border-black/25 bg-[var(--lm-bg-primary)] px-4 pb-[50px] pt-4"
+      className="flex flex-col items-center gap-3 border-t border-border/50 bg-[var(--lm-bg-primary)] px-4 pb-8 pt-4"
     >
-      <p className="text-center text-[16px] font-normal leading-[1.2] text-[var(--lm-text-primary)]">
+      <p className="text-center text-base font-normal leading-tight text-foreground">
         Here's what I captured. Does it look right?
       </p>
 
       <button
         type="button"
         onClick={onSayMore}
-        className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-lm-green p-[10px]"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary p-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-[0.98]"
       >
-        <span className="text-center text-[16px] font-medium leading-[1.2] text-white">
-          Press to Say More
-        </span>
-        <Mic className="size-5 text-white" />
+        Press to Say More
+        <Mic className="size-5" />
       </button>
 
       <button
         type="button"
         onClick={onSaveAndFinish}
-        className="flex w-full items-center justify-center gap-[10px] rounded-[10px] border border-lm-border bg-[#e7ebd9] p-[10px]"
+        className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-transparent p-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted/50 active:scale-[0.98]"
       >
-        <span className="text-center text-[16px] font-medium leading-[1.2] text-[#283227]">
-          Save & Finish
-        </span>
-        <ArrowRight className="size-5 text-[#283227]" />
+        Save & Finish
+        <ArrowRight className="size-5" />
       </button>
     </motion.div>
   )

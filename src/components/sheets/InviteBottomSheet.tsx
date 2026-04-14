@@ -339,7 +339,7 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
         <p className="font-display text-[22px] font-normal leading-[1.2] text-foreground">
           Invite someone
         </p>
-        <p className="mt-1.5 text-sm leading-snug text-[var(--lm-text-secondary)]">
+        <p className="mt-1.5 text-sm leading-snug text-muted-foreground">
           Send an invite to join as an audience member.
         </p>
 
@@ -366,7 +366,7 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
               el?.focus()
             }, 100)
           }}
-          className="mt-2.5 self-start text-[13px] font-medium text-[var(--lm-text-secondary)] underline underline-offset-2 transition-colors hover:text-foreground"
+          className="mt-2.5 self-start text-[13px] font-medium text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
         >
           Or enter details manually
         </button>
@@ -382,7 +382,7 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
             onChange={(e) => setFirstName(e.target.value)}
             onFocus={handleFieldFocus}
             onBlur={handleFieldBlur}
-            className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'firstName' ? ' animate-pulse-glow' : ''}`}
+            className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-muted-foreground focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'firstName' ? ' animate-pulse-glow' : ''}`}
           />
 
           {/* Last name */}
@@ -393,7 +393,7 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
             onChange={(e) => setLastName(e.target.value)}
             onFocus={handleFieldFocus}
             onBlur={handleFieldBlur}
-            className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'lastName' ? ' animate-pulse-glow' : ''}`}
+            className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-muted-foreground focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'lastName' ? ' animate-pulse-glow' : ''}`}
           />
 
           {/* Phone number with country code */}
@@ -412,7 +412,7 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
                   if (isPhoneValid) checkDuplicate(phone)
                   handleFieldBlur()
                 }}
-                className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'phone' ? ' animate-pulse-glow' : ''}`}
+                className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-muted-foreground focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'phone' ? ' animate-pulse-glow' : ''}`}
               />
             </div>
             {phoneError && (
@@ -425,7 +425,7 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
             type="button"
             onClick={() => setView('relationships')}
             className={`flex h-[42px] w-full items-center justify-between rounded-lg border border-lm-border bg-background px-3 text-left font-sans text-[15px] outline-none transition-colors ${
-              relationship ? 'text-foreground' : 'text-[var(--lm-text-secondary)]'
+              relationship ? 'text-foreground' : 'text-muted-foreground'
             }${pulseTarget === 'relationship' ? ' animate-pulse-glow' : ''}`}
           >
             <span>{effectiveRelationship || 'Their relationship to you'}</span>
@@ -442,7 +442,7 @@ export function InviteBottomSheet({ isOpen, onClose, onSuccess }: InviteBottomSh
               onFocus={handleFieldFocus}
               onBlur={handleFieldBlur}
               autoFocus
-              className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-[var(--lm-text-secondary)] focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'customRel' ? ' animate-pulse-glow' : ''}`}
+              className={`h-[42px] w-full rounded-lg border border-lm-border bg-background px-3 font-sans text-[15px] text-foreground outline-none placeholder:text-muted-foreground focus:border-lm-green focus:ring-1 focus:ring-lm-green/30${pulseTarget === 'customRel' ? ' animate-pulse-glow' : ''}`}
             />
           )}
         </div>

@@ -9,7 +9,7 @@ interface SlotMachineBodyProps {
 export function SlotMachineBody({ children, isSpinning }: SlotMachineBodyProps) {
   return (
     <motion.div
-      className="relative mx-auto w-full overflow-hidden rounded-[40px] border border-[var(--lm-border)] bg-[var(--lm-bg-card)]"
+      className="relative mx-auto w-full overflow-hidden rounded-[40px] border border-border bg-[var(--lm-bg-card)]"
       style={{
         boxShadow: '0 4px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6)',
       }}

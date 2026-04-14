@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { MoreHorizontal } from 'lucide-react'
 import { PageTransition } from '@/animations/PageTransition'
 import { useApp } from '@/app/AppProvider'
@@ -16,6 +17,7 @@ export function MemoryProfilePage() {
   const { activeDemoId, lifeChapters } = useApp()
   const profile = getProfileData(activeDemoId)
   const [menuOpen, setMenuOpen] = useState(false)
+  const navigate = useNavigate()
 
   // Prefer runtime chapters (user-defined) over demo data
   const resolvedChapters = useMemo(() => {
@@ -68,7 +70,10 @@ export function MemoryProfilePage() {
         {/* ── Foundation ── */}
         <div className="mt-2" />
         <ProfileSectionLabel label="Foundation" variant="gold" />
-        <ProfileFoundationGrid categories={profile.foundationCategories} />
+        <ProfileFoundationGrid
+          categories={profile.foundationCategories}
+          onCategoryTap={(id) => navigate(`/profile/category/${id}`)}
+        />
 
         {/* ── Life Story ── */}
         <div className="mt-2" />
@@ -76,6 +81,10 @@ export function MemoryProfilePage() {
         <LifeStorySection
           chapters={resolvedChapters}
           phase1Complete={profile.phase1Complete}
+          onChapterTap={(chapterNumber) => {
+            const ch = lifeChapters[chapterNumber - 1]
+            if (ch) navigate(`/profile/chapter/${ch.id}`)
+          }}
         />
 
         {/* ── Legacy ── */}
@@ -84,6 +93,7 @@ export function MemoryProfilePage() {
         <ProfileLegacyGrid
           modules={profile.legacyModules}
           phase1Complete={profile.phase1Complete}
+          onModuleTap={(id) => navigate(`/profile/category/${id}`)}
         />
 
         {/* Biography CTA */}

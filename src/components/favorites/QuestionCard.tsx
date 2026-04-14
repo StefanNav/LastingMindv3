@@ -27,7 +27,7 @@ export function QuestionCard({ category, onSubmit, onSkip }: QuestionCardProps) 
           damping: 26,
           mass: 0.9,
         }}
-        className="flex w-full max-w-[400px] flex-col gap-4 rounded-xl border border-[var(--lm-border)] bg-[var(--lm-bg-card)] px-5 py-5"
+        className="flex w-full max-w-[400px] flex-col gap-4 rounded-xl border border-border bg-[var(--lm-bg-card)] px-5 py-5"
         style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
       >
         {/* Category badge with decorative lines */}

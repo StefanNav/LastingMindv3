@@ -1,6 +1,6 @@
 export function CardBack() {
   return (
-    <div className="flex h-[360px] w-[260px] flex-col overflow-hidden rounded-2xl border border-[var(--lm-border)] bg-[var(--lm-bg-card)]"
+    <div className="flex h-[360px] w-[260px] flex-col overflow-hidden rounded-2xl border border-border bg-[var(--lm-bg-card)]"
       style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06)' }}
     >
       {/* Green header strip */}

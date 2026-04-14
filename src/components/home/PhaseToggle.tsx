@@ -4,13 +4,14 @@ import { cn } from '@/lib/utils'
 
 interface PhaseToggleProps {
   label: string
+  labelColor?: string
   onPrevious: () => void
   onNext: () => void
   hasPrevious: boolean
   hasNext: boolean
 }
 
-export function PhaseToggle({ label, onPrevious, onNext, hasPrevious, hasNext }: PhaseToggleProps) {
+export function PhaseToggle({ label, labelColor, onPrevious, onNext, hasPrevious, hasNext }: PhaseToggleProps) {
   return (
     <div className="flex items-center justify-center px-4">
       <div className="flex w-[346px] items-center gap-2.5 rounded-[20px] border border-lm-border bg-lm-bg-card p-2 shadow-toggle">
@@ -41,7 +42,7 @@ export function PhaseToggle({ label, onPrevious, onNext, hasPrevious, hasNext }:
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className="w-[97px] text-center font-semibold text-[15px] leading-[1.2] text-lm-gold"
+              className={`w-[97px] text-center font-semibold text-[15px] leading-[1.2] ${labelColor ?? 'text-lm-gold'}`}
             >
               {label}
             </motion.p>

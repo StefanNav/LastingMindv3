@@ -8,17 +8,21 @@ export interface LockedFeature {
   title: string
   description: string
   unlockMessage: string
+  unlocked?: boolean
+  unlockedDescription?: string
+  ctaLabel?: string
 }
 
 interface LockedFeatureSheetProps {
   isOpen: boolean
   feature: LockedFeature | null
   onClose: () => void
+  onAction?: (featureId: string) => void
 }
 
 const DRAG_CLOSE_THRESHOLD = 100
 
-export function LockedFeatureSheet({ isOpen, feature, onClose }: LockedFeatureSheetProps) {
+export function LockedFeatureSheet({ isOpen, feature, onClose, onAction }: LockedFeatureSheetProps) {
   const shouldReduceMotion = useReducedMotion()
 
   useEffect(() => {
@@ -137,7 +141,7 @@ export function LockedFeatureSheet({ isOpen, feature, onClose }: LockedFeatureSh
                 initial="hidden"
                 animate="visible"
               >
-                {/* Feature image + lock badge */}
+                {/* Feature image + optional lock badge */}
                 <motion.div variants={itemVariants} className="flex flex-col items-center gap-[22px] px-4">
                   <div className="flex flex-col items-center gap-2.5">
                     <div className="h-[100px] w-[100px] overflow-hidden">
@@ -147,32 +151,45 @@ export function LockedFeatureSheet({ isOpen, feature, onClose }: LockedFeatureSh
                         className="h-full w-full object-contain"
                       />
                     </div>
-                    <div className="flex size-[52px] items-center justify-center rounded-full bg-lm-bg-card shadow-card">
-                      <Lock className="size-[26px] text-lm-neutral-warm" />
-                    </div>
+                    {!feature.unlocked && (
+                      <div className="flex size-[52px] items-center justify-center rounded-full bg-lm-bg-card shadow-card">
+                        <Lock className="size-[26px] text-lm-neutral-warm" />
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex flex-col items-center gap-3 text-center">
                     <p className="font-display text-[22px] font-normal leading-[1.2] text-foreground">
                       {feature.title}
                     </p>
-                    <p className="text-sm leading-snug text-[var(--lm-text-secondary)]">
-                      {feature.description}
+                    <p className="text-sm leading-snug text-muted-foreground">
+                      {feature.unlocked ? feature.unlockedDescription : feature.description}
                     </p>
                   </div>
                 </motion.div>
 
-                {/* Unlock instructions */}
-                <motion.div variants={itemVariants} className="px-6">
-                  <div className="flex flex-col items-center gap-3 rounded-[10px] bg-lm-bg-card/40 p-5 text-center shadow-card backdrop-blur-sm">
-                    <p className="text-[11px] font-bold uppercase tracking-widest text-lm-gold">
-                      How to unlock
-                    </p>
-                    <p className="text-sm leading-snug text-[var(--lm-text-secondary)]">
-                      {feature.unlockMessage}
-                    </p>
-                  </div>
-                </motion.div>
+                {feature.unlocked ? (
+                  <motion.div variants={itemVariants} className="px-6">
+                    <button
+                      type="button"
+                      onClick={() => onAction?.(feature.id)}
+                      className="flex w-full items-center justify-center rounded-lg bg-primary px-4 py-3.5 text-[15px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-[0.98]"
+                    >
+                      {feature.ctaLabel || 'Get Started'}
+                    </button>
+                  </motion.div>
+                ) : (
+                  <motion.div variants={itemVariants} className="px-6">
+                    <div className="flex flex-col items-center gap-3 rounded-[10px] bg-lm-bg-card/40 p-5 text-center shadow-card backdrop-blur-sm">
+                      <p className="text-[11px] font-bold uppercase tracking-widest text-lm-gold">
+                        How to unlock
+                      </p>
+                      <p className="text-sm leading-snug text-muted-foreground">
+                        {feature.unlockMessage}
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
               </motion.div>
             </div>
           </motion.div>

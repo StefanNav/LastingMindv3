@@ -14,13 +14,13 @@ export function AiBubble({ messages }: AiBubbleProps) {
       className="relative mx-[15px] my-[10px]"
     >
       <div className="flex flex-col gap-[10px] rounded-[8px] bg-[var(--lm-bg-reflection)] px-4 py-2 shadow-reflection">
-        <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+        <p className="text-sm font-semibold leading-tight text-muted-foreground">
           Open Reflection
         </p>
         {messages.map((msg, i) => (
           <p
             key={i}
-            className="text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)]"
+            className="text-base font-normal leading-relaxed text-foreground"
             style={{ marginTop: i > 0 ? '10px' : 0 }}
           >
             {msg}

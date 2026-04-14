@@ -20,8 +20,8 @@ export function SelectionRadioCards({ options, selectedId, onSelect }: Selection
             className={cn(
               'flex w-full items-center gap-2.5 rounded-[10px] border p-2.5 text-left transition-colors',
               isSelected
-                ? 'border-lm-green bg-[#e7ebd9]'
-                : 'border-[#e7ebd9] bg-[#fffcf4]',
+                ? 'border-lm-green bg-primary/10'
+                : 'border-border bg-background',
             )}
           >
             {/* Radio dot */}
@@ -30,7 +30,7 @@ export function SelectionRadioCards({ options, selectedId, onSelect }: Selection
                 'flex size-[13px] shrink-0 items-center justify-center rounded-full border',
                 isSelected
                   ? 'border-lm-green'
-                  : 'border-[#5d6056]',
+                  : 'border-muted-foreground',
               )}
             >
               {isSelected && (
@@ -44,7 +44,7 @@ export function SelectionRadioCards({ options, selectedId, onSelect }: Selection
                 {option.label}
               </p>
               {option.subtitle && (
-                <p className="text-[14px] font-medium tracking-[0.5px] text-[var(--lm-text-secondary)]">
+                <p className="text-sm font-medium tracking-wide text-muted-foreground">
                   {option.subtitle}
                 </p>
               )}

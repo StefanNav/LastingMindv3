@@ -37,7 +37,7 @@ export function CompleteContent({ category, detail }: CompleteContentProps) {
         <CategorySheetHeader category={category} />
 
         {/* Encouragement text */}
-        <p className="max-w-[300px] text-center text-[14px] leading-[1.4] tracking-[0.12px] text-[var(--lm-text-secondary)]">
+        <p className="max-w-[300px] text-center text-[14px] leading-[1.4] tracking-[0.12px] text-muted-foreground">
           Every story you share brings your Lasting Mind closer to who you truly are and gives your loved ones more to hold on to. Keep going.
         </p>
       </motion.div>

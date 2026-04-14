@@ -12,13 +12,13 @@ export function FamilyMembersGrid({ members, categoryTitle = 'Family', onAddMemb
     <div className="border-y border-border bg-lm-bg-card px-4 py-5">
       <div className="flex flex-col gap-6">
         <div className="flex items-start justify-between">
-          <p className="text-[14px] font-bold leading-[1.2] text-[var(--lm-text-secondary)]">
+          <p className="text-[14px] font-bold leading-[1.2] text-muted-foreground">
             Your {categoryTitle}
           </p>
           <button
             type="button"
             onClick={onAddMember}
-            className="flex items-center gap-1 rounded-[4px] bg-[#e7ebd9] px-2.5 py-0.5"
+            className="flex items-center gap-1 rounded-[4px] bg-primary/10 px-2.5 py-0.5"
           >
             <Plus className="size-3 text-lm-green-dark" strokeWidth={2.5} />
             <p className="text-[14px] font-semibold leading-[1.2] text-lm-green-dark">
@@ -30,8 +30,8 @@ export function FamilyMembersGrid({ members, categoryTitle = 'Family', onAddMemb
         <div className="flex flex-wrap items-start justify-center gap-x-4 gap-y-4">
           {members.map((member) => (
             <div key={member.id} className="flex flex-col items-center gap-2">
-              <div className={`flex size-10 items-center justify-center overflow-hidden rounded-full ${member.entryCount > 0 ? 'border border-lm-green bg-[#fffcf5]' : 'border border-dashed border-[var(--lm-text-secondary)] bg-[#fffcf5]'}`}>
-                <p className={`text-base font-bold leading-none ${member.entryCount > 0 ? 'text-lm-green' : 'text-[var(--lm-text-secondary)]'}`}>
+              <div className={`flex size-10 items-center justify-center overflow-hidden rounded-full ${member.entryCount > 0 ? 'border border-lm-green bg-background' : 'border border-dashed border-muted-foreground bg-background'}`}>
+                <p className={`text-base font-bold leading-none ${member.entryCount > 0 ? 'text-lm-green' : 'text-muted-foreground'}`}>
                   {member.initial}
                 </p>
               </div>
@@ -39,7 +39,7 @@ export function FamilyMembersGrid({ members, categoryTitle = 'Family', onAddMemb
                 <p className="text-center text-sm font-semibold leading-none text-foreground">
                   {member.name}
                 </p>
-                <p className="text-center text-[14px] font-normal leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+                <p className="text-center text-[14px] font-normal leading-[1.2] tracking-[0.5px] text-muted-foreground">
                   {member.entryCount > 0 ? `${member.entryCount} entr${member.entryCount === 1 ? 'y' : 'ies'}` : 'No entries'}
                 </p>
               </div>
@@ -47,7 +47,7 @@ export function FamilyMembersGrid({ members, categoryTitle = 'Family', onAddMemb
           ))}
         </div>
 
-        <p className="text-center text-[14px] font-normal leading-[1.2] text-[var(--lm-text-secondary)]">
+        <p className="text-center text-[14px] font-normal leading-[1.2] text-muted-foreground">
           Tap a {categoryTitle.toLowerCase()} member to view or add entries about them
         </p>
       </div>

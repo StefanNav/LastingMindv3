@@ -69,13 +69,13 @@ export function EditSummaryItemModal({
             className="mx-6 flex w-full max-w-[340px] flex-col gap-5 rounded-[16px] bg-[var(--lm-bg-primary)] p-6 shadow-[0px_8px_24px_0px_rgba(0,0,0,0.2)]"
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="font-display text-[22px] font-semibold leading-[1.3] text-[#2f3228]">
+            <p className="font-display text-[22px] font-semibold leading-[1.3] text-foreground">
               {title}
             </p>
 
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold leading-[1.2] text-[#5d6056]">
+                <label className="text-[13px] font-semibold leading-[1.2] text-muted-foreground">
                   {nameLabel}
                 </label>
                 <input
@@ -84,11 +84,11 @@ export function EditSummaryItemModal({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={namePlaceholder}
-                  className="rounded-[8px] border border-black/20 bg-white px-3 py-3 text-[16px] leading-[1.3] text-[#2f3228] outline-none focus:border-lm-green"
+                  className="rounded-[8px] border border-black/20 bg-white px-3 py-3 text-[16px] leading-[1.3] text-foreground outline-none focus:border-lm-green"
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-[13px] font-semibold leading-[1.2] text-[#5d6056]">
+                <label className="text-[13px] font-semibold leading-[1.2] text-muted-foreground">
                   {relationshipLabel}
                 </label>
                 <input
@@ -96,12 +96,12 @@ export function EditSummaryItemModal({
                   value={relationship}
                   onChange={(e) => setRelationship(e.target.value)}
                   placeholder={relationshipPlaceholder}
-                  className="rounded-[8px] border border-black/20 bg-white px-3 py-3 text-[16px] leading-[1.3] text-[#2f3228] outline-none focus:border-lm-green"
+                  className="rounded-[8px] border border-black/20 bg-white px-3 py-3 text-[16px] leading-[1.3] text-foreground outline-none focus:border-lm-green"
                 />
               </div>
               {showDateRange && (
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[13px] font-semibold leading-[1.2] text-[#5d6056]">
+                  <label className="text-[13px] font-semibold leading-[1.2] text-muted-foreground">
                     {dateRangeLabel}
                   </label>
                   <input
@@ -109,7 +109,7 @@ export function EditSummaryItemModal({
                     value={dateRange}
                     onChange={(e) => setDateRange(e.target.value)}
                     placeholder={dateRangePlaceholder}
-                    className="rounded-[8px] border border-black/20 bg-white px-3 py-3 text-[16px] leading-[1.3] text-[#2f3228] outline-none focus:border-lm-green"
+                    className="rounded-[8px] border border-black/20 bg-white px-3 py-3 text-[16px] leading-[1.3] text-foreground outline-none focus:border-lm-green"
                   />
                 </div>
               )}
@@ -121,7 +121,7 @@ export function EditSummaryItemModal({
                 onClick={onCancel}
                 className="flex flex-1 items-center justify-center rounded-[10px] border border-black/20 px-5 py-3.5"
               >
-                <span className="text-[16px] font-medium leading-[1.2] text-[#5d6056]">
+                <span className="text-[16px] font-medium leading-[1.2] text-muted-foreground">
                   Cancel
                 </span>
               </button>

@@ -18,7 +18,7 @@ export function ReflectionThinking() {
         className="flex items-center justify-center border-t border-black/25 bg-[var(--lm-bg-primary)] px-4 py-[30px]"
       >
         <div className="flex items-center gap-[10px] p-[10px]">
-          <span className="text-[18px] font-medium leading-[1.2] text-[var(--lm-text-primary)]">
+          <span className="text-[18px] font-medium leading-[1.2] text-foreground">
             Thinking
           </span>
           <ThinkingDots />

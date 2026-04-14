@@ -111,12 +111,12 @@ export function AnswerInput({ mockAnswer, onSubmit, onSkip }: AnswerInputProps) 
   return (
     <div className="flex flex-col gap-3">
       {/* Text input with inline mic button */}
-      <div className="relative min-h-[100px] overflow-hidden rounded-[10px] border border-[var(--lm-border)] bg-white">
+      <div className="relative min-h-[100px] overflow-hidden rounded-[10px] border border-border bg-background">
         {/* Live transcription overlay — shown during recording */}
         {isRecording && (
-          <div className="p-3 pr-12 text-[15px] leading-[1.5] text-[var(--lm-text-primary)]">
+          <div className="p-3 pr-12 text-sm leading-relaxed text-foreground">
             {liveText || (
-              <span className="text-[var(--lm-text-secondary)]">Listening...</span>
+              <span className="text-muted-foreground">Listening...</span>
             )}
             <motion.span
               className="ml-0.5 inline-block h-[18px] w-[2px] translate-y-[3px] bg-lm-green"
@@ -128,7 +128,7 @@ export function AnswerInput({ mockAnswer, onSubmit, onSkip }: AnswerInputProps) 
 
         {/* Transcribed text — shown after recording stops */}
         {step === 'transcribed' && (
-          <p className="p-3 pr-12 text-[15px] leading-[1.5] text-[var(--lm-text-primary)]">
+          <p className="p-3 pr-12 text-sm leading-relaxed text-foreground">
             {text}
           </p>
         )}
@@ -141,7 +141,7 @@ export function AnswerInput({ mockAnswer, onSubmit, onSkip }: AnswerInputProps) 
             onChange={(e) => setText(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder=""
-            className="w-full min-h-[100px] resize-none border-0 bg-transparent p-3 pr-12 font-sans text-[15px] leading-[1.5] text-[var(--lm-text-primary)] outline-none"
+            className="w-full min-h-[100px] resize-none border-0 bg-transparent p-3 pr-12 font-sans text-sm leading-relaxed text-foreground outline-none"
             autoFocus
           />
         )}
@@ -200,12 +200,10 @@ export function AnswerInput({ mockAnswer, onSubmit, onSkip }: AnswerInputProps) 
               type="button"
               onClick={handleSubmitText}
               disabled={!text.trim()}
-              className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-5 py-4 disabled:opacity-40"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
             >
-              <Send className="size-5 text-white" />
-              <span className="text-[16px] font-medium leading-[1.2] text-white">
-                Submit
-              </span>
+              <Send className="size-5" />
+              Submit
             </button>
           </motion.div>
         )}
@@ -223,22 +221,18 @@ export function AnswerInput({ mockAnswer, onSubmit, onSkip }: AnswerInputProps) 
             <button
               type="button"
               onClick={() => setIsPaused((p) => !p)}
-              className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] border border-[#283227] px-5 py-4"
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-border bg-transparent px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted/50 active:scale-[0.98]"
             >
-              <Pause className="size-5 text-[#283227]" />
-              <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
-                {isPaused ? 'Resume' : 'Pause'}
-              </span>
+              <Pause className="size-5" />
+              {isPaused ? 'Resume' : 'Pause'}
             </button>
             <button
               type="button"
               onClick={handleStopRecording}
-              className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-[#d40016] px-5 py-4"
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#d40016] px-5 py-3 text-sm font-semibold text-white transition-colors active:scale-[0.98]"
             >
-              <CircleStop className="size-5 text-white" />
-              <span className="text-[16px] font-medium leading-[1.2] text-white">
-                Stop
-              </span>
+              <CircleStop className="size-5" />
+              Stop
             </button>
           </motion.div>
         )}
@@ -256,22 +250,18 @@ export function AnswerInput({ mockAnswer, onSubmit, onSkip }: AnswerInputProps) 
             <button
               type="button"
               onClick={handleStartRecording}
-              className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] px-5 py-4"
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-border bg-transparent px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted/50 active:scale-[0.98]"
             >
-              <Mic className="size-5 text-[#283227]" />
-              <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
-                Say more
-              </span>
+              <Mic className="size-5" />
+              Say more
             </button>
             <button
               type="button"
               onClick={() => onSubmit(text.trim())}
-              className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-5 py-4"
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-[0.98]"
             >
-              <span className="text-[16px] font-medium leading-[1.2] text-white">
-                Continue
-              </span>
-              <ChevronRight className="size-5 text-white" />
+              Continue
+              <ChevronRight className="size-5" />
             </button>
           </motion.div>
         )}
@@ -282,7 +272,7 @@ export function AnswerInput({ mockAnswer, onSubmit, onSkip }: AnswerInputProps) 
         <button
           type="button"
           onClick={onSkip}
-          className="mx-auto text-[13px] text-[var(--lm-text-secondary)] transition-colors hover:text-[var(--lm-text-primary)]"
+          className="mx-auto text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           Skip
         </button>

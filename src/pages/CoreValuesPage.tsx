@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { PageTransition } from '@/animations/PageTransition'
+import { PageShell } from '@/components/shared/PageShell'
 import { ConversationHeader } from '@/components/conversation/ConversationHeader'
 import { ExitConfirmationModal } from '@/components/conversation/ExitConfirmationModal'
 import { CardDeck } from '@/components/core-values/CardDeck'
@@ -44,8 +44,8 @@ export function CoreValuesPage() {
   }, [flow.step])
 
   return (
-    <PageTransition>
-      <div className="relative flex h-full flex-col bg-background">
+    <PageShell>
+      <div className="relative z-10 flex h-full flex-col">
         {/* Header */}
         <ConversationHeader
           moduleTitle="Core Values"
@@ -84,16 +84,14 @@ export function CoreValuesPage() {
                 <button
                   type="button"
                   onClick={() => setShowModal(true)}
-                  className="flex w-full max-w-[260px] items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4 transition-transform active:scale-95"
+                  className="flex w-full max-w-[260px] items-center justify-center rounded-lg bg-primary px-10 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:bg-primary/90 active:scale-[0.98]"
                 >
-                  <span className="text-[16px] font-medium leading-[1.2] text-white">
-                    Answer this question
-                  </span>
+                  Answer this question
                 </button>
                 <button
                   type="button"
                   onClick={flow.skipQuestion}
-                  className="text-[13px] text-[var(--lm-text-secondary)] transition-colors hover:text-[var(--lm-text-primary)]"
+                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Skip
                 </button>
@@ -128,6 +126,6 @@ export function CoreValuesPage() {
           onLeave={() => navigate('/home')}
         />
       </div>
-    </PageTransition>
+    </PageShell>
   )
 }

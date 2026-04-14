@@ -42,6 +42,9 @@ export function createChapterFromSuggestion(suggestion: SuggestedChapter): LifeC
     title: suggestion.defaultTitle,
     startYear: null,
     endYear: null,
+    step1Status: 'not_started',
+    step2Status: 'not_started',
+    starsEarned: 0,
   }
 }
 
@@ -52,6 +55,9 @@ export function createBlankChapter(): LifeChapter {
     title: '',
     startYear: null,
     endYear: null,
+    step1Status: 'not_started',
+    step2Status: 'not_started',
+    starsEarned: 0,
   }
 }
 

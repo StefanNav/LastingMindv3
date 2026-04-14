@@ -27,7 +27,7 @@ export function LeaveSomethingBehindCard({ onClick }: LeaveSomethingBehindCardPr
         <p className="text-[15px] font-semibold leading-tight text-lm-green-dark">
           Leave Something Behind
         </p>
-        <p className="text-[13px] leading-snug text-[var(--lm-text-secondary)]">
+        <p className="text-[13px] leading-snug text-muted-foreground">
           Letters, voice messages, stories and more
         </p>
       </div>

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { BookOpen } from 'lucide-react'
+import { BookOpen, ChevronRight } from 'lucide-react'
 import type { ProfileLifeChapter } from '@/types'
 
 interface LifeStorySectionProps {
@@ -50,7 +50,7 @@ export function LifeStorySection({ chapters, phase1Complete, onChapterTap }: Lif
           className="flex items-center gap-3 rounded-[10px] bg-lm-bg-card/40 px-4 py-3 shadow-card backdrop-blur-sm transition-transform active:scale-[0.98]"
         >
           <BookOpen className="size-4 shrink-0 text-muted-foreground" />
-          <div className="flex flex-col items-start">
+          <div className="flex min-w-0 flex-1 flex-col items-start">
             <p className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
               Ch. {ch.chapterNumber} · {ch.dateRange}
             </p>
@@ -58,6 +58,7 @@ export function LifeStorySection({ chapters, phase1Complete, onChapterTap }: Lif
               {ch.title}
             </p>
           </div>
+          <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
         </button>
       ))}
     </div>

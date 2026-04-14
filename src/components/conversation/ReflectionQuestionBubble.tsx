@@ -14,10 +14,10 @@ export function ReflectionQuestionBubble({ questionText }: ReflectionQuestionBub
       className="relative mx-[15px] my-[10px]"
     >
       <div className="flex flex-col gap-[10px] rounded-[8px] bg-[var(--lm-bg-reflection)] px-4 py-2 shadow-reflection">
-        <p className="text-[14px] font-semibold leading-[1.2] text-[var(--lm-text-secondary)]">
+        <p className="text-sm font-semibold leading-tight text-muted-foreground">
           Reflection Question
         </p>
-        <p className="text-[16px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
+        <p className="text-base font-normal leading-relaxed text-foreground">
           {questionText}
         </p>
       </div>

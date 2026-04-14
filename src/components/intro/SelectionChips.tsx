@@ -21,8 +21,8 @@ export function SelectionChips({ options, selectedId, onSelect }: SelectionChips
               className={cn(
                 'flex items-center justify-center rounded-full border px-5 py-2.5 transition-colors',
                 isSelected
-                  ? 'border-lm-green bg-[#e7ebd9] text-lm-green'
-                  : 'border-[#5d6056] bg-[#fffcf4] text-[#5d6056]',
+                  ? 'border-lm-green bg-primary/10 text-lm-green'
+                  : 'border-border bg-background text-muted-foreground',
               )}
             >
               <span className="whitespace-nowrap text-center text-[16px] font-bold leading-none">

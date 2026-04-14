@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { PageTransition } from '@/animations/PageTransition'
+import { PageShell } from '@/components/shared/PageShell'
 import { ConversationHeader } from '@/components/conversation/ConversationHeader'
 import { ExitConfirmationModal } from '@/components/conversation/ExitConfirmationModal'
 import { SlotMachineBody } from '@/components/favorites/SlotMachineBody'
@@ -49,8 +49,8 @@ export function FavoritesPage() {
       : `${flow.answeredCount} / ${flow.totalQuestions} questions`
 
   return (
-    <PageTransition>
-      <div className="relative flex h-full flex-col bg-background">
+    <PageShell>
+      <div className="relative z-10 flex h-full flex-col">
         {/* Header */}
         <ConversationHeader
           moduleTitle="Favorites"
@@ -94,14 +94,12 @@ export function FavoritesPage() {
                 type="button"
                 onClick={() => handleRef.current?.triggerPull()}
                 disabled={isHandleDisabled}
-                className="flex w-full max-w-[240px] items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4 transition-transform active:scale-95 disabled:opacity-40"
+                className="flex w-full max-w-[240px] items-center justify-center rounded-lg bg-primary px-10 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:bg-primary/90 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
               >
-                <span className="text-[16px] font-medium leading-[1.2] text-white">
-                  Pull
-                </span>
+                Pull
               </button>
               {flow.answeredCount === 0 && (
-                <p className="text-[13px] text-[var(--lm-text-secondary)]">
+                <p className="text-sm text-muted-foreground">
                   or drag the lever down
                 </p>
               )}
@@ -135,6 +133,6 @@ export function FavoritesPage() {
           onLeave={() => navigate('/home')}
         />
       </div>
-    </PageTransition>
+    </PageShell>
   )
 }

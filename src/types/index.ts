@@ -215,6 +215,7 @@ export interface DemoConfig {
   promptCards: DemoPromptCard[]
   homePhases: HomePhase[]
   categoryDetails: Record<string, CategoryDetail>
+  mockLifeChapters?: LifeChapter[]
 }
 
 export interface RewardCardItem {
@@ -318,6 +319,16 @@ export interface LifeChapter {
   title: string
   startYear: number | null
   endYear: number | 'Present' | null
+  step1Status: ChapterStepStatus
+  step2Status: ChapterStepStatus
+  starsEarned: number
+}
+
+export interface ChapterEntry {
+  id: string
+  date: string
+  title: string
+  body: string
 }
 
 // ── Memory Profile types ──────────────────────────────────────────────────────
@@ -334,6 +345,8 @@ export interface MemoryProfileStats {
   starsEarned: number
   phasesComplete: number
 }
+
+export type ChapterStepStatus = 'not_started' | 'in_progress' | 'complete'
 
 export type ProfileCategoryStatus = 'not_started' | 'in_progress' | 'complete'
 
@@ -373,6 +386,31 @@ export interface MemoryProfileData {
   biographyReady: boolean
 }
 
+// ── Category Detail / Reward Card Collection types ──────────────────────────
+
+export interface EarnedRewardCard {
+  id: string
+  moduleNumber: number
+  categoryImage: string
+  categoryLabel: string
+  moduleTitle: string
+  items: RewardCardItem[]
+  itemCountLabel: string
+  date: string
+}
+
+export interface CategoryContentSummary {
+  categoryId: string
+  categoryLabel: string
+  categoryImage: string
+  status: ProfileCategoryStatus
+  modulesComplete: number
+  modulesTotal: number
+  people?: { name: string; role: string }[]
+  entries?: { title: string; snippet: string; date: string }[]
+  items?: { label: string; value: string }[]
+}
+
 // ── Guided Conversation (V2) types ───────────────────────────────────────────
 
 export interface GuidedQuestion {
@@ -409,6 +447,30 @@ export interface GuidedSummaryEntry {
   questionId: string
 }
 
+// ── Circle Capture types ─────────────────────────────────────────────────────
+
+export interface CircleCaptureGroup {
+  id: string
+  label: string
+  defaultRelationship: string
+  prompt: string
+}
+
+export interface CircleCaptureConfig {
+  categoryId: string
+  categoryLabel: string
+  groups: CircleCaptureGroup[]
+  confirmationCTALabel: string
+  groupSelectionPrompt: string
+}
+
+export interface CapturedPerson {
+  id: string
+  name: string
+  relationship: string
+  groupId: string
+}
+
 // ── Phase 4 types ────────────────────────────────────────────────────────────
 
 export interface Phase4Category {
@@ -417,6 +479,7 @@ export interface Phase4Category {
   subtitle: string
   icon: string          // Lucide icon name used as placeholder until image assets are added
   iconColor: string     // Tailwind color class for the icon background
+  image?: string        // Path to the category image asset
   lastActiveAt?: string // ISO timestamp of last activity
 }
 
@@ -451,6 +514,58 @@ export interface AudienceMember {
   relationship: string
   status: AudienceMemberStatus
   invitedAt: string // ISO timestamp
+}
+
+// ── Category Detail Entry types ──────────────────────────────────────────────
+
+export type CategoryEntryInputType = 'text' | 'voice'
+
+interface CategoryEntryBase {
+  entryId: string
+  entryType: string
+  content: string
+  inputType: CategoryEntryInputType
+  transcript?: string
+}
+
+export interface PersonEntry extends CategoryEntryBase {
+  kind: 'person'
+  name: string
+  relationshipLabel: string
+  storyTitle?: string
+  fullName?: string
+  dateLabel?: string
+  firstPersonBio?: string
+}
+
+export interface CareerEducationEntry extends CategoryEntryBase {
+  kind: 'career-education'
+  roleName: string
+  organisation: string
+  dateRange: string
+  storyTitle?: string
+}
+
+export interface FavoriteEntry extends CategoryEntryBase {
+  kind: 'favorite'
+  categoryLabel: string
+}
+
+export interface CoreValueEntry extends CategoryEntryBase {
+  kind: 'core-value'
+  valueLabel: string
+}
+
+export type CategoryDetailEntry =
+  | PersonEntry
+  | CareerEducationEntry
+  | FavoriteEntry
+  | CoreValueEntry
+
+export interface CategoryDetailEntriesData {
+  supportingText: string
+  addMoreRoute: string
+  entries: CategoryDetailEntry[]
 }
 
 // ── Chat types ───────────────────────────────────────────────────────────────

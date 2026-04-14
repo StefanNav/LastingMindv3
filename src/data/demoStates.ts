@@ -76,7 +76,7 @@ const state0: DemoConfig = {
     {
       id: 'keep-growing',
       title: 'Keep Growing',
-      label: 'Phase 4',
+      label: 'My Study',
       categories: [],
     },
   ],
@@ -190,7 +190,7 @@ const state1: DemoConfig = {
     {
       id: 'keep-growing',
       title: 'Keep Growing',
-      label: 'Phase 4',
+      label: 'My Study',
       categories: [],
     },
   ],
@@ -318,7 +318,7 @@ const state2: DemoConfig = {
     {
       id: 'keep-growing',
       title: 'Keep Growing',
-      label: 'Phase 4',
+      label: 'My Study',
       categories: [],
     },
   ],
@@ -452,8 +452,7 @@ const state3: DemoConfig = {
   streak: 7,
   treeImage: TREE_STAGE_3,
   promptCards: [
-    { categoryTag: 'Life Chapters', question: 'Identify the major chapters of your life story.', categoryId: 'cat-life-chapters', moduleId: 'mod-lc-1' },
-    { categoryTag: 'Greatest Memories', question: 'Identify the memories that matter most.', categoryId: 'cat-greatest-memories', moduleId: 'mod-gm-1' },
+    { categoryTag: 'Life Chapters', question: 'Define the major chapters of your life story.', categoryId: 'cat-life-chapters', moduleId: 'mod-lc-1' },
     { categoryTag: 'Wisdom & Advice', question: 'Rapid-fire wisdom prompts to capture your instincts.', categoryId: 'cat-wisdom', moduleId: 'mod-wis-1' },
   ],
   homePhases: [
@@ -474,23 +473,21 @@ const state3: DemoConfig = {
       id: 'life-story',
       title: 'Life Story',
       label: 'Phase 2',
-      categories: [
-        { id: 'cat-life-chapters',     title: 'Life Chapters',     ...CAT_IMAGES.lifeChapters,     status: 'not_started', totalModules: 3 },
-        { id: 'cat-greatest-memories', title: 'Greatest Memories', ...CAT_IMAGES.greatestMemories, status: 'not_started', totalModules: 3 },
-      ],
+      categories: [],
     },
     {
       id: 'your-legacy',
       title: 'Leave Your Legacy',
       label: 'Phase 3',
       categories: [
-        { id: 'cat-wisdom', title: 'Wisdom & Advice', ...CAT_IMAGES.wisdom, status: 'not_started', totalModules: 3 },
+        { id: 'cat-wisdom',           title: 'Wisdom & Advice',   ...CAT_IMAGES.wisdom,           status: 'not_started', totalModules: 3 },
+        { id: 'cat-greatest-memories', title: 'Greatest Memories', ...CAT_IMAGES.greatestMemories, status: 'not_started', totalModules: 3 },
       ],
     },
     {
       id: 'keep-growing',
       title: 'Keep Growing',
-      label: 'Phase 4',
+      label: 'My Study',
       categories: [],
     },
   ],
@@ -612,17 +609,7 @@ const state3: DemoConfig = {
       entriesComplete: 3,
       entriesToNextStar: 2,
     },
-    // Phase 2 — not_started (ZeroStateContent)
-    'cat-life-chapters': {
-      categoryId: 'cat-life-chapters',
-      heading: 'Define Your Life Chapters',
-      subtitle: 'Walk through the chapters of your life in depth',
-      modules: [
-        { id: 'mod-lc-1', title: 'Define Your Chapters', description: 'Identify the major chapters of your life story.', duration: '10min', completed: false, locked: false },
-        { id: 'mod-lc-2', title: 'Tell Each Chapter', description: 'Go deep into each chapter with guided conversations.', duration: '15min', completed: false, locked: true },
-        { id: 'mod-lc-3', title: 'Review Your Story', description: 'See your generated biography paragraphs.', duration: '5min', completed: false, locked: true },
-      ],
-    },
+    // Phase 2 — chapters are driven by AppProvider lifeChapters state, no category detail needed
     'cat-wisdom': {
       categoryId: 'cat-wisdom',
       heading: 'Share Your Wisdom',
@@ -673,7 +660,7 @@ const state3: DemoConfig = {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// STATE 4 — Deep Progress (Phase 2 ~40%, Phase 3 ~15%, Chat with Self unlocked)
+// STATE 4 — Deep Progress (Chapters defined with progress, Phase 3 started)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const state4: DemoConfig = {
@@ -683,9 +670,16 @@ const state4: DemoConfig = {
   streak: 10,
   treeImage: TREE_STAGE_3,
   promptCards: [
-    { categoryTag: 'Life Chapters', question: 'See your generated biography paragraphs.', categoryId: 'cat-life-chapters', moduleId: 'mod-lc-3' },
-    { categoryTag: 'Greatest Memories', question: 'Identify the memories that matter most.', categoryId: 'cat-greatest-memories', moduleId: 'mod-gm-1' },
     { categoryTag: 'Wisdom & Advice', question: 'Your personal philosophy distilled.', categoryId: 'cat-wisdom', moduleId: 'mod-wis-3' },
+    { categoryTag: 'Greatest Memories', question: 'Identify the memories that matter most.', categoryId: 'cat-greatest-memories', moduleId: 'mod-gm-1' },
+  ],
+  mockLifeChapters: [
+    { id: 'ch-early', title: 'Early Years', startYear: 1950, endYear: 1968, step1Status: 'complete', step2Status: 'not_started', starsEarned: 1 },
+    { id: 'ch-coming', title: 'Coming of Age', startYear: 1968, endYear: 1974, step1Status: 'complete', step2Status: 'complete', starsEarned: 2 },
+    { id: 'ch-young', title: 'Young Adult', startYear: 1974, endYear: 1982, step1Status: 'complete', step2Status: 'not_started', starsEarned: 1 },
+    { id: 'ch-building', title: 'Building a Life', startYear: 1982, endYear: 1995, step1Status: 'not_started', step2Status: 'not_started', starsEarned: 0 },
+    { id: 'ch-middle', title: 'Middle Years', startYear: 1995, endYear: 2010, step1Status: 'not_started', step2Status: 'not_started', starsEarned: 0 },
+    { id: 'ch-recent', title: 'Recent Years', startYear: 2010, endYear: 'Present', step1Status: 'not_started', step2Status: 'not_started', starsEarned: 0 },
   ],
   homePhases: [
     {
@@ -705,23 +699,21 @@ const state4: DemoConfig = {
       id: 'life-story',
       title: 'Life Story',
       label: 'Phase 2',
-      categories: [
-        { id: 'cat-life-chapters',     title: 'Life Chapters',     ...CAT_IMAGES.lifeChapters,     status: 'budding',     totalModules: 3 },
-        { id: 'cat-greatest-memories', title: 'Greatest Memories', ...CAT_IMAGES.greatestMemories, status: 'not_started', totalModules: 3 },
-      ],
+      categories: [],
     },
     {
       id: 'your-legacy',
       title: 'Leave Your Legacy',
       label: 'Phase 3',
       categories: [
-        { id: 'cat-wisdom', title: 'Wisdom & Advice', ...CAT_IMAGES.wisdom, status: 'growing', totalModules: 3 },
+        { id: 'cat-wisdom',           title: 'Wisdom & Advice',   ...CAT_IMAGES.wisdom,           status: 'growing',     totalModules: 3 },
+        { id: 'cat-greatest-memories', title: 'Greatest Memories', ...CAT_IMAGES.greatestMemories, status: 'not_started', totalModules: 3 },
       ],
     },
     {
       id: 'keep-growing',
       title: 'Keep Growing',
-      label: 'Phase 4',
+      label: 'My Study',
       categories: [],
     },
   ],
@@ -843,28 +835,8 @@ const state4: DemoConfig = {
       entriesComplete: 3,
       entriesToNextStar: 2,
     },
-    // Phase 2 — Life Chapters: budding (StartedContent)
-    'cat-life-chapters': {
-      categoryId: 'cat-life-chapters',
-      heading: 'Define Your Life Chapters',
-      subtitle: '2 of 3 chapters complete — keep going!',
-      modules: [
-        { id: 'mod-lc-1', title: 'Define Your Chapters', description: 'Identify the major chapters of your life story.', duration: '10min', completed: true, locked: false },
-        { id: 'mod-lc-2', title: 'Tell Each Chapter', description: 'Go deep into each chapter with guided conversations.', duration: '15min', completed: true, locked: false },
-        { id: 'mod-lc-3', title: 'Review Your Story', description: 'See your generated biography paragraphs.', duration: '5min', completed: false, locked: false },
-      ],
-      recentEntries: [
-        { id: 'entry-lc1', memberInitial: 'C', memberName: 'Chapter', title: 'Growing Up in Ohio', snippet: 'The small-town values and wide open spaces that shaped my early years...', date: 'Mar 20, 2026' },
-        { id: 'entry-lc2', memberInitial: 'C', memberName: 'Chapter', title: 'Starting a Family', snippet: 'When Linda and I decided to start a family, everything changed...', date: 'Mar 22, 2026' },
-      ],
-      growthActions: [
-        { id: 'ga-lc1', label: 'Add more detail to a chapter' },
-        { id: 'ga-lc2', label: 'Review your generated biography' },
-      ],
-      entriesComplete: 2,
-      entriesToNextStar: 1,
-    },
-    // Phase 2 — Wisdom & Advice: growing (StartedContent)
+    // Phase 2 — chapters driven by mockLifeChapters, no category detail needed
+    // Phase 3 — Wisdom & Advice: growing (StartedContent)
     'cat-wisdom': {
       categoryId: 'cat-wisdom',
       heading: 'Share Your Wisdom',
@@ -884,7 +856,7 @@ const state4: DemoConfig = {
       entriesComplete: 2,
       entriesToNextStar: 1,
     },
-    // Phase 2 — Greatest Memories: not_started (ZeroStateContent)
+    // Phase 3 — Greatest Memories: not_started (ZeroStateContent)
     'cat-greatest-memories': {
       categoryId: 'cat-greatest-memories',
       heading: 'Your Greatest Memories',

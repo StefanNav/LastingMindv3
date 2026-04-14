@@ -51,7 +51,7 @@ export function Phase2VoiceCloneUnlockScreen({ onContinue }: Phase2VoiceCloneUnl
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="flex size-20 items-center justify-center rounded-full bg-[#e7ebd9]"
+          className="flex size-20 items-center justify-center rounded-full bg-primary/10"
         >
           <Mic className="size-10 text-lm-green" />
         </motion.div>

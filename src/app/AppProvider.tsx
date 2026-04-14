@@ -28,6 +28,8 @@ interface AppContextValue {
   lifeChapters: LifeChapter[]
   saveLifeChapters: (chapters: LifeChapter[]) => void
   hasDefinedChapters: boolean
+  hasSeenChaptersWelcome: boolean
+  setHasSeenChaptersWelcome: (v: boolean) => void
   chatMessages: ChatMessage[]
   addChatMessage: (msg: ChatMessage) => void
   clearChatMessages: () => void
@@ -84,6 +86,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [audienceCreatorName, setAudienceCreatorName] = useState('Robert Mitchell')
   const [hasSeenAudienceWelcome, setHasSeenAudienceWelcome] = useState(false)
   const [audienceMembers, setAudienceMembers] = useState<AudienceMember[]>(defaultAudienceMembers)
+  const [hasSeenChaptersWelcome, setHasSeenChaptersWelcome] = useState(false)
 
   // Simulate invite deep link via ?invite=true URL param
   useEffect(() => {
@@ -135,6 +138,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setChatMessages([])
     setAddedLegacyItemIds([])
     setLegacyItemStatuses({})
+    // Auto-populate life chapters from demo config
+    const config = demoStates[id]
+    setLifeChapters(config.mockLifeChapters ?? [])
   }
 
   const value = useMemo<AppContextValue>(() => ({
@@ -160,6 +166,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     lifeChapters,
     saveLifeChapters,
     hasDefinedChapters,
+    hasSeenChaptersWelcome,
+    setHasSeenChaptersWelcome,
     chatMessages,
     addChatMessage,
     clearChatMessages,
@@ -177,7 +185,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setHasSeenAudienceWelcome,
     audienceMembers,
     addAudienceMember,
-  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters, chatMessages, addedLegacyItemIds, legacyItemStatuses, hasInviteToken, userState, audienceCreatorName, hasSeenAudienceWelcome, audienceMembers])
+  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters, chatMessages, addedLegacyItemIds, legacyItemStatuses, hasInviteToken, userState, audienceCreatorName, hasSeenAudienceWelcome, hasSeenChaptersWelcome, audienceMembers])
 
   return (
     <AppContext.Provider value={value}>

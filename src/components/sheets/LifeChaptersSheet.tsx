@@ -153,7 +153,7 @@ export function LifeChaptersSheet({ isOpen, category, onClose }: LifeChaptersShe
                     <p className="font-display text-[22px] font-normal leading-[1.2] text-foreground">
                       {hasDefinedChapters ? 'Your Life Chapters' : 'Define Your Life Chapters'}
                     </p>
-                    <p className="text-sm leading-snug text-[var(--lm-text-secondary)]">
+                    <p className="text-sm leading-snug text-muted-foreground">
                       {hasDefinedChapters
                         ? `You've defined ${lifeChapters.length} chapter${lifeChapters.length === 1 ? '' : 's'}. Each one becomes a storytelling session.`
                         : 'Map out the chapters of your life — the moments and stages that made you who you are.'}

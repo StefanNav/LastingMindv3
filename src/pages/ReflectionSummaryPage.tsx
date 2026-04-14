@@ -33,7 +33,7 @@ export function ReflectionSummaryPage() {
     return (
       <PageTransition>
         <div className="flex h-full items-center justify-center">
-          <p className="text-[16px] text-[var(--lm-text-secondary)]">Summary not found.</p>
+          <p className="text-base text-muted-foreground">Summary not found.</p>
         </div>
       </PageTransition>
     )

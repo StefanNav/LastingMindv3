@@ -28,10 +28,10 @@ export function ExitConfirmationModal({ isOpen, onStay, onLeave }: ExitConfirmat
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-col gap-2">
-              <p className="font-display text-[22px] font-semibold leading-[1.3] text-[#2f3228]">
+              <p className="font-display text-[22px] font-semibold leading-[1.3] text-foreground">
                 Leave conversation?
               </p>
-              <p className="text-[15px] leading-[1.5] text-[#5d6056]">
+              <p className="text-[15px] leading-[1.5] text-muted-foreground">
                 Your progress hasn't been saved yet. If you leave now, your responses will be lost.
               </p>
             </div>

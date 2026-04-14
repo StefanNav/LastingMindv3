@@ -85,7 +85,7 @@ export function HorizontalActivityCard({
         <p className="text-[15px] font-semibold leading-tight text-lm-green-dark">
           {title}
         </p>
-        <p className="text-[13px] leading-snug text-[var(--lm-text-secondary)]">
+        <p className="text-[13px] leading-snug text-muted-foreground">
           {subtitle}
         </p>
         {lastActivity && (

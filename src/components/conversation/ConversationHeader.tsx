@@ -1,5 +1,5 @@
-import { ArrowLeft } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { BackButton } from '@/components/shared/BackButton'
 
 interface ConversationHeaderProps {
   moduleTitle: string
@@ -37,14 +37,8 @@ export function ConversationHeader({
         <div className="pointer-events-none absolute inset-0 bg-white/60" />
       )}
       <div className="relative flex w-full items-center justify-between px-4">
-        <button
-          type="button"
-          onClick={onBack}
-          className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
-        >
-          <ArrowLeft className="size-5 text-white" />
-        </button>
-        <span className={`text-center text-[14px] leading-[1.2] text-[var(--lm-text-secondary)] ${isSummary ? 'font-normal' : 'font-semibold'}`}>
+        <BackButton onClick={onBack} />
+        <span className={`text-center text-sm leading-tight text-muted-foreground ${isSummary ? 'font-normal' : 'font-semibold'}`}>
           {rightLabel}
         </span>
       </div>

@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, HelpCircle, Clock, Mic } from 'lucide-react'
-import { PageTransition } from '@/animations/PageTransition'
+import { PageShell } from '@/components/shared/PageShell'
+import { PrimaryCTA } from '@/components/shared/PrimaryCTA'
+import { StickyFooter } from '@/components/shared/StickyFooter'
 import { module2IntroData } from '@/data/mock'
 import { SelectionChips } from '@/components/intro/SelectionChips'
 import { SelectionRadioCards } from '@/components/intro/SelectionRadioCards'
 import { FamilyWebPicker } from '@/components/intro/FamilyWebPicker'
-import { cn } from '@/lib/utils'
 
 export function Module2IntroPage() {
   const { categoryId } = useParams<{ categoryId: string }>()
@@ -18,34 +19,30 @@ export function Module2IntroPage() {
 
   if (!data) {
     return (
-      <PageTransition>
-        <div className="flex h-full items-center justify-center">
-          <p className="text-[16px] text-[var(--lm-text-secondary)]">Category not found.</p>
+      <PageShell>
+        <div className="relative z-10 flex h-full items-center justify-center">
+          <p className="text-base text-muted-foreground">Category not found.</p>
         </div>
-      </PageTransition>
+      </PageShell>
     )
   }
 
   return (
-    <PageTransition>
-      <div className="relative flex h-full flex-col bg-background">
+    <PageShell>
+      <div className="relative z-10 flex h-full flex-col">
         {/* Back button */}
-        <div className="px-4 pt-[62px]">
-          <button
-            type="button"
-            onClick={() => navigate('/home', { state: { openCategory: categoryId } })}
-            className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
-          >
-            <ArrowLeft className="size-5 text-white" />
+        <div className="px-4 pt-14">
+          <button type="button" onClick={() => navigate('/home', { state: { openCategory: categoryId } })} className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5" aria-label="Go back">
+            <ArrowLeft className="size-6 text-white" />
           </button>
         </div>
 
         {/* Main content — centered and scrollable */}
-        <div className="flex flex-1 flex-col items-center overflow-y-auto px-4 pt-[63px]">
+        <div className="flex flex-1 flex-col items-center overflow-y-auto px-4 pt-12">
           <div className="flex w-full flex-col items-center gap-8">
             {/* Category image + label + title + description */}
-            <div className="flex flex-col items-center gap-[30px] px-[10px]">
-              <div className="flex flex-col items-center gap-[10px]">
+            <div className="flex flex-col items-center gap-8 px-2">
+              <div className="flex flex-col items-center gap-3">
                 {/* Image + label */}
                 <div className="flex flex-col items-center gap-3">
                   <div
@@ -58,17 +55,17 @@ export function Module2IntroPage() {
                       className="h-full w-full object-contain"
                     />
                   </div>
-                  <p className="text-center text-[22px] font-semibold leading-[1.2] text-lm-green-dark">
+                  <p className="text-center text-xl font-semibold leading-tight text-lm-green-dark">
                     {data.categoryLabel}
                   </p>
                 </div>
 
                 {/* Title + description */}
                 <div className="flex flex-col items-center gap-3 text-center">
-                  <p className="font-display text-[32px] font-normal leading-[1.2] text-foreground">
+                  <p className="font-display text-3xl font-normal leading-tight text-foreground">
                     {data.moduleTitle}
                   </p>
-                  <p className="text-[16px] font-normal leading-[1.2] tracking-[0.5px] text-[var(--lm-text-secondary)]">
+                  <p className="text-base leading-snug text-muted-foreground">
                     {data.description}
                   </p>
                 </div>
@@ -77,20 +74,20 @@ export function Module2IntroPage() {
               {/* Metadata rows */}
               <div className="flex flex-col items-center gap-2.5">
                 <div className="flex items-center gap-1.5">
-                  <HelpCircle className="size-4 text-[var(--lm-text-secondary)]" />
-                  <span className="text-center text-[14px] font-medium leading-[1.2] text-[var(--lm-text-secondary)]">
+                  <HelpCircle className="size-4 text-muted-foreground" />
+                  <span className="text-sm font-medium text-muted-foreground">
                     Reflection Question
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Clock className="size-4 text-[var(--lm-text-secondary)]" />
-                  <span className="text-center text-[14px] font-medium leading-[1.2] text-[var(--lm-text-secondary)]">
+                  <Clock className="size-4 text-muted-foreground" />
+                  <span className="text-sm font-medium text-muted-foreground">
                     About 5 minutes
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Mic className="size-4 text-[var(--lm-text-secondary)]" />
-                  <span className="text-center text-[14px] font-medium leading-[1.2] text-[var(--lm-text-secondary)]">
+                  <Mic className="size-4 text-muted-foreground" />
+                  <span className="text-sm font-medium text-muted-foreground">
                     Voice or Type
                   </span>
                 </div>
@@ -98,7 +95,7 @@ export function Module2IntroPage() {
             </div>
 
             {/* Selection area */}
-            <div className="w-full pb-[140px]">
+            <div className="w-full pb-36">
               {data.selectionType === 'web' && data.webMembers ? (
                 <FamilyWebPicker
                   webMembers={data.webMembers}
@@ -123,9 +120,8 @@ export function Module2IntroPage() {
         </div>
 
         {/* Bottom pinned button */}
-        <div className="shrink-0 border-t border-black/25 bg-background px-4 pb-[50px] pt-4">
-          <button
-            type="button"
+        <StickyFooter className="border-t-0 bg-transparent backdrop-blur-none">
+          <PrimaryCTA
             disabled={!hasSelection}
             onClick={() => {
               if (!categoryId || !selectedOption) return
@@ -149,17 +145,11 @@ export function Module2IntroPage() {
                 })
               }
             }}
-            className={cn(
-              'flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-4',
-              !hasSelection && 'opacity-70',
-            )}
           >
-            <span className="text-[16px] font-medium leading-[1.2] text-white">
-              {hasSelection ? 'Lets Begin' : data.disabledButtonText}
-            </span>
-          </button>
-        </div>
+            {hasSelection ? 'Lets Begin' : data.disabledButtonText}
+          </PrimaryCTA>
+        </StickyFooter>
       </div>
-    </PageTransition>
+    </PageShell>
   )
 }

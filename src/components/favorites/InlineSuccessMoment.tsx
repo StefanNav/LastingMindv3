@@ -32,7 +32,7 @@ export function InlineSuccessMoment({ answeredCount, totalQuestions, onDone }: I
           damping: 26,
           mass: 0.9,
         }}
-        className="flex w-full max-w-[400px] flex-col items-center gap-4 rounded-xl border border-[var(--lm-border)] bg-[var(--lm-bg-card)] px-5 py-8"
+        className="flex w-full max-w-[400px] flex-col items-center gap-4 rounded-xl border border-border bg-[var(--lm-bg-card)] px-5 py-8"
         style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}
       >
         <motion.div
@@ -51,7 +51,7 @@ export function InlineSuccessMoment({ answeredCount, totalQuestions, onDone }: I
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="text-[14px] text-[var(--lm-text-secondary)]"
+          className="text-[14px] text-muted-foreground"
         >
           {answeredCount} of {totalQuestions} — keep going
         </motion.p>

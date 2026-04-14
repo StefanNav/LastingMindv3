@@ -29,10 +29,10 @@ export function DeleteConfirmationModal({ isOpen, name, onConfirm, onCancel }: D
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-col gap-2">
-              <p className="font-display text-[22px] font-semibold leading-[1.3] text-[#2f3228]">
+              <p className="font-display text-[22px] font-semibold leading-[1.3] text-foreground">
                 Remove {name}?
               </p>
-              <p className="text-[15px] leading-[1.5] text-[#5d6056]">
+              <p className="text-[15px] leading-[1.5] text-muted-foreground">
                 This will remove them from your summary. You can always add them back later.
               </p>
             </div>
@@ -43,7 +43,7 @@ export function DeleteConfirmationModal({ isOpen, name, onConfirm, onCancel }: D
                 onClick={onCancel}
                 className="flex flex-1 items-center justify-center rounded-[10px] border border-black/20 px-5 py-3.5"
               >
-                <span className="text-[16px] font-medium leading-[1.2] text-[#5d6056]">
+                <span className="text-[16px] font-medium leading-[1.2] text-muted-foreground">
                   Cancel
                 </span>
               </button>

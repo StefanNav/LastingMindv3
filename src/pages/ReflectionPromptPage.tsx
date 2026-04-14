@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence, type PanInfo } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
+import { BackButton } from '@/components/shared/BackButton'
 import { PageTransition } from '@/animations/PageTransition'
 import { reflectionConfigs } from '@/data/mock'
 
@@ -28,7 +28,7 @@ export function ReflectionPromptPage() {
     return (
       <PageTransition>
         <div className="flex h-full items-center justify-center">
-          <p className="text-[16px] text-[var(--lm-text-secondary)]">Reflection not found.</p>
+          <p className="text-base text-muted-foreground">Reflection not found.</p>
         </div>
       </PageTransition>
     )
@@ -109,13 +109,7 @@ export function ReflectionPromptPage() {
 
         {/* Header */}
         <div className="relative z-10 flex shrink-0 items-center justify-between px-4 pb-3 pt-[62px]">
-          <button
-            type="button"
-            onClick={() => navigate(`/intro2/${categoryId}`)}
-            className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
-          >
-            <ArrowLeft className="size-5 text-white" />
-          </button>
+          <BackButton onClick={() => navigate(`/intro2/${categoryId}`)} />
           <p className="font-display text-[18px] font-semibold leading-[1.2] text-foreground">
             {config.moduleTitle}
           </p>
@@ -194,9 +188,9 @@ export function ReflectionPromptPage() {
             <button
               type="button"
               onClick={handleReflectFreely}
-              className="flex items-center justify-center rounded-lg bg-[#e7ebd9] px-6 py-2.5"
+              className="flex items-center justify-center rounded-lg border border-border bg-transparent px-6 py-2.5 transition-colors hover:bg-muted/50 active:scale-[0.98]"
             >
-              <span className="text-[15px] font-medium leading-[1.2] text-[#283227]">
+              <span className="text-sm font-medium text-foreground">
                 Reflect freely
               </span>
             </button>

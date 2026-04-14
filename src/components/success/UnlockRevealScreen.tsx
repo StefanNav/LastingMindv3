@@ -89,7 +89,7 @@ export function UnlockRevealScreen({ onComplete }: UnlockRevealScreenProps) {
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.4, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-            className="flex size-20 items-center justify-center rounded-full bg-[#e7ebd9]"
+            className="flex size-20 items-center justify-center rounded-full bg-primary/10"
           >
             {unlock.icon}
           </motion.div>

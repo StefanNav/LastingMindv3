@@ -45,14 +45,14 @@ export function EducationSummaryList({
       <div className="flex-1 overflow-y-auto pt-[190px]">
         {/* Heading */}
         <div className="flex items-center justify-center px-[10px] pb-[10px]">
-          <p className="flex-1 text-center font-display text-[26px] font-normal leading-[1.5] text-[#2f3228]">
+          <p className="flex-1 text-center font-display text-2xl font-semibold leading-tight text-foreground">
             {heading}
           </p>
         </div>
 
         {/* List section */}
         <div className="flex flex-col gap-4 px-4 pt-4">
-          <p className="text-[14px] font-semibold leading-[1.2] text-[#7b7b7b]">
+          <p className="text-sm font-semibold leading-tight text-muted-foreground">
             {listLabel}
           </p>
 
@@ -62,7 +62,7 @@ export function EducationSummaryList({
             <div className="relative flex w-[13px] shrink-0 flex-col items-center">
               {/* Continuous vertical line spanning between first and last dot */}
               <div
-                className="absolute left-1/2 w-[2px] -translate-x-1/2 bg-[#33602b]/30"
+                className="absolute left-1/2 w-[2px] -translate-x-1/2 bg-lm-green-dark/30"
                 style={{
                   top: 0,
                   bottom: 0,
@@ -76,7 +76,7 @@ export function EducationSummaryList({
                 <div key={item.id} className="relative">
                   {/* Dot — positioned to align with top border of card */}
                   <div
-                    className="absolute z-10 size-[10px] rounded-full border-[2px] border-[#33602b] bg-[#33602b]"
+                    className="absolute z-10 size-[10px] rounded-full border-[2px] border-lm-green-dark bg-lm-green-dark"
                     style={{ left: -17.5, top: 0 }}
                   />
 
@@ -86,28 +86,28 @@ export function EducationSummaryList({
                     initial="hidden"
                     animate="visible"
                     variants={listItemVariants}
-                    className="flex flex-col gap-[6px] rounded-[10px] border border-[#e7ebd9] bg-[#fffcf4] p-4"
+                    className="flex flex-col gap-1.5 rounded-[10px] bg-lm-bg-card/40 p-4 shadow-card backdrop-blur-sm"
                   >
                     {/* Top row: date range + edit button */}
                     <div className="flex items-center gap-4">
-                      <span className="flex-1 text-[14px] font-semibold leading-[1.2] text-[#5d6056]">
+                      <span className="flex-1 text-sm font-semibold leading-tight text-muted-foreground">
                         {item.dateRange}
                       </span>
                       <button
                         type="button"
                         onClick={() => setEditingItem(item)}
-                        className="flex items-center rounded-[4px] bg-[#e7ebd9] p-1"
+                        className="flex items-center rounded-lg p-1 text-muted-foreground transition-colors hover:bg-muted"
                       >
-                        <Pencil className="size-4 text-[#5d6056]" />
+                        <Pencil className="size-4" />
                       </button>
                     </div>
 
                     {/* Degree/program + school */}
                     <div className="flex flex-col gap-[3px]">
-                      <p className="font-display text-[18px] font-medium leading-[1.2] text-[#2f3228]">
+                      <p className="font-display text-lg font-medium leading-tight text-foreground">
                         {item.name}
                       </p>
-                      <p className="text-[14px] font-medium leading-[1.2] tracking-[0.5px] text-[#5d6056]">
+                      <p className="text-sm font-medium leading-tight text-muted-foreground">
                         {item.label}
                       </p>
                     </div>
@@ -119,10 +119,10 @@ export function EducationSummaryList({
               <button
                 type="button"
                 onClick={() => setIsAdding(true)}
-                className="flex items-center justify-center gap-[10px] rounded-[6px] border border-dashed border-[#5d6056] bg-[#fffcf4] px-4 py-[10px]"
+                className="flex items-center justify-center gap-2 rounded-[10px] border-2 border-dashed border-border px-4 py-2.5 text-sm font-medium text-primary transition-colors hover:border-primary/40 hover:bg-primary/5 active:scale-[0.98]"
               >
-                <Plus className="size-5 text-[#5d6056]" />
-                <span className="text-[16px] font-medium leading-[1.2] text-[#5d6056]">
+                <Plus className="size-5" />
+                <span className="text-base font-medium">
                   {addLabel}
                 </span>
               </button>
@@ -133,19 +133,17 @@ export function EducationSummaryList({
       </div>
 
       {/* Footer */}
-      <div className="flex shrink-0 flex-col items-center gap-[13px] border-t border-black/16 bg-[var(--lm-bg-primary)] px-4 py-[30px]">
-        <p className="text-center text-[14px] font-semibold leading-[1.2] text-[#313131]">
+      <div className="flex shrink-0 flex-col items-center gap-3 border-t border-border/50 bg-[var(--lm-bg-primary)] px-4 pb-8 pt-4">
+        <p className="text-center text-sm font-semibold leading-tight text-muted-foreground">
           You can always return to say more.{' '}
         </p>
         <button
           type="button"
           onClick={onSaveAndFinish}
-          className="flex w-full flex-col items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-[0.98]"
         >
-          <ArrowRight className="size-6 text-white" />
-          <span className="text-[18px] font-medium leading-[1.2] text-white">
-            Save &amp; Finish
-          </span>
+          <ArrowRight className="size-5" />
+          Save &amp; Finish
         </button>
       </div>
 

@@ -25,8 +25,13 @@ import { DefineChaptersPage } from '@/pages/DefineChaptersPage'
 import { LifeChaptersHubPage } from '@/pages/LifeChaptersHubPage'
 import { Phase4PlaceholderPage } from '@/pages/Phase4PlaceholderPage'
 import { LegacyPlaceholderPage } from '@/pages/LegacyPlaceholderPage'
+import { ChapterSessionPlaceholder } from '@/pages/ChapterSessionPlaceholder'
+import { CategoryDetailPage } from '@/pages/CategoryDetailPage'
+import { ChapterDetailPage } from '@/pages/ChapterDetailPage'
 import { conversationConfigs, foundationIntroData, module2IntroData } from '@/data/mock'
 import { guidedConversationConfigs } from '@/data/guidedConversationData'
+import { circleCaptureConfigs } from '@/data/circleCaptureData'
+import { CircleCapturePage } from '@/pages/CircleCapturePage'
 import { PageTransition } from '@/animations/PageTransition'
 import { useApp } from '@/app/AppProvider'
 import type { ModuleCompletionState, RewardCardData } from '@/types'
@@ -48,12 +53,13 @@ function ConversationRoute() {
   const config = categoryId ? guidedConversationConfigs[categoryId] : undefined
   const oldConfig = categoryId ? conversationConfigs[categoryId] : undefined
   const introData = categoryId ? foundationIntroData[categoryId] : undefined
+  const ccConfig = categoryId ? circleCaptureConfigs[categoryId] : undefined
 
-  if (!config || !categoryId) {
+  if (!categoryId || (!config && !ccConfig)) {
     return (
       <PageTransition>
         <div className="flex h-full items-center justify-center">
-          <p className="text-[16px] text-[var(--lm-text-secondary)]">Conversation not found.</p>
+          <p className="text-base text-muted-foreground">Conversation not found.</p>
         </div>
       </PageTransition>
     )
@@ -61,44 +67,60 @@ function ConversationRoute() {
 
   const mod2 = categoryId ? module2IntroData[categoryId] : undefined
 
+  const handleComplete = () => {
+    const summaryItems = oldConfig?.summaryItems ?? []
+    const moduleTitle = ccConfig?.categoryLabel ? `Who's in Your ${ccConfig.categoryLabel}` : config?.moduleTitle ?? ''
+    const categoryLabel = introData?.categoryLabel ?? categoryId
+
+    const rewardCardData: RewardCardData = {
+      categoryImage: introData?.image ?? '',
+      categoryLabel,
+      moduleTitle,
+      items: summaryItems.map((si) => ({
+        id: si.id,
+        initial: si.name.charAt(0),
+        label: si.name.split(' ')[0],
+        sublabel: si.label,
+      })),
+      itemCountLabel: `${summaryItems.length} ${categoryLabel.toLowerCase()} members recorded`,
+      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+    }
+
+    const completionState: ModuleCompletionState = {
+      categoryId,
+      moduleNumber: 1,
+      moduleTitle,
+      categoryLabel,
+      starEarned: false,
+      totalStars: 0,
+      totalStarsNeeded: 6,
+      isFirstModuleEver: !hasCompletedFirstModule,
+      rewardCardData,
+      nextModule: mod2
+        ? { title: mod2.moduleTitle, description: mod2.description, duration: '5min' }
+        : undefined,
+    }
+    markFirstModuleComplete()
+    markModule1Complete(categoryId)
+    navigate('/success', { state: completionState })
+  }
+
+  // Circle Capture for Family and Friends Module 1
+  if (ccConfig) {
+    return (
+      <CircleCapturePage
+        config={ccConfig}
+        onComplete={handleComplete}
+        onBack={() => navigate(`/intro/${categoryId}`)}
+        onExit={() => navigate('/home')}
+      />
+    )
+  }
+
   return (
     <GuidedConversationPageV2
-      config={config}
-      onComplete={() => {
-        // Build reward card data from conversation summary items
-        const summaryItems = oldConfig?.summaryItems ?? []
-        const rewardCardData: RewardCardData = {
-          categoryImage: introData?.image ?? '',
-          categoryLabel: introData?.categoryLabel ?? categoryId,
-          moduleTitle: config.moduleTitle,
-          items: summaryItems.map((si) => ({
-            id: si.id,
-            initial: si.name.charAt(0),
-            label: si.name.split(' ')[0],
-            sublabel: si.label,
-          })),
-          itemCountLabel: `${summaryItems.length} ${(introData?.categoryLabel ?? categoryId).toLowerCase()} members recorded`,
-          date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        }
-
-        const completionState: ModuleCompletionState = {
-          categoryId,
-          moduleNumber: 1,
-          moduleTitle: config.moduleTitle,
-          categoryLabel: introData?.categoryLabel ?? categoryId,
-          starEarned: false,
-          totalStars: 0,
-          totalStarsNeeded: 6,
-          isFirstModuleEver: !hasCompletedFirstModule,
-          rewardCardData,
-          nextModule: mod2
-            ? { title: mod2.moduleTitle, description: mod2.description, duration: '5min' }
-            : undefined,
-        }
-        markFirstModuleComplete()
-        markModule1Complete(categoryId)
-        navigate('/success', { state: completionState })
-      }}
+      config={config!}
+      onComplete={handleComplete}
       onBack={() => navigate(`/intro/${categoryId}`)}
       onExit={() => navigate('/home')}
     />
@@ -136,10 +158,13 @@ function App() {
               <Route path="/core-values" element={<CoreValuesPage />} />
               <Route path="/core-values/summary" element={<CoreValuesSummaryPage />} />
               <Route path="/profile" element={<MemoryProfilePage />} />
+              <Route path="/profile/category/:categoryId" element={<CategoryDetailPage />} />
+              <Route path="/profile/chapter/:chapterId" element={<ChapterDetailPage />} />
               <Route path="/life-chapters" element={<LifeChaptersHubPage />} />
               <Route path="/life-chapters/define" element={<DefineChaptersPage />} />
               <Route path="/phase4/:categoryId" element={<Phase4PlaceholderPage />} />
               <Route path="/legacy/:itemId" element={<LegacyPlaceholderPage />} />
+              <Route path="/chapter/:chapterId/:stepType" element={<ChapterSessionPlaceholder />} />
             </Routes>
           </AnimatePresence>
         </MobileShell>

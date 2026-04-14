@@ -54,9 +54,9 @@ export function VoiceRecording({ onStop, isPaused: controlledPaused, onPauseChan
   const time = useTimer(isPaused)
 
   return (
-    <div className="flex flex-col items-center gap-[13px] border-t border-black/25 bg-[var(--lm-bg-primary)] px-4 pb-[50px] pt-[30px]">
+    <div className="flex flex-col items-center gap-3 border-t border-border/50 bg-[var(--lm-bg-primary)] px-4 pb-8 pt-6">
       {/* Recording label */}
-      <p className="text-[18px] font-medium leading-[1.2] text-[#2f3228]">
+      <p className="text-lg font-medium leading-tight text-foreground">
         {isPaused ? 'Recording Paused' : 'Recording your answer...'}
       </p>
 
@@ -85,22 +85,18 @@ export function VoiceRecording({ onStop, isPaused: controlledPaused, onPauseChan
         <button
           type="button"
           onClick={() => setIsPaused((p) => !p)}
-          className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] border border-[#283227] px-5 py-4"
+          className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-border bg-transparent px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted/50 active:scale-[0.98]"
         >
-          <Pause className="size-6 text-[#283227]" />
-          <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
-            {isPaused ? 'Resume' : 'Pause'}
-          </span>
+          <Pause className="size-5" />
+          {isPaused ? 'Resume' : 'Pause'}
         </button>
         <button
           type="button"
           onClick={onStop}
-          className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-[#d40016] px-5 py-4"
+          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#d40016] px-5 py-3 text-sm font-semibold text-white transition-colors active:scale-[0.98]"
         >
-          <CircleStop className="size-6 text-white" />
-          <span className="text-[16px] font-medium leading-[1.2] text-white">
-            Press to Stop
-          </span>
+          <CircleStop className="size-5" />
+          Press to Stop
         </button>
       </div>
     </div>

@@ -7,27 +7,23 @@ interface VoiceInputProps {
 
 export function VoiceInput({ onStartRecording, onToggleInputMode }: VoiceInputProps) {
   return (
-    <div className="flex flex-col items-center gap-[13px] border-t border-black/25 bg-[var(--lm-bg-primary)] px-4 pb-[50px] pt-4">
+    <div className="flex flex-col items-center gap-3 border-t border-border/50 bg-[var(--lm-bg-primary)] px-4 pb-8 pt-4">
       <button
         type="button"
         onClick={onStartRecording}
-        className="flex w-full flex-col items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-10 py-4"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-[0.98]"
       >
-        <Mic className="size-6 text-white" />
-        <span className="text-[16px] font-medium leading-[1.2] text-white">
-          Press to Talk{' '}
-        </span>
+        <Mic className="size-5" />
+        Press to Talk
       </button>
 
       <button
         type="button"
         onClick={onToggleInputMode}
-        className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] p-[10px]"
+        className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-transparent p-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted/50 active:scale-[0.98]"
       >
-        <Keyboard className="size-6 text-[#283227]" />
-        <span className="text-center text-[16px] font-medium leading-[1.2] text-[#283227]">
-          Prefer to type? Switch to text
-        </span>
+        <Keyboard className="size-5" />
+        Prefer to type? Switch to text
       </button>
     </div>
   )

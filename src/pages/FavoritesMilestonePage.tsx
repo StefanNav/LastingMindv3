@@ -1,6 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { PageTransition } from '@/animations/PageTransition'
+import { PageShell } from '@/components/shared/PageShell'
+import { PrimaryCTA } from '@/components/shared/PrimaryCTA'
+import { SecondaryCTA } from '@/components/shared/SecondaryCTA'
+import { StickyFooter } from '@/components/shared/StickyFooter'
 import { Share2 } from 'lucide-react'
 import { module2IntroData } from '@/data/mock'
 import { useApp } from '@/app/AppProvider'
@@ -72,10 +75,10 @@ export function FavoritesMilestonePage() {
   }
 
   return (
-    <PageTransition>
-      <div className="relative flex h-full flex-col bg-background">
+    <PageShell>
+      <div className="relative z-10 flex h-full flex-col">
         {/* Scrollable content */}
-        <div className="flex flex-1 flex-col overflow-y-auto px-4 pb-48 pt-[72px]">
+        <div className="flex flex-1 flex-col overflow-y-auto px-4 pb-48 pt-16">
           {/* Headline */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -83,10 +86,10 @@ export function FavoritesMilestonePage() {
             transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
             className="mb-6 text-center"
           >
-            <h1 className="font-display text-[26px] font-normal leading-[1.2] text-foreground">
+            <h1 className="font-display text-2xl font-semibold leading-tight text-foreground">
               Your LastingMind now knows what you love.
             </h1>
-            <p className="mt-2 text-[14px] font-semibold text-[var(--lm-text-secondary)]">
+            <p className="mt-2 text-sm font-semibold text-muted-foreground">
               Here&apos;s your personality card
             </p>
           </motion.div>
@@ -96,23 +99,20 @@ export function FavoritesMilestonePage() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-            className="mx-auto w-full max-w-[340px] overflow-hidden rounded-2xl border border-[var(--lm-border)] bg-[var(--lm-bg-card)]"
-            style={{
-              boxShadow: '0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06)',
-            }}
+            className="mx-auto w-full max-w-[340px] overflow-hidden rounded-[10px] bg-lm-bg-card/40 shadow-card backdrop-blur-sm"
           >
             {/* Card header */}
-            <div className="bg-lm-green px-5 py-4">
-              <p className="text-center font-display text-[18px] font-semibold leading-[1.2] text-white">
+            <div className="bg-primary px-5 py-4">
+              <p className="text-center font-display text-lg font-semibold leading-tight text-primary-foreground">
                 My Favorite Things
               </p>
-              <p className="mt-0.5 text-center text-[12px] font-medium text-white/70">
+              <p className="mt-0.5 text-center text-xs font-medium text-primary-foreground/70">
                 LastingMind
               </p>
             </div>
 
             {/* Card body — emoji + answer pairs */}
-            <div className="flex flex-col divide-y divide-[var(--lm-border-subtle)]">
+            <div className="flex flex-col divide-y divide-border/50">
               {answers.map((answer, i) => (
                 <motion.div
                   key={answer.categoryId}
@@ -121,12 +121,12 @@ export function FavoritesMilestonePage() {
                   transition={{ duration: 0.2, delay: 0.4 + i * 0.06 }}
                   className="flex items-start gap-3 px-5 py-3"
                 >
-                  <span className="mt-0.5 text-[18px]">{answer.emoji}</span>
+                  <span className="mt-0.5 text-lg">{answer.emoji}</span>
                   <div className="flex-1">
-                    <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--lm-text-secondary)]">
+                    <p className="text-[11px] font-bold uppercase tracking-wide text-muted-foreground">
                       {answer.categoryName}
                     </p>
-                    <p className="mt-0.5 text-[13px] leading-[1.35] text-foreground">
+                    <p className="mt-0.5 text-sm leading-snug text-foreground">
                       {answer.answer}
                     </p>
                   </div>
@@ -137,28 +137,16 @@ export function FavoritesMilestonePage() {
         </div>
 
         {/* Bottom CTAs */}
-        <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 border-t border-[var(--lm-border-subtle)] bg-background/95 px-4 pb-[50px] pt-4 backdrop-blur-sm">
-          <button
-            type="button"
-            onClick={handleKeepGoing}
-            className="flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-4"
-          >
-            <span className="text-[16px] font-medium leading-[1.2] text-white">
-              Keep going
-            </span>
-          </button>
-          <button
-            type="button"
-            onClick={handleShare}
-            className="flex w-full items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] px-5 py-4"
-          >
-            <Share2 className="size-6 text-[#283227]" />
-            <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
-              Share my card
-            </span>
-          </button>
-        </div>
+        <StickyFooter className="absolute inset-x-0 bottom-0 flex flex-col gap-3">
+          <PrimaryCTA onClick={handleKeepGoing}>
+            Keep going
+          </PrimaryCTA>
+          <SecondaryCTA onClick={handleShare}>
+            <Share2 className="size-5" />
+            Share my card
+          </SecondaryCTA>
+        </StickyFooter>
       </div>
-    </PageTransition>
+    </PageShell>
   )
 }

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { PageTransition } from '@/animations/PageTransition'
+import { PageShell } from '@/components/shared/PageShell'
+import { PrimaryCTA } from '@/components/shared/PrimaryCTA'
+import { StickyFooter } from '@/components/shared/StickyFooter'
 import { ConversationHeader } from '@/components/conversation/ConversationHeader'
 import { Pencil, Check } from 'lucide-react'
 import type { FavoritesAnswer } from '@/types/favorites'
@@ -20,11 +22,11 @@ export function FavoritesSummaryPage() {
 
   if (!locationState || answers.length === 0) {
     return (
-      <PageTransition>
-        <div className="flex h-full items-center justify-center">
-          <p className="text-[16px] text-[var(--lm-text-secondary)]">No answers found.</p>
+      <PageShell>
+        <div className="relative z-10 flex h-full items-center justify-center">
+          <p className="text-base text-muted-foreground">No answers found.</p>
         </div>
-      </PageTransition>
+      </PageShell>
     )
   }
 
@@ -47,8 +49,8 @@ export function FavoritesSummaryPage() {
   }
 
   return (
-    <PageTransition>
-      <div className="relative flex h-full flex-col bg-background">
+    <PageShell>
+      <div className="relative z-10 flex h-full flex-col">
         {/* Header */}
         <ConversationHeader
           moduleTitle="Favorites"
@@ -62,11 +64,11 @@ export function FavoritesSummaryPage() {
         {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto pt-[180px] px-4 pb-32">
           {/* Heading */}
-          <div className="pb-[20px]">
-            <p className="font-display text-[26px] font-normal leading-[1.5] text-[var(--lm-text-primary)]">
+          <div className="pb-5">
+            <p className="font-display text-2xl font-semibold text-foreground">
               Your Favorites
             </p>
-            <p className="text-[15px] font-normal text-[var(--lm-text-secondary)]">
+            <p className="mt-1 text-sm text-muted-foreground">
               Review your answers below. Tap edit to change anything.
             </p>
           </div>
@@ -77,14 +79,13 @@ export function FavoritesSummaryPage() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25, delay: i * 0.05 }}
-                className="overflow-hidden rounded-xl border border-[var(--lm-border)] bg-[var(--lm-bg-card)]"
-                style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
+                className="overflow-hidden rounded-[10px] bg-lm-bg-card/40 shadow-card backdrop-blur-sm"
               >
                 {/* Card header */}
-                <div className="flex items-center justify-between border-b border-[var(--lm-border-subtle)] px-4 py-3">
+                <div className="flex items-center justify-between border-b border-border/50 px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-[20px]">{answer.emoji}</span>
-                    <span className="text-[14px] font-bold text-foreground">
+                    <span className="text-xl">{answer.emoji}</span>
+                    <span className="text-sm font-bold text-foreground">
                       {answer.categoryName}
                     </span>
                   </div>
@@ -92,7 +93,7 @@ export function FavoritesSummaryPage() {
                     <button
                       type="button"
                       onClick={() => handleStartEdit(answer)}
-                      className="flex items-center gap-1 rounded-md px-2 py-1 text-[12px] font-semibold text-[var(--lm-text-secondary)] transition-colors hover:bg-black/5"
+                      className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:bg-muted"
                     >
                       <Pencil className="size-3" />
                       Edit
@@ -102,7 +103,7 @@ export function FavoritesSummaryPage() {
 
                 {/* Card body */}
                 <div className="px-4 py-3">
-                  <p className="mb-1 text-[12px] font-medium text-[var(--lm-text-secondary)]">
+                  <p className="mb-1 text-xs font-medium text-muted-foreground">
                     {answer.question}
                   </p>
 
@@ -111,7 +112,7 @@ export function FavoritesSummaryPage() {
                       <textarea
                         value={editText}
                         onChange={(e) => setEditText(e.target.value)}
-                        className="w-full resize-none rounded-lg border border-[var(--lm-border)] bg-background p-2 text-[14px] leading-[1.4] text-foreground outline-none focus:border-lm-green focus:ring-1 focus:ring-lm-green/30"
+                        className="w-full resize-none rounded-lg border border-border bg-background p-2 text-sm leading-snug text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
                         rows={3}
                         autoFocus
                       />
@@ -119,26 +120,22 @@ export function FavoritesSummaryPage() {
                         <button
                           type="button"
                           onClick={handleCancelEdit}
-                          className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-[#e7ebd9] px-5 py-4"
+                          className="flex flex-1 items-center justify-center rounded-lg border border-border bg-transparent px-5 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted/50 active:scale-[0.98]"
                         >
-                          <span className="text-[16px] font-medium leading-[1.2] text-[#283227]">
-                            Cancel
-                          </span>
+                          Cancel
                         </button>
                         <button
                           type="button"
                           onClick={() => handleSaveEdit(answer.categoryId)}
-                          className="flex flex-1 items-center justify-center gap-[10px] rounded-[10px] bg-lm-green px-5 py-4"
+                          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-[0.98]"
                         >
-                          <Check className="size-5 text-white" />
-                          <span className="text-[16px] font-medium leading-[1.2] text-white">
-                            Save
-                          </span>
+                          <Check className="size-4" />
+                          Save
                         </button>
                       </div>
                     </div>
                   ) : (
-                    <p className="text-[14px] leading-[1.4] text-foreground">{answer.answer}</p>
+                    <p className="text-sm leading-snug text-foreground">{answer.answer}</p>
                   )}
                 </div>
               </motion.div>
@@ -147,20 +144,12 @@ export function FavoritesSummaryPage() {
         </div>
 
         {/* Sticky CTA */}
-        <div className="absolute inset-x-0 bottom-0 border-t border-[var(--lm-border-subtle)] bg-background/95 px-4 pb-[50px] pt-4 backdrop-blur-sm">
-          <button
-            type="button"
-            onClick={() =>
-              navigate('/favorites/milestone', { state: { answers } })
-            }
-            className="flex w-full items-center justify-center rounded-[4px] bg-lm-green px-10 py-4"
-          >
-            <span className="text-[16px] font-medium leading-[1.2] text-white">
-              Save my favorites
-            </span>
-          </button>
-        </div>
+        <StickyFooter className="absolute inset-x-0 bottom-0">
+          <PrimaryCTA onClick={() => navigate('/favorites/milestone', { state: { answers } })}>
+            Save my favorites
+          </PrimaryCTA>
+        </StickyFooter>
       </div>
-    </PageTransition>
+    </PageShell>
   )
 }
