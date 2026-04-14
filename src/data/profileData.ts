@@ -183,6 +183,17 @@ const profileDataMap: Record<DemoStateId, MemoryProfileData> = {
     phase1Complete: true,
     biographyReady: false,
   },
+
+  // Audience — read-only viewer state
+  audience: {
+    user: USER,
+    stats: { totalEntries: 0, starsEarned: 0, phasesComplete: 0 },
+    foundationCategories: buildFoundation(allNotStarted),
+    lifeChapters: [],
+    legacyModules: buildLegacy(),
+    phase1Complete: false,
+    biographyReady: false,
+  },
 }
 
 export function getProfileData(demoStateId: DemoStateId): MemoryProfileData {
