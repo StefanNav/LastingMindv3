@@ -14,7 +14,7 @@ interface ChapterBottomSheetProps {
 const STAR_COUNT = 3
 const DRAG_CLOSE_THRESHOLD = 100
 
-const CHAPTER_IMAGE = '/images/Life chapters 1.png'
+const CHAPTER_IMAGE = '/images/Life chapters 2.png'
 
 function statusLabel(ch: LifeChapter): string {
   if (ch.starsEarned >= 3) return 'Complete'
@@ -258,8 +258,8 @@ export function ChapterBottomSheet({ isOpen, chapter, onClose, onBeginStep }: Ch
                   </div>
                 </div>
 
-                {/* ── More Ways to Grow ── */}
-                <div className="flex flex-col gap-3 px-4">
+                {/* ── More Ways to Grow — only after both steps complete ── */}
+                {step1Complete && step2Complete && <div className="flex flex-col gap-3 px-4">
                   <div className="flex items-center gap-3">
                     <div className="h-px flex-1 bg-lm-gold/30" />
                     <p className="shrink-0 text-[11px] font-bold uppercase tracking-widest text-lm-gold">
@@ -288,7 +288,7 @@ export function ChapterBottomSheet({ isOpen, chapter, onClose, onBeginStep }: Ch
                     </p>
                     <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
                   </button>
-                </div>
+                </div>}
               </div>
             </div>
           </motion.div>

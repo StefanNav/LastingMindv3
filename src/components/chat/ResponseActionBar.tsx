@@ -1,22 +1,7 @@
-import { useState } from 'react'
-import { ThumbsUp, ThumbsDown, Volume2, RefreshCw } from 'lucide-react'
+import { Volume2, RefreshCw } from 'lucide-react'
 
 export function ResponseActionBar() {
-  const [feedback, setFeedback] = useState<'up' | 'down' | null>(null)
-
   const buttons = [
-    {
-      icon: ThumbsUp,
-      label: 'Good answer',
-      active: feedback === 'up',
-      onClick: () => setFeedback((prev) => (prev === 'up' ? null : 'up')),
-    },
-    {
-      icon: ThumbsDown,
-      label: 'Not a good answer',
-      active: feedback === 'down',
-      onClick: () => setFeedback((prev) => (prev === 'down' ? null : 'down')),
-    },
     {
       icon: Volume2,
       label: 'Read aloud',

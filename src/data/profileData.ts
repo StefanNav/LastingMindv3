@@ -10,19 +10,19 @@ import type {
 interface ImageRef { imageAsset: string; imageHeight: number; imageWidth: number }
 
 const FOUNDATION_IMAGES: Record<string, ImageRef> = {
-  family:     { imageAsset: '/images/Family 1.png',      imageHeight: 156, imageWidth: 147 },
-  friends:    { imageAsset: '/images/Freinds 1.png',     imageHeight: 156, imageWidth: 270 },
-  career:     { imageAsset: '/images/Career 1.png',      imageHeight: 145, imageWidth: 240 },
-  education:  { imageAsset: '/images/Education 1.png',   imageHeight: 145, imageWidth: 240 },
-  favorites:  { imageAsset: '/images/Favorites 1.png',  imageHeight: 156, imageWidth: 196 },
-  coreValues: { imageAsset: '/images/Core Values 1.png', imageHeight: 145, imageWidth: 250 },
+  family:     { imageAsset: '/images/Family 2.png',      imageHeight: 156, imageWidth: 147 },
+  friends:    { imageAsset: '/images/Freinds 2.png',     imageHeight: 156, imageWidth: 270 },
+  career:     { imageAsset: '/images/Career 2.png',      imageHeight: 145, imageWidth: 240 },
+  education:  { imageAsset: '/images/Education 2.png',   imageHeight: 145, imageWidth: 240 },
+  favorites:  { imageAsset: '/images/Favorites 2.png',  imageHeight: 156, imageWidth: 196 },
+  coreValues: { imageAsset: '/images/Core Values 2.png', imageHeight: 145, imageWidth: 250 },
 }
 
 const LEGACY_IMAGES: Record<string, ImageRef> = {
-  wisdom:        { imageAsset: '/images/Wisdom 1.png',                imageHeight: 156, imageWidth: 219 },
-  letters:       { imageAsset: '/images/Letters to loved ones 1.png', imageHeight: 156, imageWidth: 303 },
-  voiceMessages: { imageAsset: '/images/Voice message 1.png',         imageHeight: 156, imageWidth: 233 },
-  memoir:        { imageAsset: '/images/Memoir 1.png',                imageHeight: 156, imageWidth: 268 },
+  wisdom:        { imageAsset: '/images/Wisdom 2.png',                imageHeight: 156, imageWidth: 219 },
+  letters:       { imageAsset: '/images/Letters to loved ones 2.png', imageHeight: 156, imageWidth: 303 },
+  voiceMessages: { imageAsset: '/images/Voice message 2.png',         imageHeight: 156, imageWidth: 233 },
+  memoir:        { imageAsset: '/images/Memoir 2.png',                imageHeight: 156, imageWidth: 268 },
 }
 
 // ─── Shared user identity ─────────────────────────────────────────────────────

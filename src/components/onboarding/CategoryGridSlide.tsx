@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
 
 const categories = [
-  { label: 'Family', image: '/images/Family 1.png' },
-  { label: 'Friends', image: '/images/Freinds 1.png' },
-  { label: 'Career', image: '/images/Career 1.png' },
-  { label: 'Life Stories', image: '/images/Favorites 1.png' },
+  { label: 'Family', image: '/images/Family 2.png' },
+  { label: 'Friends', image: '/images/Freinds 2.png' },
+  { label: 'Career', image: '/images/Career 2.png' },
+  { label: 'Life Stories', image: '/images/Favorites 2.png' },
 ]
 
 const stagger = {

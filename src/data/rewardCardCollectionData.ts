@@ -6,16 +6,16 @@ import type {
 
 // ─── Foundation images (matching profileData.ts) ────────────────────────────
 const IMG = {
-  family:     '/images/Family 1.png',
-  friends:    '/images/Freinds 1.png',
-  career:     '/images/Career 1.png',
-  education:  '/images/Education 1.png',
-  favorites:  '/images/Favorites 1.png',
-  coreValues: '/images/Core Values 1.png',
-  wisdom:     '/images/Wisdom 1.png',
-  letters:    '/images/Letters to loved ones 1.png',
-  voice:      '/images/Voice message 1.png',
-  memoir:     '/images/Memoir 1.png',
+  family:     '/images/Family 2.png',
+  friends:    '/images/Freinds 2.png',
+  career:     '/images/Career 2.png',
+  education:  '/images/Education 2.png',
+  favorites:  '/images/Favorites 2.png',
+  coreValues: '/images/Core Values 2.png',
+  wisdom:     '/images/Wisdom 2.png',
+  letters:    '/images/Letters to loved ones 2.png',
+  voice:      '/images/Voice message 2.png',
+  memoir:     '/images/Memoir 2.png',
 }
 
 // ─── Reward card templates ──────────────────────────────────────────────────

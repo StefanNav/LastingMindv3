@@ -25,7 +25,7 @@ export function FavoritesMilestonePage() {
 
   const handleKeepGoing = () => {
     const rewardCardData: RewardCardData = {
-      categoryImage: '/images/Favorites 1.png',
+      categoryImage: '/images/Favorites 2.png',
       categoryLabel: 'Favorites',
       moduleTitle: 'Your Favorite Things',
       items: answers.map((a) => ({

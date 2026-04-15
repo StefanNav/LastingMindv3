@@ -73,16 +73,19 @@ function RevealText({ text, onRevealComplete }: { text: string; onRevealComplete
 function ResponseBubble({
   text,
   onFullyRevealed,
+  skipAnimation = false,
 }: {
   text: string
   onFullyRevealed?: () => void
+  skipAnimation?: boolean
 }) {
-  const [phase, setPhase] = useState<'typing' | 'revealing'>('typing')
+  const [phase, setPhase] = useState<'typing' | 'revealing'>(skipAnimation ? 'revealing' : 'typing')
 
   useEffect(() => {
+    if (skipAnimation) return
     const t = setTimeout(() => setPhase('revealing'), TYPING_DURATION)
     return () => clearTimeout(t)
-  }, [])
+  }, [skipAnimation])
 
   return (
     <div className="max-w-[78%] rounded-2xl rounded-bl-md bg-lm-bg-card px-3.5 py-2.5 shadow-card overflow-hidden">
@@ -129,8 +132,21 @@ export function AudienceAppIntroScreen({ onComplete, onBack }: AudienceAppIntroS
   const [items, setItems] = useState<AnimationItem[]>([])
   const [showCTA, setShowCTA] = useState(false)
   const [revealedCount, setRevealedCount] = useState(0)
+  const [skipped, setSkipped] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const cancelledRef = useRef(false)
+
+  const handleSkip = useCallback(() => {
+    cancelledRef.current = true
+    const allItems: AnimationItem[] = []
+    for (let i = 0; i < QA_PAIRS.length; i++) {
+      allItems.push({ type: 'question', index: i })
+      allItems.push({ type: 'response', index: i })
+    }
+    setItems(allItems)
+    setSkipped(true)
+    setShowCTA(true)
+  }, [])
 
   const scrollToBottom = useCallback(() => {
     requestAnimationFrame(() => {
@@ -222,19 +238,23 @@ export function AudienceAppIntroScreen({ onComplete, onBack }: AudienceAppIntroS
         />
       </div>
 
-      {onBack && (
-        <div className="absolute top-[62px] left-4 z-20">
+      {/* Header bar */}
+      <div className="relative z-10 flex shrink-0 items-center justify-between border-b border-border/50 bg-[var(--lm-bg-primary)]/80 px-4 pb-3 pt-[62px] backdrop-blur-sm">
+        {onBack ? (
           <button type="button" onClick={onBack} className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5" aria-label="Go back">
-            <ArrowLeft className="size-6 text-white" />
+            <ArrowLeft className="size-5 text-white" />
           </button>
-        </div>
-      )}
+        ) : (
+          <div className="w-8" />
+        )}
 
-      {/* Skip link */}
-      <div className="relative z-10 flex justify-end px-4 pt-14">
+        <p className="font-display text-[18px] font-semibold leading-[1.2] text-foreground">
+          Welcome to LastingMind
+        </p>
+
         <button
           type="button"
-          onClick={onComplete}
+          onClick={handleSkip}
           className="font-sans text-[14px] font-medium text-[var(--lm-text-secondary)] transition-colors hover:text-foreground"
         >
           Skip
@@ -244,18 +264,9 @@ export function AudienceAppIntroScreen({ onComplete, onBack }: AudienceAppIntroS
       {/* Chat thread */}
       <div
         ref={scrollRef}
-        className="relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-4"
+        className="relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto px-4 pb-4 pt-8"
         style={{ scrollbarWidth: 'none' }}
       >
-        {/* Welcome heading */}
-        <motion.h1
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-          className="mb-6 font-display text-[28px] font-semibold leading-[1.15] tracking-tight text-foreground text-center"
-        >
-          Welcome to LastingMind
-        </motion.h1>
         {items.map((item, idx) => {
           const key = `${item.type}-${item.index}-${idx}`
 
@@ -289,6 +300,7 @@ export function AudienceAppIntroScreen({ onComplete, onBack }: AudienceAppIntroS
                 <ResponseBubble
                   text={QA_PAIRS[item.index].answer}
                   onFullyRevealed={() => setRevealedCount((c) => c + 1)}
+                  skipAnimation={skipped}
                 />
               </motion.div>
             )
@@ -305,7 +317,7 @@ export function AudienceAppIntroScreen({ onComplete, onBack }: AudienceAppIntroS
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-            className="relative z-10 px-4 pb-[50px] pt-2"
+            className="relative z-10 border-t border-border/50 bg-[var(--lm-bg-primary)] px-4 pb-[50px] pt-3"
           >
             <Button
               onClick={onComplete}

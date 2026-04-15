@@ -10,7 +10,7 @@ interface ChatThreadProps {
   creatorName?: string
   isThinking?: boolean
   showAnnotations?: boolean
-  onAddResponse?: () => void
+  isAudience?: boolean
 }
 
 function getInitials(name?: string) {
@@ -19,7 +19,7 @@ function getInitials(name?: string) {
   return (parts[0]?.[0] ?? '') + (parts[parts.length - 1]?.[0] ?? '')
 }
 
-export function ChatThread({ messages, avatarUrl, creatorName, isThinking = false, showAnnotations = true, onAddResponse }: ChatThreadProps) {
+export function ChatThread({ messages, avatarUrl, creatorName, isThinking = false, showAnnotations = true, isAudience = false }: ChatThreadProps) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export function ChatThread({ messages, avatarUrl, creatorName, isThinking = fals
               <div className="h-px flex-1 bg-border/50" />
             </div>
             {group.messages.map((msg) => (
-              <ChatBubble key={msg.id} message={msg} avatarUrl={avatarUrl} creatorName={creatorName} showAnnotations={showAnnotations} onAddResponse={onAddResponse} />
+              <ChatBubble key={msg.id} message={msg} avatarUrl={avatarUrl} creatorName={creatorName} showAnnotations={showAnnotations} isAudience={isAudience} />
             ))}
           </div>
         ))}

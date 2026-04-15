@@ -7,11 +7,13 @@ interface ExplainAnswerModalProps {
   onClose: () => void
   excerpts: { source: string; text: string }[]
   onToast: (message: string) => void
+  isAudience?: boolean
+  creatorFirstName?: string
 }
 
 const DRAG_CLOSE_THRESHOLD = 100
 
-export function ExplainAnswerModal({ isOpen, onClose, excerpts, onToast }: ExplainAnswerModalProps) {
+export function ExplainAnswerModal({ isOpen, onClose, excerpts, onToast, isAudience = false, creatorFirstName }: ExplainAnswerModalProps) {
   const shouldReduceMotion = useReducedMotion()
   const [additionText, setAdditionText] = useState('')
 
@@ -111,7 +113,9 @@ export function ExplainAnswerModal({ isOpen, onClose, excerpts, onToast }: Expla
 
               {/* Intro line */}
               <p className="text-[14px] leading-[1.5] text-muted-foreground">
-                This answer was shaped by things you've shared. Here are the relevant excerpts.
+                {isAudience
+                  ? `This answer was shaped by stories and memories ${creatorFirstName ?? 'your loved one'} has shared. Here’s what it’s based on.`
+                  : 'This answer was shaped by things you\'ve shared. Here are the relevant excerpts.'}
               </p>
 
               {/* Excerpt cards */}
@@ -131,46 +135,50 @@ export function ExplainAnswerModal({ isOpen, onClose, excerpts, onToast }: Expla
                 ))}
               </div>
 
-              {/* Divider */}
-              <div className="h-px bg-border/50" />
+              {!isAudience && (
+                <>
+                  {/* Divider */}
+                  <div className="h-px bg-border/50" />
 
-              {/* Add more section */}
-              <div className="flex flex-col gap-2">
-                <p className="text-[15px] font-semibold text-foreground">
-                  Want to add to this answer?
-                </p>
-                <p className="text-[13px] leading-[1.5] text-muted-foreground">
-                  If something is missing or you'd like to give more detail, you can add to it here. Your response will be saved and used to improve future answers.
-                </p>
-              </div>
+                  {/* Add more section */}
+                  <div className="flex flex-col gap-2">
+                    <p className="text-[15px] font-semibold text-foreground">
+                      Want to add to this answer?
+                    </p>
+                    <p className="text-[13px] leading-[1.5] text-muted-foreground">
+                      If something is missing or you'd like to give more detail, you can add to it here. Your response will be saved and used to improve future answers.
+                    </p>
+                  </div>
 
-              {/* Text area + mic */}
-              <div className="flex flex-col gap-3">
-                <textarea
-                  value={additionText}
-                  onChange={(e) => setAdditionText(e.target.value)}
-                  placeholder="Type your addition here…"
-                  rows={3}
-                  className="w-full resize-none rounded-[10px] border border-border bg-white px-4 py-3 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-lm-green/40"
-                />
-                <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    className="flex size-10 shrink-0 items-center justify-center rounded-full bg-lm-green transition-transform active:scale-95"
-                    aria-label="Record voice input"
-                  >
-                    <Mic className="size-4.5 text-white" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleSave}
-                    disabled={!additionText.trim()}
-                    className="flex flex-1 items-center justify-center rounded-[10px] bg-lm-green px-5 py-3 text-[15px] font-semibold text-white transition-colors disabled:opacity-40"
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
+                  {/* Text area + mic */}
+                  <div className="flex flex-col gap-3">
+                    <textarea
+                      value={additionText}
+                      onChange={(e) => setAdditionText(e.target.value)}
+                      placeholder="Type your addition here…"
+                      rows={3}
+                      className="w-full resize-none rounded-[10px] border border-border bg-white px-4 py-3 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-lm-green/40"
+                    />
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        className="flex size-10 shrink-0 items-center justify-center rounded-full bg-lm-green transition-transform active:scale-95"
+                        aria-label="Record voice input"
+                      >
+                        <Mic className="size-4.5 text-white" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleSave}
+                        disabled={!additionText.trim()}
+                        className="flex flex-1 items-center justify-center rounded-[10px] bg-lm-green px-5 py-3 text-[15px] font-semibold text-white transition-colors disabled:opacity-40"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </motion.div>
         </>

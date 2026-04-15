@@ -18,7 +18,7 @@ const navItems = [
 export function MobileShell({ children }: MobileShellProps) {
   const location = useLocation()
   const navigate = useNavigate()
-  const hideNav = location.pathname === '/onboarding' || location.pathname === '/success' || location.pathname === '/audience-home' || location.pathname.startsWith('/intro') || location.pathname.startsWith('/conversation') || location.pathname.startsWith('/reflection') || location.pathname.startsWith('/reflect') || location.pathname.startsWith('/favorites') || location.pathname.startsWith('/core-values') || location.pathname.startsWith('/life-chapters') || /^\/loved-ones\/[^/]+\//.test(location.pathname)
+  const hideNav = location.pathname === '/onboarding' || location.pathname === '/success' || location.pathname === '/audience-home' || location.pathname === '/chat' || location.pathname.startsWith('/intro') || location.pathname.startsWith('/conversation') || location.pathname.startsWith('/reflection') || location.pathname.startsWith('/reflect') || location.pathname.startsWith('/favorites') || location.pathname.startsWith('/core-values') || location.pathname.startsWith('/life-chapters') || /^\/loved-ones\/[^/]+\//.test(location.pathname)
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
@@ -54,7 +54,7 @@ export function MobileShell({ children }: MobileShellProps) {
 
         {/* Bottom Navigation — hidden during onboarding */}
         {!hideNav && (
-          <nav className="flex h-20 items-center justify-around border-t border-border bg-background pb-4">
+          <nav className="relative z-10 flex h-20 items-center justify-around border-t border-border bg-background pb-4">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path
               return (

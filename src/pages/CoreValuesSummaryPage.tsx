@@ -56,7 +56,7 @@ export function CoreValuesSummaryPage() {
 
   const handleSaveValues = () => {
     const rewardCardData: RewardCardData = {
-      categoryImage: '/images/Core Values 1.png',
+      categoryImage: '/images/Core Values 2.png',
       categoryLabel: 'Core Values',
       moduleTitle: 'What You Stand For',
       items: answers.map((a) => ({

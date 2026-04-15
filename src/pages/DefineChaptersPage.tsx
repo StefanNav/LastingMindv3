@@ -235,7 +235,7 @@ export function DefineChaptersPage() {
 
               {/* Image */}
               <img
-                src="/images/Life chapters 1.png"
+                src="/images/Life chapters 2.png"
                 alt="Life Chapters"
                 className="h-28 w-auto object-contain"
               />

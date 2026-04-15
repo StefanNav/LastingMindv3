@@ -38,12 +38,12 @@ export const mockHomePhases: HomePhase[] = [
     title: 'Foundation',
     label: 'Phase 1',
     categories: [
-      { id: 'cat-family', title: 'Family', image: '/images/Family 1.png', imageHeight: 156, imageWidth: 147, status: 'flourishing', totalModules: 3 },
-      { id: 'cat-friends', title: 'Friends', image: '/images/Freinds 1.png', imageHeight: 156, imageWidth: 270, status: 'budding', totalModules: 3 },
-      { id: 'cat-career', title: 'Career', image: '/images/Career 1.png', imageHeight: 145, imageWidth: 240, status: 'growing', totalModules: 3 },
-      { id: 'cat-education', title: 'Education', image: '/images/Education 1.png', imageHeight: 145, imageWidth: 240, status: 'growing', currentModule: 1, totalModules: 3 },
-      { id: 'cat-favorites', title: 'Favorites', image: '/images/Favorites 1.png', imageHeight: 156, imageWidth: 196, status: 'not_started', totalModules: 3 },
-      { id: 'cat-core-values', title: 'Core Values', image: '/images/Core Values 1.png', imageHeight: 145, imageWidth: 250, status: 'not_started', totalModules: 3 },
+      { id: 'cat-family', title: 'Family', image: '/images/Family 2.png', imageHeight: 156, imageWidth: 147, status: 'flourishing', totalModules: 3 },
+      { id: 'cat-friends', title: 'Friends', image: '/images/Freinds 2.png', imageHeight: 156, imageWidth: 270, status: 'budding', totalModules: 3 },
+      { id: 'cat-career', title: 'Career', image: '/images/Career 2.png', imageHeight: 145, imageWidth: 240, status: 'growing', totalModules: 3 },
+      { id: 'cat-education', title: 'Education', image: '/images/Education 2.png', imageHeight: 145, imageWidth: 240, status: 'growing', currentModule: 1, totalModules: 3 },
+      { id: 'cat-favorites', title: 'Favorites', image: '/images/Favorites 2.png', imageHeight: 156, imageWidth: 196, status: 'not_started', totalModules: 3 },
+      { id: 'cat-core-values', title: 'Core Values', image: '/images/Core Values 2.png', imageHeight: 145, imageWidth: 250, status: 'not_started', totalModules: 3 },
     ],
   },
   {
@@ -57,8 +57,8 @@ export const mockHomePhases: HomePhase[] = [
     title: 'Leave Your Legacy',
     label: 'Phase 3',
     categories: [
-      { id: 'cat-wisdom', title: 'Wisdom & Advice', image: '/images/Wisdom 1.png', imageHeight: 156, imageWidth: 219, status: 'budding', totalModules: 3 },
-      { id: 'cat-greatest-memories', title: 'Greatest Memories', image: '/images/Greatest Memories 1.png', imageHeight: 156, imageWidth: 270, status: 'not_started', totalModules: 3 },
+      { id: 'cat-wisdom', title: 'Wisdom & Advice', image: '/images/Wisdom 2.png', imageHeight: 156, imageWidth: 219, status: 'budding', totalModules: 3 },
+      { id: 'cat-greatest-memories', title: 'Greatest Memories', image: '/images/Greatest Memories 2.png', imageHeight: 156, imageWidth: 270, status: 'not_started', totalModules: 3 },
     ],
   },
   {
@@ -333,7 +333,7 @@ export const foundationIntroData: Record<string, ModuleIntroData> = {
   'cat-family': {
     categoryId: 'cat-family',
     categoryLabel: 'Family',
-    image: '/images/Family 1.png',
+    image: '/images/Family 2.png',
     imageHeight: 156,
     moduleTitle: "Who's in your family",
     description: "We'll have a quick conversation about the people closest to you. Just talk naturally, there are no wrong answers.",
@@ -341,7 +341,7 @@ export const foundationIntroData: Record<string, ModuleIntroData> = {
   'cat-friends': {
     categoryId: 'cat-friends',
     categoryLabel: 'Friends',
-    image: '/images/Freinds 1.png',
+    image: '/images/Freinds 2.png',
     imageHeight: 156,
     moduleTitle: 'Your Friend Circle',
     description: "We'll have a quick conversation about the friends who've shaped your life. Just speak naturally. There are no wrong answers.",
@@ -349,7 +349,7 @@ export const foundationIntroData: Record<string, ModuleIntroData> = {
   'cat-career': {
     categoryId: 'cat-career',
     categoryLabel: 'Career',
-    image: '/images/Career 1.png',
+    image: '/images/Career 2.png',
     imageHeight: 145,
     moduleTitle: 'Your Career Journey',
     description: "We'll have a quick conversation about the roles you've held and the path that brought you here. Just talk naturally, there are no wrong answers.",
@@ -357,7 +357,7 @@ export const foundationIntroData: Record<string, ModuleIntroData> = {
   'cat-education': {
     categoryId: 'cat-education',
     categoryLabel: 'Education',
-    image: '/images/Education 1.png',
+    image: '/images/Education 2.png',
     imageHeight: 145,
     moduleTitle: 'Your School Years',
     description: "We'll have a quick conversation about the places you learned and the experiences that shaped your mind. Just talk naturally, there are no wrong answers.",
@@ -365,7 +365,7 @@ export const foundationIntroData: Record<string, ModuleIntroData> = {
   'cat-favorites': {
     categoryId: 'cat-favorites',
     categoryLabel: 'Favorites',
-    image: '/images/Favorites 1.png',
+    image: '/images/Favorites 2.png',
     imageHeight: 156,
     moduleTitle: 'Your Favorite Things',
     description: "Spin the slot machine to land on a category, then tell us about the things you love most. Ten quick questions, just have fun with it.",
@@ -373,7 +373,7 @@ export const foundationIntroData: Record<string, ModuleIntroData> = {
   'cat-core-values': {
     categoryId: 'cat-core-values',
     categoryLabel: 'Core Values',
-    image: '/images/Core Values 1.png',
+    image: '/images/Core Values 2.png',
     imageHeight: 145,
     moduleTitle: 'What You Stand For',
     description: "We'll have a quick conversation about the principles and beliefs that have guided your life. Just talk naturally, there are no wrong answers.",
@@ -398,7 +398,7 @@ export const module2IntroData: Record<string, Module2IntroData> = {
   'cat-family': {
     categoryId: 'cat-family',
     categoryLabel: 'Family',
-    image: '/images/Family 1.png',
+    image: '/images/Family 2.png',
     imageWidth: 132,
     moduleTitle: 'Tell us about a family member',
     description: 'Pick someone from your family and share a memory.',
@@ -410,7 +410,7 @@ export const module2IntroData: Record<string, Module2IntroData> = {
   'cat-friends': {
     categoryId: 'cat-friends',
     categoryLabel: 'Friends',
-    image: '/images/Freinds 1.png',
+    image: '/images/Freinds 2.png',
     imageWidth: 242,
     moduleTitle: 'Tell us about a friend',
     description: 'Pick someone from your friend circle and share a memory.',
@@ -429,7 +429,7 @@ export const module2IntroData: Record<string, Module2IntroData> = {
   'cat-career': {
     categoryId: 'cat-career',
     categoryLabel: 'Career',
-    image: '/images/Career 1.png',
+    image: '/images/Career 2.png',
     imageWidth: 233,
     moduleTitle: 'Share a work story',
     description: 'Pick a role, then share a story or memory from that time. Just talk naturally.',
@@ -445,7 +445,7 @@ export const module2IntroData: Record<string, Module2IntroData> = {
   'cat-education': {
     categoryId: 'cat-education',
     categoryLabel: 'Education',
-    image: '/images/Education 1.png',
+    image: '/images/Education 2.png',
     imageWidth: 242,
     moduleTitle: 'Share a school story',
     description: 'Pick a school or program, then share a story or memory from that time. Just talk naturally.',
@@ -461,7 +461,7 @@ export const module2IntroData: Record<string, Module2IntroData> = {
   'cat-favorites': {
     categoryId: 'cat-favorites',
     categoryLabel: 'Favorites',
-    image: '/images/Favorites 1.png',
+    image: '/images/Favorites 2.png',
     imageWidth: 242,
     moduleTitle: 'Why they matter',
     description: 'Pick a category, then tell us what makes it special to you. Just talk naturally.',
@@ -477,7 +477,7 @@ export const module2IntroData: Record<string, Module2IntroData> = {
   'cat-core-values': {
     categoryId: 'cat-core-values',
     categoryLabel: 'Core Values',
-    image: '/images/Core Values 1.png',
+    image: '/images/Core Values 2.png',
     imageWidth: 242,
     moduleTitle: 'Values in action',
     description: 'Pick a value, then share a time it was tested or proved true. Just talk naturally.',

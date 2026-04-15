@@ -25,7 +25,7 @@ const unlockItems: UnlockItem[] = [
     status: 'Unlocked',
   },
   {
-    image: '/images/Life chapters 1.png',
+    image: '/images/Life chapters 2.png',
     imageWidth: 32,
     imageHeight: 32,
     title: 'Phase 2 — Life Chapters',
@@ -118,7 +118,7 @@ export function FoundationUnlockSummaryScreen({
             <div className="flex items-center gap-2">
               <div className="size-8 shrink-0 overflow-hidden rounded-full">
                 <img
-                  src="/images/Life chapters 1.png"
+                  src="/images/Life chapters 2.png"
                   alt="Life Chapters"
                   className="h-full w-full object-cover"
                 />

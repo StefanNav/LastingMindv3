@@ -10,7 +10,7 @@ const chapterDetails: Record<string, ChapterDetailData> = {
   'ch-early': {
     chapterId: 'ch-early',
     description:
-      'The earliest years of my life were shaped by the people and places that surrounded me. Growing up in Charleston, every corner of our neighborhood held a story. These are the moments I carry with me — small, quiet memories that built the foundation of who I became.',
+      'The earliest years of my life were shaped by the people and places that surrounded me. Growing up in Charleston, every corner of our neighborhood held a story — the creak of the front gate, the smell of magnolias after a summer rain, the sound of my father\'s truck pulling into the driveway at dusk. These were the rhythms that defined my world before I knew the world was any bigger.\n\nI didn\'t understand it then, but those years laid down something permanent in me. The way my mother spoke to strangers, the way my father fixed things without ever reading instructions, the afternoons spent barefoot in a yard that felt like the whole earth — all of it became the soil I grew from. Looking back, I can see how every small moment carried weight I wouldn\'t feel until much later.\n\nThese are the memories I carry with me — quiet, ordinary, and irreplaceable. They are the foundation of who I became, and the beginning of the story I want to leave behind.',
     entries: [
       {
         id: 'ce-early-1',

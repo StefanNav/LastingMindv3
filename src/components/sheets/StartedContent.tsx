@@ -71,8 +71,8 @@ export function StartedContent({ category, detail, onBeginModule }: StartedConte
         </motion.div>
       )}
 
-      {/* More Ways to Grow */}
-      {detail.growthActions && detail.growthActions.length > 0 && (
+      {/* More Ways to Grow — only after first two modules complete */}
+      {detail.modules[0]?.completed && detail.modules[1]?.completed && detail.growthActions && detail.growthActions.length > 0 && (
         <motion.div variants={itemVariants}>
           <MoreWaysToGrow actions={detail.growthActions} />
         </motion.div>

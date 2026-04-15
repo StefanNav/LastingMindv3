@@ -6,6 +6,7 @@ interface ConversationStarterProps {
   avatarUrl?: string | null
   creatorName?: string
   onSelect: (question: string) => void
+  starters?: string[]
 }
 
 function getInitials(name?: string) {
@@ -14,7 +15,7 @@ function getInitials(name?: string) {
   return (parts[0]?.[0] ?? '') + (parts[parts.length - 1]?.[0] ?? '')
 }
 
-export function ConversationStarter({ avatarUrl, creatorName, onSelect }: ConversationStarterProps) {
+export function ConversationStarter({ avatarUrl, creatorName, onSelect, starters }: ConversationStarterProps) {
   const initials = getInitials(creatorName)
 
   return (
@@ -50,7 +51,7 @@ export function ConversationStarter({ avatarUrl, creatorName, onSelect }: Conver
         transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
         className="flex w-full flex-col gap-3"
       >
-        {defaultConversationStarters.map((question, i) => (
+        {(starters ?? defaultConversationStarters).map((question, i) => (
           <motion.button
             key={question}
             type="button"

@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState } from 'react'
 import { PageTransition } from '@/animations/PageTransition'
 import { useApp } from '@/app/AppProvider'
 import { getProfileData } from '@/data/profileData'
@@ -6,7 +6,6 @@ import { ChatLockedPage } from './ChatLockedPage'
 import { ChatHeader } from '@/components/chat/ChatHeader'
 import { ChatThread } from '@/components/chat/ChatThread'
 import { ChatInputBar } from '@/components/chat/ChatInputBar'
-import { SuggestionChips } from '@/components/chat/SuggestionChips'
 import { ChatMenuSheet } from '@/components/chat/ChatMenuSheet'
 import { SuggestedCategoriesSheet } from '@/components/chat/SuggestedCategoriesSheet'
 import { ConversationStarter } from '@/components/chat/ConversationStarter'
@@ -18,14 +17,6 @@ export function ChatPage() {
   const engine = useChatEngine()
   const [menuOpen, setMenuOpen] = useState(false)
   const [categoriesOpen, setCategoriesOpen] = useState(false)
-  const [isAddingResponse, setIsAddingResponse] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  const handleAddResponse = useCallback(() => {
-    setIsAddingResponse(true)
-    inputRef.current?.focus()
-  }, [])
-
   // Locked state — Phase 1 not complete
   if (!profile.phase1Complete) {
     return <ChatLockedPage />
@@ -33,7 +24,6 @@ export function ChatPage() {
 
   const handleSend = (text: string) => {
     engine.sendMessage(text)
-    setIsAddingResponse(false)
   }
 
   const hasMessages = engine.messages.length > 0 || engine.isThinking
@@ -60,15 +50,8 @@ export function ChatPage() {
                 creatorName={profile.user.name}
                 isThinking={engine.isThinking}
                 showAnnotations={false}
-                onAddResponse={handleAddResponse}
               />
 
-              {!isAddingResponse && engine.suggestedQuestions.length > 0 && !engine.isThinking && (
-                <SuggestionChips
-                  suggestions={engine.suggestedQuestions}
-                  onSelect={handleSend}
-                />
-              )}
             </>
           ) : (
             <ConversationStarter
@@ -78,15 +61,7 @@ export function ChatPage() {
             />
           )}
 
-          {isAddingResponse && (
-            <div className="px-4 py-2">
-              <p className="text-[13px] text-muted-foreground">
-                Share your response — it’ll be saved for next time this comes up.
-              </p>
-            </div>
-          )}
-
-          <ChatInputBar onSend={handleSend} externalInputRef={inputRef} />
+          <ChatInputBar onSend={handleSend} />
         </div>
 
         <ChatMenuSheet

@@ -106,7 +106,7 @@ export function HomePage() {
         </div>
 
         {/* ── Header ── */}
-        <div className="relative z-[60]">
+        <div className="relative z-10">
           <HomeHeader />
         </div>
 
@@ -255,10 +255,29 @@ export function HomePage() {
                     </div>
 
                     {/* Define Your Life Chapters card — only interactive when Phase 1 complete */}
-                    <DefineChaptersCard
-                      mode="define"
-                      onClick={foundationStars >= 6 ? () => navigate('/life-chapters/define') : undefined}
-                    />
+                    {foundationStars >= 6 ? (
+                      <DefineChaptersCard
+                        mode="define"
+                        onClick={() => navigate('/life-chapters/define')}
+                      />
+                    ) : (
+                      <LockedFeatureCard
+                        image="/images/Life chapters 2.png"
+                        title="Define your life chapters"
+                        subtitle="Name the chapters of your life — once saved, each one becomes its own story card."
+                        unlocked={false}
+                        onClick={() => setSelectedFeature({
+                          id: 'define-chapters',
+                          image: '/images/Life chapters 2.png',
+                          title: 'Define Your Life Chapters',
+                          description: 'Break your life into meaningful chapters — childhood, career, relationships, and more. Each chapter becomes a story card you can explore and build on.',
+                          unlockMessage: 'Earn at least 1 star in every Phase 1 category to unlock Life Chapters. Complete both modules in a category to earn your first star.',
+                          unlocked: false,
+                          unlockedDescription: 'You\'ve unlocked Life Chapters. Name the chapters of your life and each one becomes its own story card to explore.',
+                          ctaLabel: 'Define Your Chapters',
+                        })}
+                      />
+                    )}
                   </>
                 ) : (
                   <>
@@ -267,7 +286,7 @@ export function HomePage() {
                       const chapterAsCategory: Category = {
                         id: chapter.id,
                         title: chapter.title,
-                        image: '/images/Life chapters 1.png',
+                        image: '/images/Life chapters 2.png',
                         imageHeight: 156,
                         imageWidth: 252,
                         status: chapter.starsEarned >= 3 ? 'flourishing' : chapter.starsEarned >= 2 ? 'budding' : chapter.starsEarned >= 1 ? 'growing' : chapter.step1Status !== 'not_started' ? 'started' : 'not_started',
@@ -391,6 +410,7 @@ export function HomePage() {
           setSelectedFeature(null)
           if (featureId === 'chat-lastingmind') navigate('/chat')
           if (featureId === 'invite-audience') navigate('/loved-ones')
+          if (featureId === 'define-chapters') navigate('/life-chapters/define')
         }}
       />
 

@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Mic, MessageCircle, Sparkles, Send, MoreHorizontal, Star, TreePine } from 'lucide-react'
+import { Mic, MessageCircle, Sparkles, Send, MoreHorizontal, Star } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PageTransition } from '@/animations/PageTransition'
 import { mockLovedOnes } from '@/data/lovedOnesData'
 import { useApp } from '@/app/AppProvider'
 import { Button } from '@/components/ui/button'
+import { AudienceMenuSheet } from '@/components/profile/AudienceMenuSheet'
+import { ManageCreatorsSheet } from '@/components/sheets/ManageCreatorsSheet'
 import type { LovedOneCreator } from '@/types'
 
 function CreatorCard({ creator }: { creator: LovedOneCreator }) {
@@ -73,7 +75,7 @@ function StartYourOwnCard() {
   return (
     <div className="flex flex-col items-center gap-4 rounded-[10px] bg-lm-bg-card/40 p-6 shadow-card backdrop-blur-sm text-center">
       <div className="flex size-16 items-center justify-center rounded-full bg-lm-green/10">
-        <TreePine className="size-8 text-lm-green" />
+        <img src="/images/onboarding/SplashPageTree.png" alt="Tree" className="size-10 object-contain" />
       </div>
       <div className="flex flex-col gap-2">
         <h3 className="font-display text-lg font-semibold text-foreground">
@@ -118,7 +120,10 @@ function WelcomeToast({ creatorName, onDismiss }: { creatorName: string; onDismi
 export function AudienceHomePage() {
   const { audienceCreatorName, hasSeenAudienceWelcome, setHasSeenAudienceWelcome } = useApp()
   const [showToast, setShowToast] = useState(!hasSeenAudienceWelcome)
-  const creators = mockLovedOnes
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [manageOpen, setManageOpen] = useState(false)
+  const [removedIds, setRemovedIds] = useState<Set<string>>(new Set())
+  const creators = mockLovedOnes.filter((c) => !removedIds.has(c.id))
 
   const dismissToast = () => {
     setShowToast(false)
@@ -151,6 +156,7 @@ export function AudienceHomePage() {
           </div>
           <button
             type="button"
+            onClick={() => setMenuOpen(true)}
             className="mt-0.5 shrink-0 rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted"
             aria-label="More options"
           >
@@ -186,6 +192,18 @@ export function AudienceHomePage() {
 
         <div className="pb-4" />
       </div>
+
+      <AudienceMenuSheet
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        onManageCreators={() => setManageOpen(true)}
+      />
+      <ManageCreatorsSheet
+        isOpen={manageOpen}
+        onClose={() => setManageOpen(false)}
+        creators={creators}
+        onRemove={(id) => setRemovedIds((prev) => new Set(prev).add(id))}
+      />
     </PageTransition>
   )
 }

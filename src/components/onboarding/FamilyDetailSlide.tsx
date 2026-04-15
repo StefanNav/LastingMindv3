@@ -6,7 +6,7 @@ import type { Category } from '@/types'
 const familyCategory: Category = {
   id: 'cat-family',
   title: 'Family',
-  image: '/images/Family 1.png',
+  image: '/images/Family 2.png',
   imageHeight: 156,
   imageWidth: 147,
   status: 'flourishing',

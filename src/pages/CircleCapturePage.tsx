@@ -54,6 +54,7 @@ export function CircleCapturePage({ config, onComplete, onBack, onExit }: Circle
               <GroupSelectionScreen
                 key="group-select"
                 categoryLabel={config.categoryLabel}
+                contextLine={config.contextLine}
                 promptText={config.groupSelectionPrompt}
                 groups={config.groups}
                 selectedGroupIds={flow.selectedGroupIds}
@@ -76,7 +77,9 @@ export function CircleCapturePage({ config, onComplete, onBack, onExit }: Circle
                 hasSubmittedNames={flow.hasSubmittedNames}
                 inputMode={flow.inputMode}
                 isRecording={flow.isRecording}
-                isLastGroup={flow.isLastGroup}
+                conversationStep={flow.conversationStep}
+                conversationMessages={flow.conversationMessages}
+                currentFollowUp={flow.currentFollowUp}
                 onSetInputMode={flow.setInputMode}
                 onStartRecording={flow.startRecording}
                 onStopRecording={flow.stopRecording}
@@ -84,7 +87,10 @@ export function CircleCapturePage({ config, onComplete, onBack, onExit }: Circle
                 onEditPersonName={flow.editPersonName}
                 onRemovePersonFromGroup={flow.removePersonFromGroup}
                 onAddPersonToGroup={flow.addPersonToGroup}
-                onNext={flow.nextGroup}
+                onConfirmNames={flow.confirmNames}
+                onSubmitFollowUpAnswer={flow.submitFollowUpAnswer}
+                onReviewList={flow.reviewList}
+                isLastGroup={flow.isLastGroup}
                 onSkip={flow.skipGroup}
                 onBack={handleBackFromCapture}
               />
@@ -99,6 +105,7 @@ export function CircleCapturePage({ config, onComplete, onBack, onExit }: Circle
                 onEditPerson={flow.editPerson}
                 onRemovePerson={flow.removePerson}
                 onAddPerson={flow.addPerson}
+                onBack={flow.goBackFromSummary}
                 onSave={onComplete}
               />
             )}

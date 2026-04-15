@@ -62,7 +62,7 @@ export const availableLegacyItems: LegacyItem[] = [
     description: 'Write a personal letter to someone who matters to you',
     icon: 'Mail',
     iconColor: 'bg-sky-100 text-sky-700',
-    image: '/images/Letters to loved ones 1.png',
+    image: '/images/Letters to loved ones 2.png',
   },
   {
     id: 'legacy-voice-messages',
@@ -70,7 +70,7 @@ export const availableLegacyItems: LegacyItem[] = [
     description: 'Record a message in your own words and voice',
     icon: 'Mic',
     iconColor: 'bg-emerald-100 text-emerald-700',
-    image: '/images/Voice message 1.png',
+    image: '/images/Voice message 2.png',
   },
   {
     id: 'legacy-video-messages',
@@ -106,6 +106,6 @@ export const availableLegacyItems: LegacyItem[] = [
     description: 'Write the story of your life in your own words',
     icon: 'FileText',
     iconColor: 'bg-stone-100 text-stone-700',
-    image: '/images/Memoir 1.png',
+    image: '/images/Memoir 2.png',
   },
 ]

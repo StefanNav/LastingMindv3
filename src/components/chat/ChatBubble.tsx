@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Leaf } from 'lucide-react'
 import { ExplainAnswerModal } from './ExplainAnswerModal'
 import { ProvideNewAnswerModal } from './ProvideNewAnswerModal'
 import { ResponseActionBar } from './ResponseActionBar'
@@ -11,7 +10,7 @@ interface ChatBubbleProps {
   avatarUrl?: string | null
   creatorName?: string
   showAnnotations?: boolean
-  onAddResponse?: () => void
+  isAudience?: boolean
 }
 
 function getInitials(name?: string) {
@@ -20,11 +19,11 @@ function getInitials(name?: string) {
   return (parts[0]?.[0] ?? '') + (parts[parts.length - 1]?.[0] ?? '')
 }
 
-export function ChatBubble({ message, avatarUrl, creatorName, showAnnotations = true, onAddResponse }: ChatBubbleProps) {
+export function ChatBubble({ message, avatarUrl, creatorName, showAnnotations = true, isAudience = false }: ChatBubbleProps) {
   const isUser = message.sender === 'user'
   const initials = getInitials(creatorName)
   const [explainOpen, setExplainOpen] = useState(false)
-  const [newAnswerOpen, setNewAnswerOpen] = useState(false)
+  const [newAnswerVariant, setNewAnswerVariant] = useState<'replace' | 'gap' | null>(null)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
 
   useEffect(() => {
@@ -39,11 +38,11 @@ export function ChatBubble({ message, avatarUrl, creatorName, showAnnotations = 
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-      className={`flex gap-2 px-4 py-1.5 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
+      className={`flex flex-col px-4 py-1.5 ${isUser ? 'items-end' : 'items-start'}`}
     >
       {/* Avatar — only for LastingMind messages */}
       {!isUser && (
-        <div className="relative mt-1 shrink-0">
+        <div className="relative mb-1 shrink-0">
           {avatarUrl ? (
             <img
               src={avatarUrl}
@@ -55,14 +54,11 @@ export function ChatBubble({ message, avatarUrl, creatorName, showAnnotations = 
               <span className="text-xs font-bold text-primary">{initials}</span>
             </div>
           )}
-          <div className="absolute -bottom-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-lm-green">
-            <Leaf className="size-2.5 text-white" />
-          </div>
         </div>
       )}
 
       {/* Bubble content */}
-      <div className={`flex max-w-[78%] flex-col gap-1 ${isUser ? 'items-end' : 'items-start'}`}>
+      <div className={`flex max-w-[88%] flex-col gap-1 ${isUser ? 'items-end' : 'items-start'}`}>
         <div
           className={`rounded-2xl px-3.5 py-2.5 ${
             isUser
@@ -75,42 +71,39 @@ export function ChatBubble({ message, avatarUrl, creatorName, showAnnotations = 
           </p>
         </div>
 
-        {/* Explain answer label */}
-        {!isUser && message.sourceEntry && (
-          <button
-            type="button"
-            onClick={() => setExplainOpen(true)}
-            className="px-1 text-[12px] font-medium text-lm-gold transition-colors hover:text-lm-gold-muted"
-          >
-            Explain answer ›
-          </button>
-        )}
-
-        {/* Provide a new answer label */}
-        {!isUser && message.sourceEntry && (
-          <button
-            type="button"
-            onClick={() => setNewAnswerOpen(true)}
-            className="px-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground/70"
-          >
-            Provide a new answer ›
-          </button>
-        )}
-
-        {/* Response action bar */}
-        {!isUser && message.sourceEntry && (
-          <ResponseActionBar />
-        )}
-
-        {/* Add a response — gap responses only (Legacy Creator view) */}
-        {!isUser && message.isGapResponse && onAddResponse && (
-          <button
-            type="button"
-            onClick={onAddResponse}
-            className="px-1 text-[12px] font-medium text-lm-green transition-colors hover:text-lm-green-dark"
-          >
-            Add a response ›
-          </button>
+        {/* Action row — icons + answer action */}
+        {!isUser && (
+          <div className="flex items-center gap-2">
+            {!isAudience && (
+              message.isGapResponse ? (
+                <button
+                  type="button"
+                  onClick={() => setNewAnswerVariant('gap')}
+                  className="rounded-full border border-lm-green/30 bg-lm-green/8 px-3 py-1 text-[11px] font-semibold text-lm-green transition-colors hover:bg-lm-green/15 active:scale-[0.97]"
+                >
+                  Add a response
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setNewAnswerVariant('replace')}
+                  className="text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground/70"
+                >
+                  Provide a new answer ›
+                </button>
+              )
+            )}
+            <ResponseActionBar />
+            {message.sourceEntry && (
+              <button
+                type="button"
+                onClick={() => setExplainOpen(true)}
+                className="text-[12px] font-medium text-lm-gold transition-colors hover:text-lm-gold-muted"
+              >
+                {isAudience ? 'Where this answer came from ›' : 'Explain answer ›'}
+              </button>
+            )}
+          </div>
         )}
 
         {/* Tutorial annotation */}
@@ -128,13 +121,16 @@ export function ChatBubble({ message, avatarUrl, creatorName, showAnnotations = 
           onClose={() => setExplainOpen(false)}
           excerpts={message.excerpts}
           onToast={setToastMessage}
+          isAudience={isAudience}
+          creatorFirstName={creatorName?.split(' ')[0]}
         />
       )}
-      {!isUser && (
+      {!isUser && !isAudience && (
         <ProvideNewAnswerModal
-          isOpen={newAnswerOpen}
-          onClose={() => setNewAnswerOpen(false)}
+          isOpen={newAnswerVariant !== null}
+          onClose={() => setNewAnswerVariant(null)}
           onToast={setToastMessage}
+          variant={newAnswerVariant ?? 'replace'}
         />
       )}
 

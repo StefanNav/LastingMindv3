@@ -102,16 +102,16 @@ export function PersonDetailSheet({ isOpen, person, categoryLabel, onClose }: Pe
             {/* Scrollable content */}
             <div className="flex-1 overflow-y-auto px-6 pb-10 pt-2">
               {/* Category label */}
-              <h3 className="font-display text-xl font-semibold text-foreground">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-lm-gold">
                 {categoryLabel}
-              </h3>
+              </p>
 
               {/* Person info */}
-              <div className="mt-3 flex flex-col gap-1">
-                <h2 className="font-display text-2xl font-semibold leading-tight text-foreground">
+              <div className="mt-2 flex flex-col gap-1">
+                <h2 className="font-display text-[22px] font-semibold leading-tight text-foreground">
                   {person.fullName ?? person.name}
                 </h2>
-                <p className="text-sm font-medium text-lm-gold-muted">
+                <p className="text-[13px] font-medium text-muted-foreground">
                   {person.dateLabel ?? person.relationshipLabel}
                 </p>
               </div>

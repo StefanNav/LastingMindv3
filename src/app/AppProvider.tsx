@@ -33,6 +33,9 @@ interface AppContextValue {
   chatMessages: ChatMessage[]
   addChatMessage: (msg: ChatMessage) => void
   clearChatMessages: () => void
+  audienceChatMessages: ChatMessage[]
+  addAudienceChatMessage: (msg: ChatMessage) => void
+  clearAudienceChatMessages: () => void
   addedLegacyItemIds: string[]
   addLegacyItem: (id: string) => void
   legacyItemStatuses: Record<string, LegacyItemStatus>
@@ -87,6 +90,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [hasSeenAudienceWelcome, setHasSeenAudienceWelcome] = useState(false)
   const [audienceMembers, setAudienceMembers] = useState<AudienceMember[]>(defaultAudienceMembers)
   const [hasSeenChaptersWelcome, setHasSeenChaptersWelcome] = useState(false)
+  const [audienceChatMessages, setAudienceChatMessages] = useState<ChatMessage[]>([])
 
   // Simulate invite deep link via ?invite=true URL param
   useEffect(() => {
@@ -103,6 +107,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const addChatMessage = (msg: ChatMessage) => setChatMessages((prev) => [...prev, msg])
   const clearChatMessages = () => setChatMessages([])
+  const addAudienceChatMessage = (msg: ChatMessage) => setAudienceChatMessages((prev) => [...prev, msg])
+  const clearAudienceChatMessages = () => setAudienceChatMessages([])
 
   const addLegacyItem = (id: string) => {
     setAddedLegacyItemIds((prev) => prev.includes(id) ? prev : [...prev, id])
@@ -136,6 +142,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
     // Reset chat state on demo switch
     setChatMessages([])
+    setAudienceChatMessages([])
     setAddedLegacyItemIds([])
     setLegacyItemStatuses({})
     // Auto-populate life chapters from demo config
@@ -171,6 +178,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     chatMessages,
     addChatMessage,
     clearChatMessages,
+    audienceChatMessages,
+    addAudienceChatMessage,
+    clearAudienceChatMessages,
     addedLegacyItemIds,
     addLegacyItem,
     legacyItemStatuses,
@@ -185,7 +195,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setHasSeenAudienceWelcome,
     audienceMembers,
     addAudienceMember,
-  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters, chatMessages, addedLegacyItemIds, legacyItemStatuses, hasInviteToken, userState, audienceCreatorName, hasSeenAudienceWelcome, hasSeenChaptersWelcome, audienceMembers])
+  }), [state, activeDemoId, onboardingKey, demoConfig, hasCompletedFirstModule, module2Runs, module1Completions, lifeChapters, chatMessages, audienceChatMessages, addedLegacyItemIds, legacyItemStatuses, hasInviteToken, userState, audienceCreatorName, hasSeenAudienceWelcome, hasSeenChaptersWelcome, audienceMembers])
 
   return (
     <AppContext.Provider value={value}>

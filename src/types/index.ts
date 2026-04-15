@@ -449,11 +449,19 @@ export interface GuidedSummaryEntry {
 
 // ── Circle Capture types ─────────────────────────────────────────────────────
 
+export interface FollowUpPrompt {
+  template: string        // e.g. "Is [Name] your brother or sister?"
+  field: 'relationship' | 'side' | 'context'
+  options?: string[]      // optional quick-pick chip values
+  mockAnswer?: string     // mock answer used when simulating
+}
+
 export interface CircleCaptureGroup {
   id: string
   label: string
   defaultRelationship: string
   prompt: string
+  followUpPrompts: FollowUpPrompt[]
 }
 
 export interface CircleCaptureConfig {
@@ -462,6 +470,7 @@ export interface CircleCaptureConfig {
   groups: CircleCaptureGroup[]
   confirmationCTALabel: string
   groupSelectionPrompt: string
+  contextLine: string
 }
 
 export interface CapturedPerson {
@@ -469,6 +478,8 @@ export interface CapturedPerson {
   name: string
   relationship: string
   groupId: string
+  side?: string           // e.g. "mother's side" / "father's side"
+  context?: string        // e.g. "school", "work", how they met
 }
 
 // ── Phase 4 types ────────────────────────────────────────────────────────────

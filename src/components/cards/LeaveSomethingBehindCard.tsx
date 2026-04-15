@@ -1,4 +1,3 @@
-import { Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface LeaveSomethingBehindCardProps {
@@ -17,9 +16,13 @@ export function LeaveSomethingBehindCard({ onClick }: LeaveSomethingBehindCardPr
         'transition-transform active:scale-[0.97]',
       )}
     >
-      {/* Plus icon */}
+      {/* Icon */}
       <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-lm-green/10">
-        <Plus className="size-7 text-lm-green" />
+        <img
+          src="/images/Letters to loved ones 2.png"
+          alt=""
+          className="size-9 object-contain"
+        />
       </div>
 
       {/* Text block */}

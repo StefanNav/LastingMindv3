@@ -7,6 +7,7 @@ import type { CircleCaptureGroup } from '@/types'
 
 interface GroupSelectionScreenProps {
   categoryLabel: string
+  contextLine: string
   promptText: string
   groups: CircleCaptureGroup[]
   selectedGroupIds: string[]
@@ -19,6 +20,7 @@ interface GroupSelectionScreenProps {
 
 export function GroupSelectionScreen({
   categoryLabel,
+  contextLine,
   promptText,
   groups,
   selectedGroupIds,
@@ -47,11 +49,11 @@ export function GroupSelectionScreen({
 
       {/* Content */}
       <div className="flex flex-1 flex-col overflow-y-auto px-5 pt-8">
-        <p className="mb-1 text-center font-display text-[22px] font-normal leading-tight text-foreground">
+        <p className="mb-2 text-center font-display text-[18px] font-semibold leading-tight text-foreground">
           {promptText}
         </p>
-        <p className="mb-6 text-center text-[14px] text-muted-foreground">
-          Select all that apply.
+        <p className="mb-6 text-center text-[14px] leading-[1.5] text-muted-foreground">
+          {contextLine}
         </p>
 
         <div className="flex flex-col gap-3">
@@ -127,7 +129,7 @@ export function GroupSelectionScreen({
                 isNoneSelected ? 'text-foreground' : 'text-muted-foreground',
               )}
             >
-              None of the above — skip to next
+              Skip and add names manually
             </span>
           </button>
         </div>

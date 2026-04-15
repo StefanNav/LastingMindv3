@@ -1,9 +1,17 @@
 import { useState, useCallback, useRef } from 'react'
-import type { CircleCaptureConfig, CapturedPerson } from '@/types'
+import type { CircleCaptureConfig, CapturedPerson, FollowUpPrompt } from '@/types'
 import { mockNamesPerGroup, NONE_GROUP_ID } from '@/data/circleCaptureData'
 
 export type CircleCaptureScreen = 'group-select' | 'name-capture' | 'summary'
 export type CaptureInputMode = 'voice' | 'text'
+export type ConversationStep = 'awaiting-names' | 'reviewing-names' | 'follow-up' | 'transitioning'
+
+export interface ConversationMessage {
+  id: string
+  sender: 'lm' | 'user'
+  content: string
+  timestamp: number
+}
 
 interface UseCircleCaptureReturn {
   // Screen state
@@ -17,7 +25,7 @@ interface UseCircleCaptureReturn {
   canStart: boolean
   startCapture: () => void
 
-  // Screen 2 — Name Capture
+  // Screen 2 — Conversational Name Capture
   currentGroupIndex: number
   totalGroups: number
   currentGroupLabel: string
@@ -39,12 +47,25 @@ interface UseCircleCaptureReturn {
   goBackFromCapture: () => void
   isLastGroup: boolean
 
+  // Conversation flow state
+  conversationStep: ConversationStep
+  conversationMessages: ConversationMessage[]
+  currentFollowUp: FollowUpPrompt | null
+  followUpIndex: number
+  confirmNames: () => void
+  submitFollowUpAnswer: (answer: string) => void
+  reviewList: () => void
+  nextGroupLabel: string
+
   // Screen 3 — Summary Table
   allPeople: CapturedPerson[]
   editPerson: (personId: string, field: 'name' | 'relationship', value: string) => void
   removePerson: (personId: string) => void
   addPerson: (name: string, relationship: string) => void
   confirmationCTALabel: string
+
+  // Summary navigation
+  goBackFromSummary: () => void
 
   // Exit
   hasProgress: boolean
@@ -53,6 +74,15 @@ interface UseCircleCaptureReturn {
 let nextId = 1
 function genId() {
   return `cp-${nextId++}`
+}
+
+let msgId = 1
+function genMsgId() {
+  return `cmsg-${msgId++}`
+}
+
+function createMsg(sender: 'lm' | 'user', content: string): ConversationMessage {
+  return { id: genMsgId(), sender, content, timestamp: Date.now() }
 }
 
 export function useCircleCapture(config: CircleCaptureConfig): UseCircleCaptureReturn {
@@ -65,7 +95,13 @@ export function useCircleCapture(config: CircleCaptureConfig): UseCircleCaptureR
   const [inputMode, setInputMode] = useState<CaptureInputMode>('voice')
   const [isRecording, setIsRecording] = useState(false)
 
+  // Conversation flow state
+  const [conversationStep, setConversationStep] = useState<ConversationStep>('awaiting-names')
+  const [conversationMessages, setConversationMessages] = useState<ConversationMessage[]>([])
+  const [followUpIndex, setFollowUpIndex] = useState(0)
+
   const recordingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Derived: active groups (excluding "none")
   const activeGroups = selectedGroupIds
@@ -78,6 +114,33 @@ export function useCircleCapture(config: CircleCaptureConfig): UseCircleCaptureR
   const isNoneSelected = selectedGroupIds.includes(NONE_GROUP_ID)
   const canStart = selectedGroupIds.length > 0
   const isLastGroup = currentGroupIndex >= totalGroups - 1
+
+  // Current follow-up prompt (if any)
+  const followUpPrompts = currentGroup?.followUpPrompts ?? []
+  const currentFollowUp = followUpIndex < followUpPrompts.length ? followUpPrompts[followUpIndex] : null
+
+  // Next group label for transition message
+  const nextGroupObj = !isLastGroup ? activeGroups[currentGroupIndex + 1] : null
+  const nextGroupLabel = nextGroupObj?.label ?? ''
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+
+  const resetGroupState = useCallback(() => {
+    setCurrentGroupNames([])
+    setHasSubmittedNames(false)
+    setInputMode('voice')
+    setConversationStep('awaiting-names')
+    setConversationMessages([])
+    setFollowUpIndex(0)
+  }, [])
+
+  const addLmMessage = useCallback((content: string) => {
+    setConversationMessages((prev) => [...prev, createMsg('lm', content)])
+  }, [])
+
+  const addUserMessage = useCallback((content: string) => {
+    setConversationMessages((prev) => [...prev, createMsg('user', content)])
+  }, [])
 
   // ── Screen 1: Group Selection ──────────────────────────────────────────────
 
@@ -96,18 +159,24 @@ export function useCircleCapture(config: CircleCaptureConfig): UseCircleCaptureR
 
   const startCapture = useCallback(() => {
     if (isNoneSelected || activeGroups.length === 0) {
-      // Skip directly to summary with empty list
       setScreen('summary')
       return
     }
     setCurrentGroupIndex(0)
-    setCurrentGroupNames([])
-    setHasSubmittedNames(false)
-    setInputMode('voice')
+    resetGroupState()
     setScreen('name-capture')
-  }, [isNoneSelected, activeGroups.length])
+  }, [isNoneSelected, activeGroups.length, resetGroupState])
 
-  // ── Screen 2: Name Capture ─────────────────────────────────────────────────
+  // ── Screen 2: Conversational Name Capture ──────────────────────────────────
+
+  const populateNames = useCallback((names: CapturedPerson[]) => {
+    setCurrentGroupNames(names)
+    setHasSubmittedNames(true)
+    setConversationStep('reviewing-names')
+    // Add user message summarizing the names
+    const nameList = names.map((p) => p.name).join(', ')
+    addUserMessage(nameList)
+  }, [addUserMessage])
 
   const startRecording = useCallback(() => {
     setIsRecording(true)
@@ -118,11 +187,10 @@ export function useCircleCapture(config: CircleCaptureConfig): UseCircleCaptureR
       if (group) {
         const mocks = mockNamesPerGroup[group.id] ?? []
         const withIds = mocks.map((m) => ({ ...m, id: genId() }))
-        setCurrentGroupNames(withIds)
-        setHasSubmittedNames(true)
+        populateNames(withIds)
       }
     }, 3000)
-  }, [activeGroups, currentGroupIndex])
+  }, [activeGroups, currentGroupIndex, populateNames])
 
   const stopRecording = useCallback(() => {
     if (recordingTimerRef.current) {
@@ -130,15 +198,13 @@ export function useCircleCapture(config: CircleCaptureConfig): UseCircleCaptureR
       recordingTimerRef.current = null
     }
     setIsRecording(false)
-    // Populate mock names immediately on manual stop
     const group = activeGroups[currentGroupIndex]
     if (group) {
       const mocks = mockNamesPerGroup[group.id] ?? []
       const withIds = mocks.map((m) => ({ ...m, id: genId() }))
-      setCurrentGroupNames(withIds)
-      setHasSubmittedNames(true)
+      populateNames(withIds)
     }
-  }, [activeGroups, currentGroupIndex])
+  }, [activeGroups, currentGroupIndex, populateNames])
 
   const submitTextNames = useCallback((text: string) => {
     const group = activeGroups[currentGroupIndex]
@@ -153,9 +219,8 @@ export function useCircleCapture(config: CircleCaptureConfig): UseCircleCaptureR
       relationship: group.defaultRelationship,
       groupId: group.id,
     }))
-    setCurrentGroupNames(people)
-    setHasSubmittedNames(true)
-  }, [activeGroups, currentGroupIndex])
+    populateNames(people)
+  }, [activeGroups, currentGroupIndex, populateNames])
 
   const editPersonName = useCallback((personId: string, newName: string) => {
     setCurrentGroupNames((prev) =>
@@ -182,14 +247,104 @@ export function useCircleCapture(config: CircleCaptureConfig): UseCircleCaptureR
     ])
   }, [activeGroups, currentGroupIndex])
 
+  // ── Follow-up & Transition Logic ───────────────────────────────────────────
+
+  const advanceToNextGroup = useCallback(() => {
+    const names = currentGroupNames
+    if (names.length > 0) {
+      setCapturedPeople((prev) => [...prev, ...names])
+    }
+    if (isLastGroup) {
+      resetGroupState()
+      setScreen('summary')
+    } else {
+      setCurrentGroupIndex((i) => i + 1)
+      resetGroupState()
+    }
+  }, [currentGroupNames, isLastGroup, resetGroupState])
+
+  const triggerTransition = useCallback(() => {
+    setConversationStep('transitioning')
+    const msg = isLastGroup
+      ? 'Got it. Let\u2019s review your list.'
+      : `Got it. Let\u2019s move on to ${nextGroupLabel}.`
+    addLmMessage(msg)
+    if (!isLastGroup) {
+      transitionTimerRef.current = setTimeout(() => {
+        advanceToNextGroup()
+      }, 1500)
+    }
+    // For the last group, don't auto-advance — the UI shows a "Review my list" CTA
+  }, [isLastGroup, nextGroupLabel, addLmMessage, advanceToNextGroup])
+
+  const confirmNames = useCallback(() => {
+    const group = activeGroups[currentGroupIndex]
+    if (!group) return
+
+    // If group has follow-ups, start follow-up phase
+    if (group.followUpPrompts.length > 0 && currentGroupNames.length > 0) {
+      setFollowUpIndex(0)
+      setConversationStep('follow-up')
+      // Show the first follow-up question using the first captured name
+      const firstName = currentGroupNames[0]?.name.split(' ')[0] ?? currentGroupNames[0]?.name
+      const prompt = group.followUpPrompts[0]
+      const questionText = prompt.template.replace('[Name]', firstName)
+      addLmMessage(questionText)
+    } else {
+      // No follow-ups → transition directly
+      triggerTransition()
+    }
+  }, [activeGroups, currentGroupIndex, currentGroupNames, addLmMessage, triggerTransition])
+
+  const submitFollowUpAnswer = useCallback((answer: string) => {
+    const group = activeGroups[currentGroupIndex]
+    if (!group) return
+    const prompts = group.followUpPrompts
+    const currentPrompt = prompts[followUpIndex]
+    if (!currentPrompt) return
+
+    // Record user answer
+    addUserMessage(answer)
+
+    // Apply the answer to first person (simulate one example; mock fills all)
+    const field = currentPrompt.field
+    if (field === 'relationship') {
+      // Use mock answer for all names
+      const mockVal = currentPrompt.mockAnswer ?? answer
+      setCurrentGroupNames((prev) =>
+        prev.map((p) => ({ ...p, relationship: mockVal })),
+      )
+    } else if (field === 'side') {
+      const mockVal = currentPrompt.mockAnswer ?? answer
+      setCurrentGroupNames((prev) =>
+        prev.map((p) => ({ ...p, side: mockVal })),
+      )
+    } else if (field === 'context') {
+      const mockVal = currentPrompt.mockAnswer ?? answer
+      setCurrentGroupNames((prev) =>
+        prev.map((p) => ({ ...p, context: mockVal })),
+      )
+    }
+
+    // Move to next follow-up or transition
+    const nextFollowUpIdx = followUpIndex + 1
+    if (nextFollowUpIdx < prompts.length && currentGroupNames.length > 0) {
+      setFollowUpIndex(nextFollowUpIdx)
+      const nextPrompt = prompts[nextFollowUpIdx]
+      const firstName = currentGroupNames[0]?.name.split(' ')[0] ?? currentGroupNames[0]?.name
+      const questionText = nextPrompt.template.replace('[Name]', firstName)
+      setTimeout(() => addLmMessage(questionText), 600)
+    } else {
+      setTimeout(() => triggerTransition(), 600)
+    }
+  }, [activeGroups, currentGroupIndex, followUpIndex, currentGroupNames, addUserMessage, addLmMessage, triggerTransition])
+
   const commitCurrentGroup = useCallback(() => {
     if (currentGroupNames.length > 0) {
       setCapturedPeople((prev) => [...prev, ...currentGroupNames])
     }
-    setCurrentGroupNames([])
-    setHasSubmittedNames(false)
-    setInputMode('voice')
-  }, [currentGroupNames])
+    resetGroupState()
+  }, [currentGroupNames, resetGroupState])
 
   const nextGroup = useCallback(() => {
     commitCurrentGroup()
@@ -201,33 +356,35 @@ export function useCircleCapture(config: CircleCaptureConfig): UseCircleCaptureR
   }, [commitCurrentGroup, isLastGroup])
 
   const skipGroup = useCallback(() => {
-    setCurrentGroupNames([])
-    setHasSubmittedNames(false)
-    setInputMode('voice')
+    if (transitionTimerRef.current) {
+      clearTimeout(transitionTimerRef.current)
+      transitionTimerRef.current = null
+    }
+    resetGroupState()
     if (isLastGroup) {
       setScreen('summary')
     } else {
       setCurrentGroupIndex((i) => i + 1)
     }
-  }, [isLastGroup])
+  }, [isLastGroup, resetGroupState])
 
   const goBackFromCapture = useCallback(() => {
+    if (transitionTimerRef.current) {
+      clearTimeout(transitionTimerRef.current)
+      transitionTimerRef.current = null
+    }
     if (currentGroupIndex === 0) {
       setScreen('group-select')
-      setCurrentGroupNames([])
-      setHasSubmittedNames(false)
+      resetGroupState()
     } else {
-      // Go back to previous group — discard current names, remove previous group's people from captured
       const prevGroup = activeGroups[currentGroupIndex - 1]
-      setCurrentGroupNames([])
-      setHasSubmittedNames(false)
-      setInputMode('voice')
+      resetGroupState()
       if (prevGroup) {
         setCapturedPeople((prev) => prev.filter((p) => p.groupId !== prevGroup.id))
       }
       setCurrentGroupIndex((i) => i - 1)
     }
-  }, [currentGroupIndex, activeGroups])
+  }, [currentGroupIndex, activeGroups, resetGroupState])
 
   // ── Screen 3: Summary Table ────────────────────────────────────────────────
 
@@ -249,6 +406,24 @@ export function useCircleCapture(config: CircleCaptureConfig): UseCircleCaptureR
       { id: genId(), name, relationship, groupId: 'manual' },
     ])
   }, [])
+
+  const goBackFromSummary = useCallback(() => {
+    if (activeGroups.length === 0) {
+      setScreen('group-select')
+    } else {
+      const lastIdx = activeGroups.length - 1
+      const lastGroup = activeGroups[lastIdx]
+      const lastGroupPeople = capturedPeople.filter((p) => p.groupId === lastGroup.id)
+      setCapturedPeople((prev) => prev.filter((p) => p.groupId !== lastGroup.id))
+      setCurrentGroupNames(lastGroupPeople)
+      setHasSubmittedNames(lastGroupPeople.length > 0)
+      setConversationStep(lastGroupPeople.length > 0 ? 'reviewing-names' : 'awaiting-names')
+      setConversationMessages([])
+      setFollowUpIndex(0)
+      setCurrentGroupIndex(lastIdx)
+      setScreen('name-capture')
+    }
+  }, [activeGroups, capturedPeople])
 
   const hasProgress = capturedPeople.length > 0 || currentGroupNames.length > 0
 
@@ -280,11 +455,20 @@ export function useCircleCapture(config: CircleCaptureConfig): UseCircleCaptureR
     skipGroup,
     goBackFromCapture,
     isLastGroup,
+    conversationStep,
+    conversationMessages,
+    currentFollowUp,
+    followUpIndex,
+    confirmNames,
+    submitFollowUpAnswer,
+    reviewList: advanceToNextGroup,
+    nextGroupLabel,
     allPeople,
     editPerson,
     removePerson,
     addPerson,
     confirmationCTALabel: config.confirmationCTALabel,
+    goBackFromSummary,
     hasProgress,
   }
 }
