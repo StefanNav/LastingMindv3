@@ -27,7 +27,7 @@ export function AiBubble({ messages }: AiBubbleProps) {
           </p>
         ))}
       </div>
-      {/* Triangle pointer with matching shadow */}
+      {/* Triangle */}
       <svg
         className="ml-5"
         width="20"
