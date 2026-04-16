@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { Leaf } from 'lucide-react'
 import { defaultConversationStarters } from '@/data/chatData'
 
 interface ConversationStarterProps {
@@ -38,10 +37,6 @@ export function ConversationStarter({ avatarUrl, creatorName, onSelect, starters
             <span className="text-3xl font-bold text-primary">{initials}</span>
           </div>
         )}
-        {/* Leaf badge */}
-        <div className="absolute -bottom-1 -right-1 flex size-6 items-center justify-center rounded-full bg-lm-green">
-          <Leaf className="size-3.5 text-white" />
-        </div>
       </motion.div>
 
       {/* Starter cards */}

@@ -137,6 +137,7 @@ const keywordMap: { keywords: string[]; responses: ScriptedResponse[] }[] = [
   { keywords: ['favorite', 'favourite', 'love', 'song', 'movie', 'food', 'place', 'book', 'music'], responses: favoritesResponses },
   { keywords: ['value', 'values', 'principle', 'belief', 'honesty', 'integrity', 'faith', 'moral'], responses: coreValuesResponses },
   { keywords: ['know', 'shared', 'learned', 'everything', 'tell me about', 'what do you'], responses: generalResponses },
+  { keywords: ['excite', 'concern', 'world today', 'hardest decision', 'upbringing', 'shape who you are'], responses: coreValuesResponses },
 ]
 
 export function getScriptedResponse(userMessage: string): ScriptedResponse {

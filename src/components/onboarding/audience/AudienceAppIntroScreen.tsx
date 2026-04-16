@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
+import { BackButton } from '@/components/shared/BackButton'
 import { ThinkingDots } from '@/components/ui/ThinkingDots'
 import { Button } from '@/components/ui/button'
 
@@ -241,9 +241,7 @@ export function AudienceAppIntroScreen({ onComplete, onBack }: AudienceAppIntroS
       {/* Header bar */}
       <div className="relative z-10 flex shrink-0 items-center justify-between border-b border-border/50 bg-[var(--lm-bg-primary)]/80 px-4 pb-3 pt-[62px] backdrop-blur-sm">
         {onBack ? (
-          <button type="button" onClick={onBack} className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5" aria-label="Go back">
-            <ArrowLeft className="size-5 text-white" />
-          </button>
+          <BackButton onClick={onBack} />
         ) : (
           <div className="w-8" />
         )}

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, MoreHorizontal } from 'lucide-react'
+import { MoreHorizontal } from 'lucide-react'
+import { BackButton } from '@/components/shared/BackButton'
 
 interface AudienceChatHeaderProps {
   creatorFirstName: string
@@ -11,13 +12,7 @@ export function AudienceChatHeader({ creatorFirstName, onMenuOpen }: AudienceCha
 
   return (
     <div className="flex shrink-0 items-center justify-between border-b border-border/50 bg-[var(--lm-bg-primary)]/80 px-4 pb-3 pt-[62px] backdrop-blur-sm">
-      <button
-        type="button"
-        onClick={() => navigate('/audience-home')}
-        className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
-      >
-        <ArrowLeft className="size-5 text-white" />
-      </button>
+      <BackButton onClick={() => navigate('/audience-home')} />
 
       <p className="font-display text-[18px] font-semibold leading-[1.2] text-foreground">
         {creatorFirstName}'s LastingMind

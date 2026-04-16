@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
+import { BackButton } from '@/components/shared/BackButton'
 import { Button } from '@/components/ui/button'
 import { useTreeMorph } from '@/hooks/useTreeMorph'
 import { containerVariants, dissolveVariants } from './animations'
@@ -212,9 +212,7 @@ export function NarrativePhase({
     <div className="flex h-full flex-col">
       {(onBack || stage > 0) && (
         <div className="absolute top-[62px] left-4 z-20">
-          <button type="button" onClick={handleBack} className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5" aria-label="Go back">
-            <ArrowLeft className="size-6 text-white" />
-          </button>
+          <BackButton onClick={handleBack} />
         </div>
       )}
       {/* ---- Text area (crossfade) ---- */}

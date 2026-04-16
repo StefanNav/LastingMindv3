@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, HelpCircle, Clock, Mic } from 'lucide-react'
+import { HelpCircle, Clock, Mic } from 'lucide-react'
 import { PageShell } from '@/components/shared/PageShell'
+import { BackButton } from '@/components/shared/BackButton'
 import { PrimaryCTA } from '@/components/shared/PrimaryCTA'
 import { StickyFooter } from '@/components/shared/StickyFooter'
 import { module2IntroData } from '@/data/mock'
@@ -32,9 +33,7 @@ export function Module2IntroPage() {
       <div className="relative z-10 flex h-full flex-col">
         {/* Back button */}
         <div className="px-4 pt-14">
-          <button type="button" onClick={() => navigate('/home', { state: { openCategory: categoryId } })} className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5" aria-label="Go back">
-            <ArrowLeft className="size-6 text-white" />
-          </button>
+          <BackButton onClick={() => navigate('/home', { state: { openCategory: categoryId } })} />
         </div>
 
         {/* Main content — centered and scrollable */}

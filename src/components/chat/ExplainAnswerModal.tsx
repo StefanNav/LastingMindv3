@@ -1,6 +1,6 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useRef } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
-import { X, Mic } from 'lucide-react'
+import { X, Mic, Square } from 'lucide-react'
 
 interface ExplainAnswerModalProps {
   isOpen: boolean
@@ -13,9 +13,45 @@ interface ExplainAnswerModalProps {
 
 const DRAG_CLOSE_THRESHOLD = 100
 
+const SIMULATED_TRANSCRIPTS = [
+  'I think the answer is more about how I felt at the time than what actually happened.',
+  'Looking back, I would say that experience taught me to trust my instincts more.',
+  'It\'s something I\'ve been thinking about for a while and I finally feel ready to put it into words.',
+]
+
 export function ExplainAnswerModal({ isOpen, onClose, excerpts, onToast, isAudience = false, creatorFirstName }: ExplainAnswerModalProps) {
   const shouldReduceMotion = useReducedMotion()
   const [additionText, setAdditionText] = useState('')
+  const [isRecording, setIsRecording] = useState(false)
+  const [recordingSeconds, setRecordingSeconds] = useState(0)
+  const recordingTimer = useRef<ReturnType<typeof setInterval> | null>(null)
+  const transcriptIndex = useRef(0)
+
+  const startRecording = useCallback(() => {
+    setIsRecording(true)
+    setRecordingSeconds(0)
+    recordingTimer.current = setInterval(() => {
+      setRecordingSeconds((s) => s + 1)
+    }, 1000)
+  }, [])
+
+  const stopRecording = useCallback(() => {
+    setIsRecording(false)
+    if (recordingTimer.current) {
+      clearInterval(recordingTimer.current)
+      recordingTimer.current = null
+    }
+    const transcript = SIMULATED_TRANSCRIPTS[transcriptIndex.current % SIMULATED_TRANSCRIPTS.length]
+    transcriptIndex.current += 1
+    setAdditionText((prev) => (prev ? `${prev} ${transcript}` : transcript))
+    setRecordingSeconds(0)
+  }, [])
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60)
+    const s = seconds % 60
+    return `${m}:${s.toString().padStart(2, '0')}`
+  }
 
   const sheetVariants = useMemo(() => ({
     hidden: {
@@ -150,32 +186,57 @@ export function ExplainAnswerModal({ isOpen, onClose, excerpts, onToast, isAudie
                     </p>
                   </div>
 
-                  {/* Text area + mic */}
+                  {/* Text area + action */}
                   <div className="flex flex-col gap-3">
                     <textarea
                       value={additionText}
                       onChange={(e) => setAdditionText(e.target.value)}
                       placeholder="Type your addition here…"
-                      rows={3}
+                      rows={4}
                       className="w-full resize-none rounded-[10px] border border-border bg-white px-4 py-3 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-lm-green/40"
                     />
-                    <div className="flex items-center gap-3">
+                    {isRecording ? (
                       <button
                         type="button"
-                        className="flex size-10 shrink-0 items-center justify-center rounded-full bg-lm-green transition-transform active:scale-95"
-                        aria-label="Record voice input"
+                        onMouseUp={stopRecording}
+                        onTouchEnd={stopRecording}
+                        className="relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-[10px] bg-red-500/10 px-5 py-3 text-[15px] font-semibold text-red-600 transition-colors"
+                        aria-label="Release to stop recording"
                       >
-                        <Mic className="size-4.5 text-white" />
+                        <motion.div
+                          className="absolute inset-0 bg-red-500/5"
+                          animate={{ opacity: [0.3, 0.8, 0.3] }}
+                          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                        />
+                        <span className="relative flex items-center gap-2.5">
+                          <Square className="size-3.5 fill-current" />
+                          <span>Recording {formatTime(recordingSeconds)}</span>
+                        </span>
+                        <span className="relative text-[13px] font-normal text-red-400">Release to stop</span>
                       </button>
-                      <button
-                        type="button"
-                        onClick={handleSave}
-                        disabled={!additionText.trim()}
-                        className="flex flex-1 items-center justify-center rounded-[10px] bg-lm-green px-5 py-3 text-[15px] font-semibold text-white transition-colors disabled:opacity-40"
-                      >
-                        Save
-                      </button>
-                    </div>
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          onMouseDown={startRecording}
+                          onTouchStart={startRecording}
+                          className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-lm-green/10 px-5 py-3 text-[15px] font-semibold text-lm-green transition-colors active:scale-[0.98]"
+                          aria-label="Hold to record voice input"
+                        >
+                          <Mic className="size-4.5" />
+                          {additionText.trim() ? 'Hold to say more' : 'Hold to speak'}
+                        </button>
+                        {additionText.trim() && (
+                          <button
+                            type="button"
+                            onClick={handleSave}
+                            className="flex w-full items-center justify-center rounded-[10px] bg-lm-green px-5 py-3 text-[15px] font-semibold text-white transition-colors active:scale-[0.98]"
+                          >
+                            Save
+                          </button>
+                        )}
+                      </>
+                    )}
                   </div>
                 </>
               )}

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
+import { BackButton } from '@/components/shared/BackButton'
 
 type UserType = 'builder' | 'connector'
 
@@ -41,9 +41,7 @@ export function UserTypeScreen({ onSelect, hasInviteToken = false, onBack }: Use
 
       {onBack && (
         <div className="absolute top-[62px] left-4 z-20">
-          <button type="button" onClick={onBack} className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5" aria-label="Go back">
-            <ArrowLeft className="size-6 text-white" />
-          </button>
+          <BackButton onClick={onBack} />
         </div>
       )}
 

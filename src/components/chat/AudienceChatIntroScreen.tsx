@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, MessageCircle } from 'lucide-react'
+import { MessageCircle } from 'lucide-react'
+import { BackButton } from '@/components/shared/BackButton'
 import { Button } from '@/components/ui/button'
 
 interface AudienceChatIntroScreenProps {
@@ -33,13 +34,7 @@ export function AudienceChatIntroScreen({
       <div className="relative z-10 flex min-h-0 flex-1 flex-col">
         {/* Back button */}
         <div className="flex shrink-0 items-center px-4 pt-[62px] pb-3">
-          <button
-            type="button"
-            onClick={() => navigate('/audience-home')}
-            className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
-          >
-            <ArrowLeft className="size-5 text-white" />
-          </button>
+          <BackButton onClick={() => navigate('/audience-home')} />
         </div>
 
         {/* Content */}

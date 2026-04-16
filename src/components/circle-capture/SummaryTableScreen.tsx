@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Pencil, Trash2, Plus, X } from 'lucide-react'
+import { Pencil, Trash2, Plus, X } from 'lucide-react'
+import { BackButton } from '@/components/shared/BackButton'
 import { PrimaryCTA } from '@/components/shared/PrimaryCTA'
 import { StickyFooter } from '@/components/shared/StickyFooter'
 import type { CapturedPerson } from '@/types'
@@ -87,13 +88,9 @@ export function SummaryTableScreen({
     <div className="flex h-full flex-col bg-[var(--lm-bg-primary)]">
       {/* Header */}
       <div className="shrink-0 border-b border-border/50 bg-[var(--lm-bg-primary)] px-5 pb-4 pt-[62px]">
-        <button
-          type="button"
-          onClick={onBack}
-          className="mb-3 flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
-        >
-          <ArrowLeft className="size-5 text-white" />
-        </button>
+        <div className="mb-3">
+          <BackButton onClick={onBack} />
+        </div>
         <h1 className="font-display text-[24px] font-semibold leading-tight text-foreground">
           {title}
         </h1>

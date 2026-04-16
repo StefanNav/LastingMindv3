@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Mic, Square, Send, X, Pencil, Plus, Leaf } from 'lucide-react'
+import { Mic, Square, Send, X, Pencil, Plus, Leaf } from 'lucide-react'
+import { BackButton } from '@/components/shared/BackButton'
 import { PrimaryCTA } from '@/components/shared/PrimaryCTA'
 import type { CapturedPerson, FollowUpPrompt } from '@/types'
 import type { CaptureInputMode, ConversationStep, ConversationMessage } from '@/hooks/useCircleCapture'
@@ -191,13 +192,7 @@ export function NameCaptureScreen({
       <div className="flex shrink-0 flex-col border-b border-border/50 bg-[var(--lm-bg-primary)]/80 px-4 pb-3 pt-[62px] backdrop-blur-sm">
         {/* Top row: back button + progress */}
         <div className="flex items-center justify-between">
-          <button
-            type="button"
-            onClick={onBack}
-            className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
-          >
-            <ArrowLeft className="size-5 text-white" />
-          </button>
+          <BackButton onClick={onBack} />
           <span className="text-[13px] font-medium text-muted-foreground">
             Group {currentGroupIndex + 1} of {totalGroups}
           </span>

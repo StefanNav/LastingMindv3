@@ -75,35 +75,27 @@ export function ChatBubble({ message, avatarUrl, creatorName, showAnnotations = 
         {!isUser && (
           <div className="flex items-center gap-2">
             {!isAudience && (
-              message.isGapResponse ? (
-                <button
-                  type="button"
-                  onClick={() => setNewAnswerVariant('gap')}
-                  className="rounded-full border border-lm-green/30 bg-lm-green/8 px-3 py-1 text-[11px] font-semibold text-lm-green transition-colors hover:bg-lm-green/15 active:scale-[0.97]"
-                >
-                  Add a response
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setNewAnswerVariant('replace')}
-                  className="text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground/70"
-                >
-                  Provide a new answer ›
-                </button>
-              )
-            )}
-            <ResponseActionBar />
-            {message.sourceEntry && (
               <button
                 type="button"
-                onClick={() => setExplainOpen(true)}
-                className="text-[12px] font-medium text-lm-gold transition-colors hover:text-lm-gold-muted"
+                onClick={() => setNewAnswerVariant('gap')}
+                className="rounded-full border border-lm-green/30 bg-lm-green/8 px-3 py-1 text-[11px] font-semibold text-lm-green transition-colors hover:bg-lm-green/15 active:scale-[0.97]"
               >
-                {isAudience ? 'Where this answer came from ›' : 'Explain answer ›'}
+                Add a response
               </button>
             )}
+            <ResponseActionBar />
           </div>
+        )}
+
+        {/* Explain answer label */}
+        {!isUser && message.sourceEntry && (
+          <button
+            type="button"
+            onClick={() => setExplainOpen(true)}
+            className="px-1 text-[12px] font-medium text-lm-gold transition-colors hover:text-lm-gold-muted"
+          >
+            {isAudience ? 'Where this answer came from ›' : 'Explain answer ›'}
+          </button>
         )}
 
         {/* Tutorial annotation */}

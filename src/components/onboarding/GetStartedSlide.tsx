@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
+import { BackButton } from '@/components/shared/BackButton'
 import { Button } from '@/components/ui/button'
 
 interface GetStartedSlideProps {
@@ -19,14 +19,7 @@ export function GetStartedSlide({ onStart, onBack }: GetStartedSlideProps) {
 
       {onBack && (
         <div className="absolute top-[62px] left-4 z-20">
-          <button
-            type="button"
-            onClick={onBack}
-            className="flex items-center gap-1.5 rounded-[4px] bg-lm-neutral-warm p-1.5"
-            aria-label="Go back"
-          >
-            <ArrowLeft className="size-6 text-white" />
-          </button>
+          <BackButton onClick={onBack} />
         </div>
       )}
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">

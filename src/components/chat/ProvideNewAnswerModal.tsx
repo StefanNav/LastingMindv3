@@ -180,15 +180,7 @@ export function ProvideNewAnswerModal({ isOpen, onClose, onToast, variant = 'rep
                   rows={4}
                   className="w-full resize-none rounded-[10px] border border-border bg-white px-4 py-3 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-lm-green/40"
                 />
-                {answerText.trim() ? (
-                  <button
-                    type="button"
-                    onClick={handleSave}
-                    className="flex w-full items-center justify-center rounded-[10px] bg-lm-green px-5 py-3 text-[15px] font-semibold text-white transition-colors active:scale-[0.98]"
-                  >
-                    {copy.button}
-                  </button>
-                ) : isRecording ? (
+                {isRecording ? (
                   <button
                     type="button"
                     onMouseUp={stopRecording}
@@ -208,16 +200,27 @@ export function ProvideNewAnswerModal({ isOpen, onClose, onToast, variant = 'rep
                     <span className="relative text-[13px] font-normal text-red-400">Release to stop</span>
                   </button>
                 ) : (
-                  <button
-                    type="button"
-                    onMouseDown={startRecording}
-                    onTouchStart={startRecording}
-                    className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-lm-green/10 px-5 py-3 text-[15px] font-semibold text-lm-green transition-colors active:scale-[0.98]"
-                    aria-label="Hold to record voice input"
-                  >
-                    <Mic className="size-4.5" />
-                    Hold to speak
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      onMouseDown={startRecording}
+                      onTouchStart={startRecording}
+                      className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-lm-green/10 px-5 py-3 text-[15px] font-semibold text-lm-green transition-colors active:scale-[0.98]"
+                      aria-label="Hold to record voice input"
+                    >
+                      <Mic className="size-4.5" />
+                      {answerText.trim() ? 'Hold to say more' : 'Hold to speak'}
+                    </button>
+                    {answerText.trim() && (
+                      <button
+                        type="button"
+                        onClick={handleSave}
+                        className="flex w-full items-center justify-center rounded-[10px] bg-lm-green px-5 py-3 text-[15px] font-semibold text-white transition-colors active:scale-[0.98]"
+                      >
+                        {copy.button}
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
             </div>
